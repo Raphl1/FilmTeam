@@ -826,6 +826,72 @@ body.light .loc-map iframe { filter: none; }
 .permit-declined { background: rgba(247,37,133,.1); color: var(--accent); border: 1px solid rgba(247,37,133,.2); }
 
 /* ══════════════════════════════════════════════
+   KANBAN VIEW
+   ══════════════════════════════════════════════ */
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  align-items: flex-start;
+}
+.kanban-column {
+  background: var(--card2);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.kanban-col-header {
+  padding: .8rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card);
+}
+.kanban-col-title { font-size: .85rem; font-weight: 700; }
+.kanban-col-count {
+  background: rgba(108,63,197,.15);
+  color: var(--lilac);
+  font-size: .7rem;
+  font-weight: 700;
+  padding: .15em .5em;
+  border-radius: 99px;
+}
+.kanban-col-body { padding: .6rem; display: flex; flex-direction: column; gap: .5rem; min-height: 60px; }
+.kanban-card {
+  padding: .8rem 1rem !important;
+  border-radius: 10px !important;
+  position: relative;
+}
+.kanban-card-title { font-size: .88rem; font-weight: 600; margin-bottom: .3rem; }
+.kanban-card-desc { font-size: .78rem; color: var(--muted); margin-bottom: .4rem; }
+.kanban-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  font-size: .72rem;
+  color: var(--muted);
+}
+.kanban-owner { color: var(--violet); font-weight: 600; }
+.kanban-assignee { color: var(--text2); }
+.kanban-deadline { font-size: .72rem; color: var(--gold); margin-top: .3rem; }
+.kanban-empty { font-size: .78rem; color: var(--muted); text-align: center; padding: 1rem; font-style: italic; }
+.kanban-add { margin: .5rem .6rem .6rem; }
+.kanban-status-select {
+  margin-top: .5rem;
+  font-size: .72rem;
+  background: var(--card2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: .3em .5em;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .kanban-board { grid-template-columns: 1fr; }
+}
+
+/* ══════════════════════════════════════════════
    CALENDAR VIEW
    ══════════════════════════════════════════════ */
 .calendar-info-cards {

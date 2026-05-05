@@ -16,6 +16,7 @@ const state = {
   equipment: null,
   budget: null,
   timeline: null,
+  kanban: null,
   activeFilter: 'all',
   editMode: false,
   dirty: new Set(),       // tracks which data files have been modified
@@ -153,6 +154,7 @@ const ICONS = {
   'clock': '\u23F3',
   'phone': '\uD83D\uDCDE',
   'calendar-days': '\uD83D\uDDD3\uFE0F',
+  'kanban': '\uD83D\uDCCB',
   'sun': '\u2600\uFE0F',
   'moon': '\uD83C\uDF19'
 };
@@ -304,7 +306,7 @@ function closeTokenModal() {
 // DATA FETCHING
 // =============================================================================
 async function fetchAllData() {
-  const files = ['config', 'locations', 'schedule', 'contacts', 'team', 'equipment', 'budget', 'timeline'];
+  const files = ['config', 'locations', 'schedule', 'contacts', 'team', 'equipment', 'budget', 'timeline', 'kanban'];
   const results = await Promise.all(
     files.map(f => fetch(`data/${f}.json?t=${Date.now()}`).then(r => r.json()))
   );
@@ -425,6 +427,7 @@ function renderHeaderControls() {
 function renderView(route) {
   switch (route) {
     case 'hub':       return viewHub();
+    case 'kanban':    return viewKanban();
     case 'locations': return viewLocations();
     case 'schedule':  return viewSchedule();
     case 'team':      return viewTeam();
@@ -482,6 +485,59 @@ function viewHub() {
           <div class="hc-desc">${descriptions[item.id] || ''}</div>
         </a>
       `).join('')}
+    </div>
+  `;
+}
+
+// =============================================================================
+// VIEW: KANBAN
+// =============================================================================
+function viewKanban() {
+  const { columns, tasks, members } = state.kanban;
+  const editing = state.editMode;
+
+  return `
+    <h2 class="view-title">\uD83D\uDCCB Kanban-Board</h2>
+    <div class="kanban-board">
+      ${columns.map(col => {
+        const colTasks = tasks.filter(t => t.status === col.id);
+        return `
+          <div class="kanban-column" data-column="${col.id}">
+            <div class="kanban-col-header" style="border-top:3px solid ${col.color}">
+              <span class="kanban-col-title">${col.label}</span>
+              <span class="kanban-col-count">${colTasks.length}</span>
+            </div>
+            <div class="kanban-col-body">
+              ${colTasks.map((task, idx) => {
+                const realIdx = tasks.indexOf(task);
+                const deleteBtn = editing ? `<button class="delete-btn-sm" data-action="delete-kanban-task" data-idx="${realIdx}">\u2715</button>` : '';
+                const statusSelect = editing ? `
+                  <select class="kanban-status-select" data-action="change-kanban-status" data-idx="${realIdx}">
+                    ${columns.map(c => `<option value="${c.id}" ${task.status === c.id ? 'selected' : ''}>${c.label}</option>`).join('')}
+                  </select>` : '';
+
+                return `
+                  <div class="kanban-card card">
+                    ${deleteBtn}
+                    <div class="kanban-card-title">${editing
+                      ? `<span contenteditable="true" data-field="title" data-file="kanban" data-idx="${realIdx}" data-subkey="tasks">${escapeHtml(task.title)}</span>`
+                      : escapeHtml(task.title)}</div>
+                    ${task.description ? `<div class="kanban-card-desc">${escapeHtml(task.description)}</div>` : ''}
+                    <div class="kanban-card-meta">
+                      ${task.owner ? `<span class="kanban-owner">\uD83D\uDC64 ${escapeHtml(task.owner)}</span>` : ''}
+                      ${task.assignee ? `<span class="kanban-assignee">\u2192 ${escapeHtml(task.assignee)}</span>` : ''}
+                    </div>
+                    ${task.deadline ? `<div class="kanban-deadline">\uD83D\uDCC5 ${escapeHtml(task.deadline)}</div>` : ''}
+                    ${statusSelect}
+                  </div>
+                `;
+              }).join('')}
+              ${colTasks.length === 0 ? '<div class="kanban-empty">Keine Aufgaben</div>' : ''}
+            </div>
+            ${editing ? `<button class="add-item-btn-sm kanban-add" data-action="add-kanban-task" data-status="${col.id}">+ Aufgabe</button>` : ''}
+          </div>
+        `;
+      }).join('')}
     </div>
   `;
 }
@@ -1295,6 +1351,35 @@ document.addEventListener('click', (e) => {
       render();
       return;
     }
+
+    // --- Add kanban task ---
+    if (action === 'add-kanban-task') {
+      e.preventDefault();
+      const status = actionEl.dataset.status;
+      state.kanban.tasks.push({
+        id: generateId(),
+        title: 'Neue Aufgabe',
+        description: '',
+        assignee: '',
+        owner: '',
+        status: status,
+        deadline: ''
+      });
+      markDirty('kanban');
+      render();
+      return;
+    }
+
+    // --- Delete kanban task ---
+    if (action === 'delete-kanban-task') {
+      e.preventDefault();
+      if (!confirm('Aufgabe wirklich l\u00f6schen?')) return;
+      const idx = parseInt(actionEl.dataset.idx);
+      state.kanban.tasks.splice(idx, 1);
+      markDirty('kanban');
+      render();
+      return;
+    }
   }
 
   // Filter buttons
@@ -1335,6 +1420,8 @@ document.addEventListener('input', (e) => {
         state.timeline[idx][field] = value;
       } else if (file === 'contacts' && idx !== null && subkey === 'contacts') {
         state.contacts.contacts[idx][field] = value;
+      } else if (file === 'kanban' && idx !== null && subkey === 'tasks') {
+        state.kanban.tasks[idx][field] = value;
       } else if (file === 'equipment') {
         const catIdx = parseInt(el.dataset.cat);
         const itemIdx = parseInt(el.dataset.idx);
@@ -1366,6 +1453,15 @@ document.addEventListener('input', (e) => {
     const idx = parseInt(el.dataset.idx);
     state.team.roles[idx].assigned = el.value;
     markDirty('team');
+    return;
+  }
+
+  // Kanban status change
+  if (el.dataset.action === 'change-kanban-status') {
+    const idx = parseInt(el.dataset.idx);
+    state.kanban.tasks[idx].status = el.value;
+    markDirty('kanban');
+    render();
     return;
   }
 });

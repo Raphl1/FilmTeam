@@ -10,6 +10,7 @@
   },
   "navigation": [
     { "id": "hub", "label": "Hub", "icon": "grid" },
+    { "id": "kanban", "label": "Kanban", "icon": "kanban" },
     { "id": "locations", "label": "Drehorte", "icon": "map-pin" },
     { "id": "schedule", "label": "Drehplan", "icon": "calendar" },
     { "id": "team", "label": "Team", "icon": "users" },

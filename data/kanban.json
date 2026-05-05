@@ -1,0 +1,102 @@
+{
+  "columns": [
+    { "id": "todo", "label": "To Do", "color": "#f72585" },
+    { "id": "in-progress", "label": "In Progress", "color": "#6c3fc5" },
+    { "id": "review", "label": "Under Review", "color": "#f9c74f" },
+    { "id": "done", "label": "Done", "color": "#43aa8b" },
+    { "id": "on-hold", "label": "On Hold", "color": "#8892a4" }
+  ],
+  "tasks": [
+    {
+      "id": "t1",
+      "title": "Kanban-Board erstellen",
+      "description": "Kanban-Board übernehmen",
+      "assignee": "Yudong",
+      "owner": "Jetmir",
+      "status": "done",
+      "deadline": "2026-04-28"
+    },
+    {
+      "id": "t2",
+      "title": "Kurzfristige und langfristige Ziele",
+      "description": "Aufgeschrieben welche Ziele wir verfolgen",
+      "assignee": "Miriam",
+      "owner": "Jetmir",
+      "status": "done",
+      "deadline": "2026-04-28"
+    },
+    {
+      "id": "t3",
+      "title": "Rolle im Film überlegen",
+      "description": "Sich überlegen, ob und welche Rolle man spielen will",
+      "assignee": "Alle",
+      "owner": "Lia",
+      "status": "on-hold",
+      "deadline": "2026-04-29"
+    },
+    {
+      "id": "t4",
+      "title": "Location auswählen",
+      "description": "Finale Locations klären",
+      "assignee": "Raphael, Jetmir",
+      "owner": "Runa",
+      "status": "done",
+      "deadline": "2026-05-07"
+    },
+    {
+      "id": "t5",
+      "title": "Charakterisierung",
+      "description": "",
+      "assignee": "Tobi, Miriam, Luca",
+      "owner": "Raphael",
+      "status": "in-progress",
+      "deadline": "2026-05-07"
+    },
+    {
+      "id": "t6",
+      "title": "Storyboard erstellen",
+      "description": "",
+      "assignee": "Dilara, Quyen, Runa, Benicio, Yudong",
+      "owner": "Luca",
+      "status": "in-progress",
+      "deadline": "2026-05-07"
+    },
+    {
+      "id": "t7",
+      "title": "Ziele, Zeitplan, Meilensteine",
+      "description": "Festlegen und präsentieren",
+      "assignee": "Alle",
+      "owner": "Miriam",
+      "status": "in-progress",
+      "deadline": "2026-05-05"
+    },
+    {
+      "id": "t8",
+      "title": "Best of the Best: Einführung",
+      "description": "Welche Animation, KI einbauen, Musik auswählen",
+      "assignee": "?",
+      "owner": "Quyen",
+      "status": "todo",
+      "deadline": "2026-05-12"
+    },
+    {
+      "id": "t9",
+      "title": "Abspann",
+      "description": "Was soll konkret passieren, Handlungsablauf. MPG23 ist in den Abspann getanzt.",
+      "assignee": "",
+      "owner": "Quyen",
+      "status": "todo",
+      "deadline": ""
+    },
+    {
+      "id": "t10",
+      "title": "Countdown",
+      "description": "Wie stellen wir die Szenen dar",
+      "assignee": "Alle",
+      "owner": "Benicio",
+      "status": "todo",
+      "deadline": ""
+    }
+  ],
+  "members": ["Dilara", "Jetmir", "Lia", "Runa", "Raphael", "Luca", "Miriam", "Quyen", "Benicio", "Nico", "Yudong", "Tobi"]
+}
