@@ -557,21 +557,52 @@ function viewKanban() {
 
                 const deadlineClass = task.deadline && new Date(task.deadline) < new Date() ? 'overdue' : '';
 
+                // Editable fields
+                const titleField = editing
+                  ? `<span contenteditable="true" data-field="title" data-file="kanban" data-idx="${realIdx}" data-subkey="tasks">${escapeHtml(task.title)}</span>`
+                  : escapeHtml(task.title);
+
+                const descField = editing
+                  ? `<div class="kanban-card-desc" contenteditable="true" data-field="description" data-file="kanban" data-idx="${realIdx}" data-subkey="tasks">${escapeHtml(task.description || '')}</div>`
+                  : (task.description ? `<div class="kanban-card-desc">${escapeHtml(task.description)}</div>` : '');
+
+                const ownerField = editing
+                  ? `<input type="text" class="kanban-inline-input" value="${escapeHtml(task.owner || '')}" placeholder="Owner..." data-action="kanban-owner" data-idx="${realIdx}" />`
+                  : (task.owner ? `<span class="kanban-owner-label">${escapeHtml(task.owner)}</span>` : '');
+
+                const assigneeField = editing
+                  ? `<input type="text" class="kanban-inline-input" value="${escapeHtml(task.assignee || '')}" placeholder="Zugewiesen an..." data-action="kanban-assignee" data-idx="${realIdx}" />`
+                  : '';
+
+                const deadlineField = editing
+                  ? `<input type="date" class="kanban-inline-input kanban-date-input" value="${task.deadline || ''}" data-action="kanban-deadline" data-idx="${realIdx}" />`
+                  : (task.deadline ? `<span class="kanban-deadline ${deadlineClass}">\uD83D\uDCC5 ${escapeHtml(task.deadline)}</span>` : '');
+
                 return `
                   <div class="kanban-card">
                     ${deleteBtn}
                     <div class="kanban-card-top">
                       <span class="kanban-card-id">${task.id.toUpperCase()}</span>
-                      ${ownerAvatar}
+                      ${editing ? '' : ownerAvatar}
                     </div>
-                    <div class="kanban-card-title">${editing
-                      ? `<span contenteditable="true" data-field="title" data-file="kanban" data-idx="${realIdx}" data-subkey="tasks">${escapeHtml(task.title)}</span>`
-                      : escapeHtml(task.title)}</div>
-                    ${task.description ? `<div class="kanban-card-desc">${escapeHtml(task.description)}</div>` : ''}
-                    ${assigneeTags ? `<div class="kanban-assignees">${assigneeTags}</div>` : ''}
-                    <div class="kanban-card-footer">
-                      ${task.deadline ? `<span class="kanban-deadline ${deadlineClass}">\uD83D\uDCC5 ${escapeHtml(task.deadline)}</span>` : ''}
-                    </div>
+                    <div class="kanban-card-title">${titleField}</div>
+                    ${descField}
+                    ${editing ? `
+                      <div class="kanban-edit-fields">
+                        <label class="kanban-field-label">Owner</label>
+                        ${ownerField}
+                        <label class="kanban-field-label">Zugewiesen</label>
+                        ${assigneeField}
+                        <label class="kanban-field-label">Deadline</label>
+                        ${deadlineField}
+                      </div>
+                    ` : `
+                      ${assigneeTags ? `<div class="kanban-assignees">${assigneeTags}</div>` : ''}
+                      <div class="kanban-card-footer">
+                        ${ownerField}
+                        ${deadlineField}
+                      </div>
+                    `}
                     ${statusSelect}
                   </div>
                 `;
@@ -1516,6 +1547,30 @@ document.addEventListener('input', (e) => {
     state.kanban.tasks[idx].status = el.value;
     markDirty('kanban');
     render();
+    return;
+  }
+
+  // Kanban owner
+  if (el.dataset.action === 'kanban-owner') {
+    const idx = parseInt(el.dataset.idx);
+    state.kanban.tasks[idx].owner = el.value;
+    markDirty('kanban');
+    return;
+  }
+
+  // Kanban assignee
+  if (el.dataset.action === 'kanban-assignee') {
+    const idx = parseInt(el.dataset.idx);
+    state.kanban.tasks[idx].assignee = el.value;
+    markDirty('kanban');
+    return;
+  }
+
+  // Kanban deadline
+  if (el.dataset.action === 'kanban-deadline') {
+    const idx = parseInt(el.dataset.idx);
+    state.kanban.tasks[idx].deadline = el.value;
+    markDirty('kanban');
     return;
   }
 });

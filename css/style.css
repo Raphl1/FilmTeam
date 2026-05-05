@@ -981,6 +981,42 @@ body.light .loc-map iframe { filter: none; }
   padding: .25em .4em;
   width: 100%;
 }
+.kanban-inline-input {
+  width: 100%;
+  font-size: .75rem;
+  background: var(--card2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: .35em .5em;
+  margin-top: .2rem;
+  transition: border-color .15s;
+}
+.kanban-inline-input:focus {
+  outline: none;
+  border-color: var(--purple);
+}
+.kanban-date-input { font-family: inherit; }
+.kanban-edit-fields {
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+  margin-top: .5rem;
+  padding-top: .5rem;
+  border-top: 1px solid var(--border);
+}
+.kanban-field-label {
+  font-size: .62rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  margin-top: .3rem;
+}
+.kanban-owner-label {
+  font-size: .72rem;
+  color: var(--violet);
+  font-weight: 600;
+}
 
 /* Team members bar */
 .kanban-members-bar {
