@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget — FR(AI)ME · NOTG 2026</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .budget-summary {
+      background: var(--card);
+      border: 1px solid rgba(108,63,197,.3);
+      border-left: 4px solid var(--purple);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .budget-summary .bs-label {
+      font-size: .82rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 600;
+    }
+    .budget-summary .bs-total {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--lilac);
+    }
+    .budget-summary .bs-range {
+      font-size: .85rem;
+      color: var(--muted);
+    }
+
+    .budget-table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.07);
+      background: var(--card);
+      margin-bottom: 2rem;
+    }
+    .budget-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .84rem;
+      min-width: 600px;
+    }
+    .budget-table th {
+      background: rgba(108,63,197,.2);
+      color: var(--lilac);
+      font-weight: 700;
+      text-align: left;
+      padding: .7em 1em;
+      font-size: .76rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .budget-table td {
+      padding: .7em 1em;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      vertical-align: middle;
+    }
+    .budget-table tr:last-child td { border-bottom: none; }
+    .budget-table tr:hover td { background: rgba(255,255,255,.03); }
+    .budget-table .cat-icon { margin-right: .5em; }
+    .budget-table .total-row td {
+      background: rgba(108,63,197,.1);
+      font-weight: 700;
+      color: var(--lilac);
+      border-top: 2px solid rgba(108,63,197,.3);
+    }
+    .budget-note {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.4rem;
+      font-size: .84rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .budget-note strong { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="tag">Filmteam DHBW Mannheim MPG24</div>
+  <h1>FR<span class="ai">(AI)</span>ME<span class="sep"> — </span>Night of the Graduates</h1>
+  <div class="subtitle">Budget&uuml;bersicht &middot; Kostenplanung</div>
+</header>
+
+<nav class="site-nav">
+  <a href="index.html">Hub</a>
+  <a href="locations.html">Drehorte</a>
+  <a href="drehplan.html">Drehplan</a>
+  <a href="shotlist.html">Shotlist</a>
+  <a href="equipment.html">Equipment</a>
+  <a href="team.html">Team</a>
+  <a href="budget.html" class="active">Budget</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="kalender.html">Kalender</a>
+  <a href="kontakte.html">Kontakte</a>
+</nav>
+
+<main class="page-main">
+
+  <!-- Gesamtsumme -->
+  <div class="budget-summary">
+    <div>
+      <div class="bs-label">Gesch&auml;tzte Gesamtkosten</div>
+      <div class="bs-total">750 &ndash; 1.350 &euro;</div>
+      <div class="bs-range">Abh&auml;ngig von Airbnb-Wahl &amp; Equipment-Miete</div>
+    </div>
+    <div>
+      <span class="badge badge-info">Vorl&auml;ufig</span>
+    </div>
+  </div>
+
+  <!-- Budget-Tabelle -->
+  <div class="budget-table-wrap">
+    <table class="budget-table">
+      <thead>
+        <tr>
+          <th>Kategorie</th>
+          <th>Position</th>
+          <th>Kosten (Min)</th>
+          <th>Kosten (Max)</th>
+          <th>Anmerkungen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="cat-icon">&#x1F3E0;</span> Airbnb</td>
+          <td>Unterkunft / Filmset</td>
+          <td>150 &euro;</td>
+          <td>600 &euro;</td>
+          <td>150-300&euro;/Nacht &times; 1-2 N&auml;chte</td>
+        </tr>
+        <tr>
+          <td><span class="cat-icon">&#x1F3A5;</span> Equipment-Miete</td>
+          <td>Licht, Objektive, Ton</td>
+          <td>150 &euro;</td>
+          <td>300 &euro;</td>
+          <td>LED-Panels, Neon-Tubes, Funkstrecke, Recorder</td>
+        </tr>
+        <tr>
+          <td><span class="cat-icon">&#x1F3AD;</span> Requisiten &amp; Kost&uuml;m</td>
+          <td>Cowboy-H&uuml;te, Holster, Deko</td>
+          <td>50 &euro;</td>
+          <td>100 &euro;</td>
+          <td>Second-Hand / Amazon, Nebelmaschine</td>
+        </tr>
+        <tr>
+          <td><span class="cat-icon">&#x1F354;</span> Verpflegung</td>
+          <td>Crew-Catering (5 Drehtage)</td>
+          <td>200 &euro;</td>
+          <td>250 &euro;</td>
+          <td>~8-10 Personen, Snacks + Mittagessen</td>
+        </tr>
+        <tr>
+          <td><span class="cat-icon">&#x1F697;</span> Transport</td>
+          <td>Sprit, ggf. Transporter</td>
+          <td>50 &euro;</td>
+          <td>100 &euro;</td>
+          <td>Mannheim-intern, kurze Wege</td>
+        </tr>
+        <tr>
+          <td><span class="cat-icon">&#x1F4E6;</span> Sonstiges</td>
+          <td>Unvorhergesehenes, Genehmigungsgeb&uuml;hren</td>
+          <td>50 &euro;</td>
+          <td>100 &euro;</td>
+          <td>Puffer f&uuml;r spontane Ausgaben</td>
+        </tr>
+        <tr class="total-row">
+          <td></td>
+          <td><strong>Gesamt</strong></td>
+          <td><strong>650 &euro;</strong></td>
+          <td><strong>1.450 &euro;</strong></td>
+          <td>Zielkorridor: ~750-1.350&euro;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Hinweise -->
+  <div class="budget-note">
+    <strong>Hinweise:</strong><br>
+    &bull; DHBW-Equipment (Kamera, Boom, Grundlicht) ist kostenfrei verf&uuml;gbar &mdash; Reservierung &uuml;ber Maik Mittelst&auml;dt.<br>
+    &bull; Luisenpark-Drehgenehmigung kann Geb&uuml;hren verursachen &mdash; Anfrage bei Stadtpark Mannheim gGmbH.<br>
+    &bull; Airbnb dient gleichzeitig als Filmset (La La Land Piano, Western Duell) &mdash; daher h&ouml;heres Budget gerechtfertigt.<br>
+    &bull; Finanzierung: Teilweise &uuml;ber DHBW-Budget f&uuml;r Abschlussfilm, Rest Eigenanteil / Crowdfunding im Kurs.
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div style="font-size:.9rem; font-weight:600; color:var(--text);">FR(AI)ME — Night of the Graduates 2026</div>
+  <div style="margin-top:.3rem;">Filmteam DHBW Mannheim MPG24 &middot; Projektleitung: Dilara Sabuncuo &middot; Stand: Mai 2026</div>
+</footer>
+
+</body>
+</html>

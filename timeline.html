@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timeline — FR(AI)ME · NOTG 2026</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .timeline {
+      position: relative;
+      padding-left: 2.5rem;
+      margin-top: 1.5rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 12px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--purple), var(--violet), var(--accent));
+      border-radius: 2px;
+    }
+    .tl-item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding: 1.2rem 1.4rem;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: var(--radius);
+      transition: border-color .2s;
+    }
+    .tl-item:hover { border-color: rgba(108,63,197,.3); }
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -2.5rem;
+      top: 1.5rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--purple);
+      border: 2px solid var(--bg);
+      z-index: 1;
+    }
+    .tl-item.done::before { background: var(--green); }
+    .tl-item.active::before { background: var(--accent); box-shadow: 0 0 8px rgba(247,37,133,.5); }
+    .tl-item.upcoming::before { background: var(--muted); }
+    .tl-phase {
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--lilac);
+      font-weight: 700;
+      margin-bottom: .2rem;
+    }
+    .tl-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .3rem;
+    }
+    .tl-date {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-bottom: .4rem;
+    }
+    .tl-desc {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .tl-status {
+      display: inline-block;
+      margin-top: .5rem;
+    }
+    .phase-header {
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--lilac);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin: 2.5rem 0 1rem 0;
+      padding-left: 2.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="tag">Timeline</div>
+  <h1>FR<span class="ai">(AI)</span>ME<span class="sep"> &mdash; </span>Projekt-Timeline</h1>
+  <div class="subtitle">Pre-Production &rarr; Dreh &rarr; Post-Production &rarr; Premiere</div>
+</header>
+
+<nav class="site-nav">
+  <a href="index.html">Hub</a>
+  <a href="locations.html">Drehorte</a>
+  <a href="drehplan.html">Drehplan</a>
+  <a href="shotlist.html">Shotlist</a>
+  <a href="equipment.html">Equipment</a>
+  <a href="team.html">Team</a>
+  <a href="budget.html">Budget</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="kalender.html">Kalender</a>
+  <a href="kontakte.html">Kontakte</a>
+</nav>
+
+<main class="page-main">
+
+  <div class="info-box highlight">
+    <h3>&#x1F4C5; Projekt-Roadmap</h3>
+    <p>Von der Idee bis zur Premiere auf der Night of the Graduates. Alle Meilensteine, Deadlines und Abhängigkeiten im Überblick.</p>
+  </div>
+
+  <!-- PRE-PRODUCTION -->
+  <div class="phase-header">&#x1F4DD; Phase 1: Pre-Production</div>
+  <div class="timeline">
+
+    <div class="tl-item done">
+      <div class="tl-phase">Konzept</div>
+      <div class="tl-title">Topic Pitch &amp; Konzeptentwicklung</div>
+      <div class="tl-date">Januar 2026</div>
+      <div class="tl-desc">Filmidee "FR(AI)ME" vorgestellt. Konzept mit KI-Thematik, Film-Referenzen und Countdown-Struktur verabschiedet.</div>
+      <div class="tl-status"><span class="badge badge-hf">Erledigt</span></div>
+    </div>
+
+    <div class="tl-item done">
+      <div class="tl-phase">Dokumentation</div>
+      <div class="tl-title">Projektdokumentation &amp; Risikomatrix</div>
+      <div class="tl-date">Januar &ndash; Februar 2026</div>
+      <div class="tl-desc">NOTG2026_Dokumentation_Film.pdf erstellt. Interne Bewertung (30.01.2026), Kanban-Board und Risikomatrix angelegt.</div>
+      <div class="tl-status"><span class="badge badge-hf">Erledigt</span></div>
+    </div>
+
+    <div class="tl-item done">
+      <div class="tl-phase">Location Scouting</div>
+      <div class="tl-title">Drehort-Recherche &amp; Übersicht</div>
+      <div class="tl-date">März &ndash; Mai 2026</div>
+      <div class="tl-desc">15 Locations identifiziert. Google Maps Links, Optionen-Vergleich und Drehplan-Cluster erstellt.</div>
+      <div class="tl-status"><span class="badge badge-hf">Erledigt</span></div>
+    </div>
+
+    <div class="tl-item active">
+      <div class="tl-phase">Aktuell &mdash; Deadline: 17. Juni</div>
+      <div class="tl-title">Genehmigungen &amp; Buchungen</div>
+      <div class="tl-date">Mai &ndash; 16. Juni 2026</div>
+      <div class="tl-desc">Airbnb buchen, DHBW-Räume anfragen (Maik Mittelstädt), Luisenpark-Genehmigung, Sondernutzung Stadt Mannheim. Cafés kontaktieren.</div>
+      <div class="tl-status"><span class="badge badge-cd">In Arbeit</span></div>
+    </div>
+
+    <div class="tl-item upcoming">
+      <div class="tl-phase">Vorbereitung</div>
+      <div class="tl-title">Shotlist finalisieren</div>
+      <div class="tl-date">Bis 14. Juni 2026</div>
+      <div class="tl-desc">Alle Einstellungen pro Szene festlegen. Kamerawinkel, Licht-Setup, Requisiten-Listen pro Drehtag.</div>
+      <div class="tl-status"><span class="badge badge-open">Ausstehend</span></div>
+    </div>
+
+    <div class="tl-item upcoming">
+      <div class="tl-phase">Vorbereitung</div>
+      <div class="tl-title">Equipment organisieren</div>
+      <div class="tl-date">Bis 15. Juni 2026</div>
+      <div class="tl-desc">Equipment-Check: Was vorhanden, was gemietet? LED-Leisten, Funkstrecke, Requisiten (Cowboy-Hüte, etc.) besorgen.</div>
+      <div class="tl-status"><span class="badge badge-open">Ausstehend</span></div>
+    </div>
+
+    <div class="tl-item upcoming">
+      <div class="tl-phase">Vorbereitung</div>
+      <div class="tl-title">Casting &amp; Team-Zuweisung</div>
+      <div class="tl-date">Bis 10. Juni 2026</div>
+      <div class="tl-desc">Rollen verteilen: Regie, Kamera, Ton, Licht, Darsteller. Proben für Spezial-Setups (Tanz, Piano).</div>
+      <div class="tl-status"><span class="badge badge-open">Ausstehend</span></div>
+    </div>
+
+  </div>
+
+  <!-- PRODUCTION -->
+  <div class="phase-header">&#x1F3AC; Phase 2: Production (Dreh)</div>
+  <div class="timeline">
+
+    <div class="tl-item upcoming">
+      <div class="tl-phase">Drehtag 1</div>
+      <div class="tl-title">WG &amp; Treppenhaus</div>
+      <div class="tl-date">17. Juni 2026</div>
+      <div class="tl-desc">Ganzer Tag. Locations #02&ndash;#05. Alle WG-Szenen + Sicherungskeller.</div>
+      <div class="tl-status"><span class="badge badge-open">Geplant</span></div>
+    </div>
+
+    <div class="tl-item upcoming">
+      <div class="tl-phase">Drehtag 2</div>
+      <div class="tl-title">Techniker-Base</div>
+      <div class="tl-date">18. Juni 2026</div>
+      <div class="tl-desc">Halber Tag. Location #01. KI-Zentrale, Hacking-Montage.</div>
+      <div class="tl-status"><span class="badge badge-open">Geplant</span></div>
+    </div>
+
+    <div class="tl-item upcoming">
+      <div class="tl-phase">Drehtag 3</div>
+      <div class="tl-title">Gastronomie</div>
+      <div class="tl-date">19. Juni 2026</div>
+      <div class="tl-desc">Nachmittag/Abend. Locations #06&ndash;#07. Date + Versöhnung.</div>
+      <div class="tl-status"><span class="badge badge-open">Geplant</span></div>
+    </div>
+
+    <div class="tl-item upcoming">
+      <div class="tl-phase">Drehtag 4</div>
+      <div class="tl-title">Außen-Countdown</div>
+      <div class="tl-date">20. Juni 2026 (wetterabhängig)</div>
+      <div class="tl-desc">Ganzer Tag. Locations #08, #09, #11, #13, #15. Park, Treppe, Western, Regen, Sunset.</div>
+      <div class="tl-status"><span class="badge badge-open">Geplant</span></div>
+    </div>
+
+    <div class="tl-item upcoming">
+      <div class="tl-phase">Drehtag 5</div>
+      <div class="tl-title">Spezial-Setups</div>
+      <div class="tl-date">21. Juni 2026</div>
+      <div class="tl-desc">Halber Tag. Locations #10, #12, #14. Tanzfläche, Bar, Piano.</div>
+      <div class="tl-status"><span class="badge badge-open">Geplant</span></div>
+    </div>
+
+  </div>
+
+  <!-- POST-PRODUCTION -->
+  <div class="phase-header">&#x1F4BB; Phase 3: Post-Production</div>
+  <div class="timeline">
+
+    <div class="tl-item upcoming">
+      <div class="tl-phase">Schnitt</div>
+      <div class="tl-title">Rohschnitt</div>
+      <div class="tl-date">Ende Juni &ndash; Juli 2026</div>
+      <div class="tl-desc">Material sichten, Rohschnitt aller 3 Filmteile (Countdown, Opener, Hauptfilm). Feedback-Runde im Team.</div>
+      <div class="tl-status"><span class="badge badge-open">Ausstehend</span></div>
+    </div>
+
+    <div class="tl-item upcoming">
+      <div class="tl-phase">Schnitt</div>
+      <div class="tl-title">Feinschnitt &amp; Color Grading</div>
+      <div class="tl-date">Juli &ndash; August 2026</div>
+      <div class="tl-desc">Feinschnitt, Übergänge, Color Grading (Film-Referenz-Looks), VFX falls nötig (KI-Base-Szenen).</div>
+      <div class="tl-status"><span class="badge badge-open">Ausstehend</span></div>
+    </div>
+
+    <div class="tl-item upcoming">
+      <div class="tl-phase">Audio</div>
+      <div class="tl-title">Sound-Design &amp; Musik</div>
+      <div class="tl-date">August 2026</div>
+      <div class="tl-desc">Soundtrack, Foley, Atmosphären. Musikrechte klären oder eigene Kompositionen.</div>
+      <div class="tl-status"><span class="badge badge-open">Ausstehend</span></div>
+    </div>
+
+    <div class="tl-item upcoming">
+      <div class="tl-phase">Finalisierung</div>
+      <div class="tl-title">Master &amp; Export</div>
+      <div class="tl-date">August &ndash; September 2026</div>
+      <div class="tl-desc">Finaler Export in Vorführ-Qualität. Backup. Testvorführung im kleinen Kreis.</div>
+      <div class="tl-status"><span class="badge badge-open">Ausstehend</span></div>
+    </div>
+
+  </div>
+
+  <!-- PREMIERE -->
+  <div class="phase-header">&#x1F31F; Phase 4: Premiere</div>
+  <div class="timeline">
+
+    <div class="tl-item upcoming">
+      <div class="tl-phase">Event</div>
+      <div class="tl-title">Night of the Graduates 2026</div>
+      <div class="tl-date">Oktober/November 2026 (Termin TBD)</div>
+      <div class="tl-desc">Premiere des Films auf der Night of the Graduates. Countdown-Sequenzen live zwischen den Acts, Hauptfilm als Highlight.</div>
+      <div class="tl-status"><span class="badge badge-info">Ziel</span></div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div style="font-size:.9rem; font-weight:600; color:var(--text);">FR(AI)ME &mdash; Night of the Graduates 2026</div>
+  <div style="margin-top:.3rem;">Filmteam DHBW Mannheim MPG24 &middot; Projektleitung: Dilara Sabuncuo &middot; Stand: Mai 2026</div>
+  <div style="margin-top:.4rem; color:var(--accent); font-weight:600;">Erster Drehtag: 17. Juni 2026</div>
+</footer>
+
+</body>
+</html>

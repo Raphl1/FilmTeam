@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team & Rollen — FR(AI)ME · NOTG 2026</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .team-lead {
+      background: var(--card);
+      border: 1px solid rgba(108,63,197,.3);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.8rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      border-left: 4px solid var(--purple);
+    }
+    .team-lead .lead-icon { font-size: 2.4rem; }
+    .team-lead .lead-info h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: .2rem;
+    }
+    .team-lead .lead-info .lead-role {
+      font-size: .82rem;
+      color: var(--lilac);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .team-lead .lead-info .lead-desc {
+      font-size: .84rem;
+      color: var(--muted);
+      margin-top: .3rem;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .role-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: var(--radius);
+      padding: 1.3rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+      transition: transform .2s, border-color .2s;
+    }
+    .role-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(108,63,197,.3);
+    }
+    .role-card .rc-icon { font-size: 1.6rem; }
+    .role-card .rc-title {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .role-card .rc-person {
+      font-size: .85rem;
+      color: var(--violet);
+      font-weight: 600;
+    }
+    .role-card .rc-person.open {
+      color: var(--muted);
+      font-style: italic;
+    }
+    .role-card .rc-tasks {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-top: .3rem;
+      line-height: 1.6;
+    }
+    .role-card .rc-tasks ul {
+      list-style: none;
+      padding: 0;
+    }
+    .role-card .rc-tasks li::before {
+      content: '\2022';
+      color: var(--purple);
+      margin-right: .5em;
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="tag">Filmteam DHBW Mannheim MPG24</div>
+  <h1>FR<span class="ai">(AI)</span>ME<span class="sep"> — </span>Night of the Graduates</h1>
+  <div class="subtitle">Team &amp; Rollen &middot; Wer macht was</div>
+</header>
+
+<nav class="site-nav">
+  <a href="index.html">Hub</a>
+  <a href="locations.html">Drehorte</a>
+  <a href="drehplan.html">Drehplan</a>
+  <a href="shotlist.html">Shotlist</a>
+  <a href="equipment.html">Equipment</a>
+  <a href="team.html" class="active">Team</a>
+  <a href="budget.html">Budget</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="kalender.html">Kalender</a>
+  <a href="kontakte.html">Kontakte</a>
+</nav>
+
+<main class="page-main">
+
+  <!-- Projektleitung -->
+  <div class="team-lead">
+    <div class="lead-icon">&#x1F451;</div>
+    <div class="lead-info">
+      <div class="lead-role">Projektleitung</div>
+      <h3>Dilara Sabuncuo</h3>
+      <div class="lead-desc">Gesamtkoordination, Ansprechpartnerin f&uuml;r alle Bereiche, Zeitplan &amp; Deadlines, Kommunikation mit DHBW &amp; externen Partnern.</div>
+    </div>
+  </div>
+
+  <!-- Rollen-Grid -->
+  <div class="section-title">
+    <div class="num">&#x1F465;</div>
+    <h2>Rollen im Filmteam</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="role-grid">
+
+    <div class="role-card">
+      <div class="rc-icon">&#x1F3AC;</div>
+      <div class="rc-title">Regie</div>
+      <div class="rc-person open">Zuweisung offen</div>
+      <div class="rc-tasks">
+        <ul>
+          <li>K&uuml;nstlerische Vision &amp; Szenengestaltung</li>
+          <li>Schauspielregie &amp; Blocking</li>
+          <li>Abstimmung mit Kamera &amp; Licht</li>
+          <li>Finale Freigabe aller Takes</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role-card">
+      <div class="rc-icon">&#x1F4F7;</div>
+      <div class="rc-title">Kamera</div>
+      <div class="rc-person open">Zuweisung offen</div>
+      <div class="rc-tasks">
+        <ul>
+          <li>Kameraf&uuml;hrung (Main &amp; B-Cam)</li>
+          <li>Bildkomposition &amp; Framing</li>
+          <li>Objektivwahl pro Szene</li>
+          <li>Technischer Check vor Drehstart</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role-card">
+      <div class="rc-icon">&#x1F4A1;</div>
+      <div class="rc-title">Licht</div>
+      <div class="rc-person open">Zuweisung offen</div>
+      <div class="rc-tasks">
+        <ul>
+          <li>Licht-Setup pro Szene (Shotlist)</li>
+          <li>LED-Panels, Neon, Spotlight bedienen</li>
+          <li>Nat&uuml;rliches Licht optimieren</li>
+          <li>Auf-/Abbau Lichtequipment</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role-card">
+      <div class="rc-icon">&#x1F3A4;</div>
+      <div class="rc-title">Ton</div>
+      <div class="rc-person open">Zuweisung offen</div>
+      <div class="rc-tasks">
+        <ul>
+          <li>Tonaufnahme (Boom &amp; Funkstrecke)</li>
+          <li>Monitoring &amp; Pegelkontrolle</li>
+          <li>Atmo-Aufnahmen pro Location</li>
+          <li>Backup-Recording auf externem Recorder</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role-card">
+      <div class="rc-icon">&#x1F4BB;</div>
+      <div class="rc-title">Schnitt / Post-Production</div>
+      <div class="rc-person open">Zuweisung offen</div>
+      <div class="rc-tasks">
+        <ul>
+          <li>Rohschnitt &amp; Feinschnitt</li>
+          <li>Color Grading</li>
+          <li>Sound Design &amp; Mischung</li>
+          <li>VFX / Motion Graphics (falls n&ouml;tig)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role-card">
+      <div class="rc-icon">&#x1F3AD;</div>
+      <div class="rc-title">Schauspiel</div>
+      <div class="rc-person open">Zuweisung offen</div>
+      <div class="rc-tasks">
+        <ul>
+          <li>Darstellung der Filmreferenz-Szenen</li>
+          <li>Probe &amp; Blocking mit Regie</li>
+          <li>Kost&uuml;m-Wechsel koordinieren</li>
+          <li>Mehrere Rollen m&ouml;glich (Ensemble)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role-card">
+      <div class="rc-icon">&#x1F4CB;</div>
+      <div class="rc-title">Produktion / Organisation</div>
+      <div class="rc-person open">Zuweisung offen</div>
+      <div class="rc-tasks">
+        <ul>
+          <li>Location-Booking &amp; Genehmigungen</li>
+          <li>Equipment-Logistik &amp; Miete</li>
+          <li>Catering &amp; Verpflegung</li>
+          <li>Zeitplan am Set durchsetzen</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role-card">
+      <div class="rc-icon">&#x1F3A8;</div>
+      <div class="rc-title">Set-Design / Requisiten</div>
+      <div class="rc-person open">Zuweisung offen</div>
+      <div class="rc-tasks">
+        <ul>
+          <li>Requisiten beschaffen &amp; verwalten</li>
+          <li>Set-Dressing pro Szene</li>
+          <li>Cowboy-H&uuml;te, Holster, Klavier-Setup</li>
+          <li>Continuity sicherstellen</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div style="font-size:.9rem; font-weight:600; color:var(--text);">FR(AI)ME — Night of the Graduates 2026</div>
+  <div style="margin-top:.3rem;">Filmteam DHBW Mannheim MPG24 &middot; Projektleitung: Dilara Sabuncuo &middot; Stand: Mai 2026</div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shotlist — FR(AI)ME · NOTG 2026</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .wip-banner {
+      background: rgba(247,37,133,.1);
+      border: 1px solid rgba(247,37,133,.3);
+      border-radius: var(--radius);
+      padding: 1rem 1.4rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      font-size: .88rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .wip-banner .wip-icon { font-size: 1.4rem; }
+    .day-section { margin-bottom: 2.5rem; }
+    .day-section h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: .8rem;
+      color: var(--lilac);
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .day-section h3 .day-badge {
+      background: rgba(108,63,197,.2);
+      border: 1px solid rgba(108,63,197,.3);
+      padding: .2em .7em;
+      border-radius: 6px;
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .shot-table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.07);
+      background: var(--card);
+    }
+    .shot-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .82rem;
+      min-width: 750px;
+    }
+    .shot-table th {
+      background: rgba(108,63,197,.2);
+      color: var(--lilac);
+      font-weight: 700;
+      text-align: left;
+      padding: .7em .9em;
+      font-size: .74rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .shot-table td {
+      padding: .6em .9em;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      vertical-align: middle;
+    }
+    .shot-table tr:last-child td { border-bottom: none; }
+    .shot-table tr:hover td { background: rgba(255,255,255,.03); }
+    .shot-table .placeholder { color: var(--muted); font-style: italic; }
+    .film-ref {
+      display: inline-block;
+      background: rgba(249,199,79,.1);
+      border: 1px solid rgba(249,199,79,.25);
+      color: var(--gold);
+      font-size: .7rem;
+      font-weight: 600;
+      padding: .15em .5em;
+      border-radius: 4px;
+      margin-left: .4em;
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="tag">Filmteam DHBW Mannheim MPG24</div>
+  <h1>FR<span class="ai">(AI)</span>ME<span class="sep"> — </span>Night of the Graduates</h1>
+  <div class="subtitle">Shotlist &middot; Alle Einstellungen pro Drehtag</div>
+</header>
+
+<nav class="site-nav">
+  <a href="index.html">Hub</a>
+  <a href="locations.html">Drehorte</a>
+  <a href="drehplan.html">Drehplan</a>
+  <a href="shotlist.html" class="active">Shotlist</a>
+  <a href="equipment.html">Equipment</a>
+  <a href="team.html">Team</a>
+  <a href="budget.html">Budget</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="kalender.html">Kalender</a>
+  <a href="kontakte.html">Kontakte</a>
+</nav>
+
+<main class="page-main">
+
+  <div class="wip-banner">
+    <span class="wip-icon">&#x1F6A7;</span>
+    <span>In Arbeit — Placeholder-Eintr&auml;ge zum Ausf&uuml;llen durch das Team. Shots werden nach Location-Begehung finalisiert.</span>
+  </div>
+
+  <!-- ═══ TAG 1 ═══ -->
+  <div class="day-section">
+    <h3><span class="day-badge">Tag 1</span> DHBW Indoor &amp; Umgebung</h3>
+    <div class="shot-table-wrap">
+      <table class="shot-table">
+        <thead>
+          <tr>
+            <th>Shot #</th>
+            <th>Szene</th>
+            <th>Einstellung</th>
+            <th>Kamera-Bewegung</th>
+            <th>Licht</th>
+            <th>Notizen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1-01</td>
+            <td>Forrest Gump Parkbank <span class="film-ref">Forrest Gump</span></td>
+            <td>Wide</td>
+            <td>Statisch / langsamer Push-in</td>
+            <td>Nat&uuml;rliches Licht, Aufheller</td>
+            <td>Bank vor DHBW, Campuspark</td>
+          </tr>
+          <tr>
+            <td>1-02</td>
+            <td>Forrest Gump Parkbank</td>
+            <td>Medium</td>
+            <td>Over-the-Shoulder</td>
+            <td>Nat&uuml;rliches Licht</td>
+            <td>Close auf Gesicht, Erz&auml;hlmoment</td>
+          </tr>
+          <tr>
+            <td>1-03</td>
+            <td>Rocky Stairs <span class="film-ref">Rocky</span></td>
+            <td>Wide</td>
+            <td>Tracking Shot (treppauf)</td>
+            <td>Nat&uuml;rliches Licht / Gegenlicht</td>
+            <td>DHBW Treppe, Triumphpose oben</td>
+          </tr>
+          <tr>
+            <td>1-04</td>
+            <td>Rocky Stairs</td>
+            <td>Close</td>
+            <td>Low-Angle statisch</td>
+            <td>Nat&uuml;rliches Licht</td>
+            <td>Faust in die Luft, Silhouette</td>
+          </tr>
+          <tr>
+            <td>1-05</td>
+            <td class="placeholder">— noch zuzuweisen —</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">Team erg&auml;nzt nach Begehung</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ TAG 2 ═══ -->
+  <div class="day-section">
+    <h3><span class="day-badge">Tag 2</span> Luisenpark &amp; Outdoor Locations</h3>
+    <div class="shot-table-wrap">
+      <table class="shot-table">
+        <thead>
+          <tr>
+            <th>Shot #</th>
+            <th>Szene</th>
+            <th>Einstellung</th>
+            <th>Kamera-Bewegung</th>
+            <th>Licht</th>
+            <th>Notizen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2-01</td>
+            <td>Shawshank Rain <span class="film-ref">Shawshank</span></td>
+            <td>Wide</td>
+            <td>Crane/Jib (oder Drohne)</td>
+            <td>Overcast / Regen-Setup</td>
+            <td>Arme ausgebreitet, Regen oder Wasser-Rig</td>
+          </tr>
+          <tr>
+            <td>2-02</td>
+            <td>Shawshank Rain</td>
+            <td>Medium</td>
+            <td>Dolly-in</td>
+            <td>Diffuses Licht</td>
+            <td>Emotionaler Close, Wasser im Gesicht</td>
+          </tr>
+          <tr>
+            <td>2-03</td>
+            <td>Sonnenuntergang <span class="film-ref">Sunset</span></td>
+            <td>Wide</td>
+            <td>Statisch / Zeitraffer</td>
+            <td>Golden Hour</td>
+            <td>Luisenpark Wiese, Silhouetten</td>
+          </tr>
+          <tr>
+            <td>2-04</td>
+            <td>Sonnenuntergang</td>
+            <td>Close</td>
+            <td>Handheld</td>
+            <td>Golden Hour Backlight</td>
+            <td>Gesichter im warmen Licht</td>
+          </tr>
+          <tr>
+            <td>2-05</td>
+            <td class="placeholder">— noch zuzuweisen —</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">Team erg&auml;nzt nach Begehung</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ TAG 3 ═══ -->
+  <div class="day-section">
+    <h3><span class="day-badge">Tag 3</span> Caf&eacute;s &amp; Gastro-Locations</h3>
+    <div class="shot-table-wrap">
+      <table class="shot-table">
+        <thead>
+          <tr>
+            <th>Shot #</th>
+            <th>Szene</th>
+            <th>Einstellung</th>
+            <th>Kamera-Bewegung</th>
+            <th>Licht</th>
+            <th>Notizen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>3-01</td>
+            <td>HIMYM Bar-Szene <span class="film-ref">HIMYM</span></td>
+            <td>Wide</td>
+            <td>Statisch / Steadicam-Schwenk</td>
+            <td>Warmes Ambient, Practicals</td>
+            <td>Caf&eacute; als Bar-Setting, Booth-Shot</td>
+          </tr>
+          <tr>
+            <td>3-02</td>
+            <td>HIMYM Bar-Szene</td>
+            <td>Medium</td>
+            <td>Schwenk &uuml;ber Gruppe</td>
+            <td>Warmes Ambient</td>
+            <td>Gegensch&uuml;sse Gespr&auml;ch</td>
+          </tr>
+          <tr>
+            <td>3-03</td>
+            <td>Pulp Fiction Dance <span class="film-ref">Pulp Fiction</span></td>
+            <td>Medium</td>
+            <td>Tracking / Dolly lateral</td>
+            <td>Neon + Spot</td>
+            <td>Tanzfl&auml;che, ikonische Pose</td>
+          </tr>
+          <tr>
+            <td>3-04</td>
+            <td>Pulp Fiction Dance</td>
+            <td>Close</td>
+            <td>Handheld, leichte Unruhe</td>
+            <td>Neon-Farben (blau/rot)</td>
+            <td>F&uuml;&szlig;e / H&auml;nde Detail</td>
+          </tr>
+          <tr>
+            <td>3-05</td>
+            <td class="placeholder">— noch zuzuweisen —</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">Team erg&auml;nzt nach Begehung</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ TAG 4 ═══ -->
+  <div class="day-section">
+    <h3><span class="day-badge">Tag 4</span> Airbnb &amp; Spezial-Setups</h3>
+    <div class="shot-table-wrap">
+      <table class="shot-table">
+        <thead>
+          <tr>
+            <th>Shot #</th>
+            <th>Szene</th>
+            <th>Einstellung</th>
+            <th>Kamera-Bewegung</th>
+            <th>Licht</th>
+            <th>Notizen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>4-01</td>
+            <td>La La Land Piano <span class="film-ref">La La Land</span></td>
+            <td>Wide</td>
+            <td>Langsamer 360&deg;-Dolly</td>
+            <td>Single Spotlight + Dunkelheit</td>
+            <td>Klavier im Spotlight, Rest dunkel</td>
+          </tr>
+          <tr>
+            <td>4-02</td>
+            <td>La La Land Piano</td>
+            <td>Close</td>
+            <td>Slider &uuml;ber Tasten</td>
+            <td>Spotlight warmwei&szlig;</td>
+            <td>H&auml;nde auf Tasten, Profil-Shot</td>
+          </tr>
+          <tr>
+            <td>4-03</td>
+            <td>Western Duell <span class="film-ref">Western</span></td>
+            <td>Wide</td>
+            <td>Statisch, symmetrisch</td>
+            <td>Hartes Seitenlicht</td>
+            <td>Zwei Kontrahenten, Staubwolke</td>
+          </tr>
+          <tr>
+            <td>4-04</td>
+            <td>Western Duell</td>
+            <td>Close</td>
+            <td>Schnelle Schnitte, Augen-Detail</td>
+            <td>Hartes Licht, Schatten</td>
+            <td>Augen, Hand am Holster, Cowboy-Hut</td>
+          </tr>
+          <tr>
+            <td>4-05</td>
+            <td class="placeholder">— noch zuzuweisen —</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">Team erg&auml;nzt nach Begehung</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ TAG 5 ═══ -->
+  <div class="day-section">
+    <h3><span class="day-badge">Tag 5</span> Reshoots &amp; Erg&auml;nzungen</h3>
+    <div class="shot-table-wrap">
+      <table class="shot-table">
+        <thead>
+          <tr>
+            <th>Shot #</th>
+            <th>Szene</th>
+            <th>Einstellung</th>
+            <th>Kamera-Bewegung</th>
+            <th>Licht</th>
+            <th>Notizen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>5-01</td>
+            <td>Sonnenuntergang Pickup <span class="film-ref">Sunset</span></td>
+            <td>Wide</td>
+            <td>Steadicam Walk-and-Talk</td>
+            <td>Golden Hour</td>
+            <td>Falls Tag 2 Wetter schlecht</td>
+          </tr>
+          <tr>
+            <td>5-02</td>
+            <td class="placeholder">— noch zuzuweisen —</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">Reshoots nach Sichtung</td>
+          </tr>
+          <tr>
+            <td>5-03</td>
+            <td class="placeholder">— noch zuzuweisen —</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">Team erg&auml;nzt nach Begehung</td>
+          </tr>
+          <tr>
+            <td>5-04</td>
+            <td class="placeholder">— noch zuzuweisen —</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">Team erg&auml;nzt nach Begehung</td>
+          </tr>
+          <tr>
+            <td>5-05</td>
+            <td class="placeholder">— noch zuzuweisen —</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">TBD</td>
+            <td class="placeholder">Team erg&auml;nzt nach Begehung</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div style="font-size:.9rem; font-weight:600; color:var(--text);">FR(AI)ME — Night of the Graduates 2026</div>
+  <div style="margin-top:.3rem;">Filmteam DHBW Mannheim MPG24 &middot; Projektleitung: Dilara Sabuncuo &middot; Stand: Mai 2026</div>
+</footer>
+
+</body>
+</html>

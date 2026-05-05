@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Equipment — FR(AI)ME · NOTG 2026</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .equip-section {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.2rem;
+    }
+    .equip-section h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .8rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--lilac);
+    }
+    .equip-section h3 .eq-icon { font-size: 1.2rem; }
+    .equip-list {
+      list-style: none;
+      font-size: .85rem;
+    }
+    .equip-list li {
+      padding: .35em 0;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .equip-list li:last-child { border-bottom: none; }
+    .equip-list .check { font-size: 1rem; flex-shrink: 0; }
+    .equip-list .item-name { flex: 1; }
+    .equip-list .item-note { color: var(--muted); font-size: .78rem; }
+
+    .status-legend {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      font-size: .82rem;
+    }
+    .status-legend span {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .split-header {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin: 2.5rem 0 1rem;
+    }
+    .split-header h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .split-header .line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, rgba(108,63,197,.5), transparent);
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="tag">Filmteam DHBW Mannheim MPG24</div>
+  <h1>FR<span class="ai">(AI)</span>ME<span class="sep"> — </span>Night of the Graduates</h1>
+  <div class="subtitle">Equipment-Checkliste &middot; Was wir brauchen</div>
+</header>
+
+<nav class="site-nav">
+  <a href="index.html">Hub</a>
+  <a href="locations.html">Drehorte</a>
+  <a href="drehplan.html">Drehplan</a>
+  <a href="shotlist.html">Shotlist</a>
+  <a href="equipment.html" class="active">Equipment</a>
+  <a href="team.html">Team</a>
+  <a href="budget.html">Budget</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="kalender.html">Kalender</a>
+  <a href="kontakte.html">Kontakte</a>
+</nav>
+
+<main class="page-main">
+
+  <div class="status-legend">
+    <span>&#x2611; = Vorhanden</span>
+    <span>&#x2610; = Muss organisiert/gemietet werden</span>
+  </div>
+
+  <!-- ═══ WAS VORHANDEN ═══ -->
+  <div class="split-header">
+    <h2>Was vorhanden</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="equip-section">
+    <h3><span class="eq-icon">&#x1F3A5;</span> Kamera</h3>
+    <ul class="equip-list">
+      <li><span class="check">&#x2611;</span> <span class="item-name">Main-Cam (DHBW-Bestand)</span> <span class="item-note">Reservierung &uuml;ber Maik Mittelst&auml;dt</span></li>
+      <li><span class="check">&#x2610;</span> <span class="item-name">B-Cam (2. Perspektive)</span> <span class="item-note">Ggf. private DSLR/Mirrorless</span></li>
+    </ul>
+  </div>
+
+  <div class="equip-section">
+    <h3><span class="eq-icon">&#x1F50D;</span> Objektive</h3>
+    <ul class="equip-list">
+      <li><span class="check">&#x2611;</span> <span class="item-name">Zoom 24-70mm f/2.8</span> <span class="item-note">Standardobjektiv, DHBW</span></li>
+      <li><span class="check">&#x2610;</span> <span class="item-name">Festbrennweite 50mm f/1.4</span> <span class="item-note">F&uuml;r Bokeh / Low-Light</span></li>
+      <li><span class="check">&#x2610;</span> <span class="item-name">Weitwinkel 16-35mm</span> <span class="item-note">F&uuml;r Wide Shots, Landschaft</span></li>
+    </ul>
+  </div>
+
+  <div class="equip-section">
+    <h3><span class="eq-icon">&#x1F3A4;</span> Ton</h3>
+    <ul class="equip-list">
+      <li><span class="check">&#x2611;</span> <span class="item-name">Richtmikrofon (Shotgun)</span> <span class="item-note">DHBW-Bestand</span></li>
+      <li><span class="check">&#x2611;</span> <span class="item-name">Tonangel / Boom Pole</span> <span class="item-note">DHBW-Bestand</span></li>
+      <li><span class="check">&#x2610;</span> <span class="item-name">Funkstrecke (Lavalier, 2x)</span> <span class="item-note">F&uuml;r Dialoge im Freien</span></li>
+      <li><span class="check">&#x2610;</span> <span class="item-name">Externer Recorder (Zoom H6 o.&auml;.)</span> <span class="item-note">Backup-Aufnahme</span></li>
+    </ul>
+  </div>
+
+  <!-- ═══ WAS GEMIETET WERDEN MUSS ═══ -->
+  <div class="split-header">
+    <h2>Was gemietet werden muss</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="equip-section">
+    <h3><span class="eq-icon">&#x1F4A1;</span> Licht</h3>
+    <ul class="equip-list">
+      <li><span class="check">&#x2610;</span> <span class="item-name">LED-Panels (2-3 St&uuml;ck, bicolor)</span> <span class="item-note">Indoor-Szenen, Interview-Light</span></li>
+      <li><span class="check">&#x2610;</span> <span class="item-name">Neonlicht / RGB-Tubes</span> <span class="item-note">F&uuml;r Base-Szene (Pulp Fiction Vibe)</span></li>
+      <li><span class="check">&#x2611;</span> <span class="item-name">Nat&uuml;rliches Licht (Outdoor)</span> <span class="item-note">Kein Equipment n&ouml;tig, Reflektoren mitnehmen</span></li>
+      <li><span class="check">&#x2610;</span> <span class="item-name">Spotlight / Fresnel</span> <span class="item-note">La La Land Piano-Szene</span></li>
+      <li><span class="check">&#x2610;</span> <span class="item-name">Reflektoren &amp; Diffusoren</span> <span class="item-note">Outdoor Fill-Light</span></li>
+    </ul>
+  </div>
+
+  <div class="equip-section">
+    <h3><span class="eq-icon">&#x1F3AD;</span> Requisiten</h3>
+    <ul class="equip-list">
+      <li><span class="check">&#x2610;</span> <span class="item-name">Cowboy-H&uuml;te (2x)</span> <span class="item-note">Western-Duell-Szene</span></li>
+      <li><span class="check">&#x2610;</span> <span class="item-name">Holster / G&uuml;rtel (Westernstil)</span> <span class="item-note">Western-Duell-Szene</span></li>
+      <li><span class="check">&#x2610;</span> <span class="item-name">Klavier-Spotlight Setup</span> <span class="item-note">La La Land Referenz, ggf. E-Piano organisieren</span></li>
+      <li><span class="check">&#x2610;</span> <span class="item-name">Parkbank-Requisite</span> <span class="item-note">Forrest Gump, ggf. vorhandene Bank nutzen</span></li>
+      <li><span class="check">&#x2610;</span> <span class="item-name">Nebelmaschine</span> <span class="item-note">Atmosph&auml;re f&uuml;r Indoor-Szenen</span></li>
+    </ul>
+  </div>
+
+  <div class="equip-section">
+    <h3><span class="eq-icon">&#x1F698;</span> Transport</h3>
+    <ul class="equip-list">
+      <li><span class="check">&#x2610;</span> <span class="item-name">Transporter / Kombi f&uuml;r Equipment</span> <span class="item-note">5 Drehtage, Mannheim-weit</span></li>
+      <li><span class="check">&#x2610;</span> <span class="item-name">Equipment-Cases &amp; Trolleys</span> <span class="item-note">Schutz f&uuml;r Kamera &amp; Licht</span></li>
+      <li><span class="check">&#x2611;</span> <span class="item-name">Private PKWs (Crew)</span> <span class="item-note">Pers&ouml;nlicher Transport</span></li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div style="font-size:.9rem; font-weight:600; color:var(--text);">FR(AI)ME — Night of the Graduates 2026</div>
+  <div style="margin-top:.3rem;">Filmteam DHBW Mannheim MPG24 &middot; Projektleitung: Dilara Sabuncuo &middot; Stand: Mai 2026</div>
+</footer>
+
+</body>
+</html>

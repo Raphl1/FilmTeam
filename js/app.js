@@ -1,12 +1,12 @@
 /**
  * FR(AI)ME — Night of the Graduates 2026
- * Single Page Application
+ * Single Page Application with Inline Editing & GitHub Sync
  * Vanilla JS · Hash Router · localStorage persistence
  */
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // STATE
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 const state = {
   config: null,
   locations: null,
@@ -16,23 +16,114 @@ const state = {
   equipment: null,
   budget: null,
   timeline: null,
-  activeFilter: 'all'
+  activeFilter: 'all',
+  editMode: false,
+  dirty: new Set(),       // tracks which data files have been modified
+  saving: false,
+  loaded: false
 };
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// DATA FETCHING
-// ═══════════════════════════════════════════════════════════════════════════════
-async function fetchAllData() {
-  const files = ['config', 'locations', 'schedule', 'contacts', 'team', 'equipment', 'budget', 'timeline'];
-  const results = await Promise.all(
-    files.map(f => fetch(`data/${f}.json`).then(r => r.json()))
-  );
-  files.forEach((name, i) => { state[name] = results[i]; });
+// =============================================================================
+// GITHUB SYNC CONFIG
+// =============================================================================
+const GITHUB_REPO = 'Raphl1/FilmTeam';
+const GITHUB_BRANCH = 'main';
+const DATA_PATH = 'website/data';
+
+function getGithubToken() {
+  return localStorage.getItem('github_token') || '';
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+function setGithubToken(token) {
+  localStorage.setItem('github_token', token);
+}
+
+function hasGithubToken() {
+  return !!getGithubToken();
+}
+
+// Fetch SHA for a file from GitHub
+async function fetchFileSHA(filePath) {
+  const token = getGithubToken();
+  const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}?ref=${GITHUB_BRANCH}`, {
+    headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+  });
+  if (res.ok) {
+    const data = await res.json();
+    return data.sha;
+  }
+  return null;
+}
+
+// Save a single JSON file to GitHub via API
+async function saveFileToGithub(fileName, data) {
+  const token = getGithubToken();
+  if (!token) return { ok: false, error: 'Kein Token' };
+
+  const filePath = `${DATA_PATH}/${fileName}.json`;
+
+  try {
+    const sha = await fetchFileSHA(filePath);
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2) + '\n')));
+    const body = {
+      message: `Update ${fileName}.json via FR(AI)ME Editor`,
+      content,
+      branch: GITHUB_BRANCH
+    };
+    if (sha) body.sha = sha;
+
+    const putRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (putRes.ok) return { ok: true };
+    const err = await putRes.json();
+    return { ok: false, error: err.message || 'Fehler beim Speichern' };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+// Save all dirty files to GitHub
+async function saveAllDirty() {
+  if (state.dirty.size === 0) {
+    showToast('Keine Änderungen vorhanden', 'info');
+    return;
+  }
+
+  state.saving = true;
+  renderHeaderControls();
+  showToast('Speichere...', 'info');
+
+  let errors = [];
+  for (const file of state.dirty) {
+    const result = await saveFileToGithub(file, state[file]);
+    if (!result.ok) errors.push(`${file}: ${result.error}`);
+  }
+
+  state.saving = false;
+
+  if (errors.length === 0) {
+    showToast('Gespeichert \u2713', 'success');
+    state.dirty.clear();
+    exitEditMode();
+    await fetchAllData();
+    render();
+  } else {
+    showToast('Fehler: ' + errors.join(', '), 'error');
+    renderHeaderControls();
+  }
+}
+
+// =============================================================================
 // THEME
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function getTheme() {
   return localStorage.getItem('theme') || 'dark';
 }
@@ -42,16 +133,16 @@ function applyTheme(theme) {
   document.body.className = theme;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // ROUTER
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function getRoute() {
   return window.location.hash.slice(1) || 'hub';
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // ICONS (emoji-based for zero dependencies)
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 const ICONS = {
   'grid': '\u25A6',
   'map-pin': '\uD83D\uDCCD',
@@ -66,9 +157,9 @@ const ICONS = {
   'moon': '\uD83C\uDF19'
 };
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // UTILITIES
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function formatDate(dateStr) {
   const d = new Date(dateStr);
   const days = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
@@ -110,28 +201,168 @@ function cyclePermitStatus(current) {
   return cycle[(idx + 1) % cycle.length];
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// =============================================================================
+// TOAST SYSTEM
+// =============================================================================
+function showToast(message, type = 'success') {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  requestAnimationFrame(() => {
+    toast.classList.add('show');
+  });
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// =============================================================================
+// EDIT MODE LOGIC
+// =============================================================================
+function enterEditMode() {
+  if (!hasGithubToken()) {
+    showTokenModal();
+    return;
+  }
+  state.editMode = true;
+  state.dirty.clear();
+  document.body.classList.add('edit-mode-active');
+  render();
+  showToast('Bearbeitungsmodus aktiv', 'info');
+}
+
+function exitEditMode() {
+  state.editMode = false;
+  state.dirty.clear();
+  document.body.classList.remove('edit-mode-active');
+  render();
+}
+
+function cancelEditMode() {
+  if (state.dirty.size > 0) {
+    if (!confirm('Ungespeicherte Änderungen verwerfen?')) return;
+  }
+  // Reload data to discard changes
+  fetchAllData().then(() => {
+    exitEditMode();
+    showToast('Änderungen verworfen', 'info');
+  });
+}
+
+function markDirty(file) {
+  state.dirty.add(file);
+  renderHeaderControls();
+}
+
+function showTokenModal() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.id = 'token-modal';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h3>GitHub Token erforderlich</h3>
+      <p>Um Änderungen zu speichern, benötigst du einen <strong>Personal Access Token</strong> mit <code>repo</code> Berechtigung.</p>
+      <p><a href="https://github.com/settings/tokens/new?scopes=repo&description=FRAIME+Editor" target="_blank" rel="noopener">Token erstellen &rarr;</a></p>
+      <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxx" class="token-input" autocomplete="off" />
+      <div class="modal-actions">
+        <button class="btn btn-secondary" data-action="close-modal">Abbrechen</button>
+        <button class="btn btn-primary" data-action="save-token">Speichern</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  requestAnimationFrame(() => modal.classList.add('show'));
+  document.getElementById('token-input').focus();
+}
+
+function closeTokenModal() {
+  const modal = document.getElementById('token-modal');
+  if (modal) {
+    modal.classList.remove('show');
+    setTimeout(() => modal.remove(), 300);
+  }
+}
+
+// =============================================================================
+// DATA FETCHING
+// =============================================================================
+async function fetchAllData() {
+  const files = ['config', 'locations', 'schedule', 'contacts', 'team', 'equipment', 'budget', 'timeline'];
+  const results = await Promise.all(
+    files.map(f => fetch(`data/${f}.json?t=${Date.now()}`).then(r => r.json()))
+  );
+  files.forEach((name, i) => { state[name] = results[i]; });
+}
+
+// =============================================================================
+// SKELETON LOADING
+// =============================================================================
+function renderSkeleton() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="header-text">
+          <div class="skeleton skeleton-tag"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-subtitle"></div>
+        </div>
+      </div>
+    </header>
+    <nav class="site-nav">
+      ${Array(9).fill('<div class="skeleton skeleton-nav-item"></div>').join('')}
+    </nav>
+    <main class="page-main">
+      <div class="view-container">
+        <div class="skeleton-grid">
+          ${Array(6).fill('<div class="skeleton skeleton-card"></div>').join('')}
+        </div>
+      </div>
+    </main>
+  `;
+}
+
+// =============================================================================
 // MAIN RENDER
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function render() {
+  const scrollPos = window.scrollY;
   const theme = getTheme();
   applyTheme(theme);
 
   const app = document.getElementById('app');
   const route = getRoute();
   const themeIcon = theme === 'dark' ? ICONS.sun : ICONS.moon;
+  const editClass = state.editMode ? 'editing' : '';
 
   app.innerHTML = `
-    <header class="site-header">
+    <header class="site-header ${editClass}">
       <div class="header-inner">
         <div class="header-text">
           <div class="tag">Filmteam DHBW Mannheim MPG24</div>
           <h1>FR<span class="ai">(AI)</span>ME<span class="sep"> \u2014 </span>Night of the Graduates</h1>
           <div class="subtitle">Vollst\u00e4ndige Projektplanung \u00b7 2026</div>
         </div>
-        <button class="theme-toggle" data-action="toggle-theme" aria-label="Theme wechseln">
-          ${themeIcon}
-        </button>
+        <div class="header-actions" id="header-actions">
+          ${renderHeaderButtons(themeIcon)}
+        </div>
       </div>
     </header>
 
@@ -150,11 +381,47 @@ function render() {
       </div>
     </main>
   `;
+
+  // Restore scroll position
+  window.scrollTo(0, scrollPos);
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+function renderHeaderButtons(themeIcon) {
+  if (state.editMode) {
+    return `
+      <span class="edit-label">Bearbeiten</span>
+      <button class="header-btn save-btn" data-action="save-changes" title="Speichern" ${state.saving ? 'disabled' : ''}>
+        ${state.saving ? '\u23F3' : '\uD83D\uDCBE'}
+      </button>
+      <button class="header-btn cancel-btn" data-action="cancel-edit" title="Abbrechen">
+        \u2715
+      </button>
+      <button class="theme-toggle" data-action="toggle-theme" aria-label="Theme wechseln">
+        ${themeIcon}
+      </button>
+    `;
+  }
+  return `
+    <button class="header-btn edit-btn" data-action="enter-edit" title="Bearbeiten">
+      \u270F\uFE0F
+    </button>
+    <button class="theme-toggle" data-action="toggle-theme" aria-label="Theme wechseln">
+      ${themeIcon}
+    </button>
+  `;
+}
+
+function renderHeaderControls() {
+  const actions = document.getElementById('header-actions');
+  if (!actions) return;
+  const theme = getTheme();
+  const themeIcon = theme === 'dark' ? ICONS.sun : ICONS.moon;
+  actions.innerHTML = renderHeaderButtons(themeIcon);
+}
+
+// =============================================================================
 // VIEW DISPATCHER
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function renderView(route) {
   switch (route) {
     case 'hub':       return viewHub();
@@ -170,9 +437,9 @@ function renderView(route) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // VIEW: HUB
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function viewHub() {
   const { stats, navigation } = state.config;
   const links = navigation.filter(n => n.id !== 'hub');
@@ -219,13 +486,14 @@ function viewHub() {
   `;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // VIEW: LOCATIONS
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function viewLocations() {
   const locations = state.locations;
   const filter = state.activeFilter;
   const allBadges = [...new Set(locations.flatMap(l => l.badges))];
+  const editing = state.editMode;
 
   let filtered;
   if (filter === 'all') {
@@ -236,6 +504,10 @@ function viewLocations() {
     filtered = locations.filter(l => l.badges.includes(filter));
   }
 
+  const emptyState = filtered.length === 0
+    ? '<div class="empty-state">Keine Locations gefunden f\u00fcr diesen Filter.</div>'
+    : '';
+
   return `
     <h2 class="view-title">\uD83D\uDCCD Drehorte</h2>
     <div class="filter-bar">
@@ -245,8 +517,10 @@ function viewLocations() {
       `).join('')}
       <button class="filter-btn ${filter === 'open' ? 'active' : ''}" data-filter="open">Offen</button>
     </div>
+    ${emptyState}
     <div class="locations-grid">
-      ${filtered.map(loc => {
+      ${filtered.map((loc, idx) => {
+        const realIdx = locations.indexOf(loc);
         const statusClass = loc.status === 'confirmed' ? 'status-green'
           : loc.status === 'pending' ? 'status-yellow' : 'status-gray';
         const statusLabel = loc.status === 'confirmed' ? 'Best\u00e4tigt'
@@ -260,69 +534,103 @@ function viewLocations() {
           ? `<a href="${loc.mapLink}" target="_blank" rel="noopener" class="maps-btn">\uD83D\uDDFA\uFE0F Google Maps</a>`
           : '';
 
+        const deleteBtn = editing ? `<button class="delete-btn" data-action="delete-location" data-idx="${realIdx}" title="L\u00f6schen">\u2715</button>` : '';
+
+        const statusBadge = editing
+          ? `<span class="status-badge ${statusClass} editable-badge" data-action="cycle-location-status" data-idx="${realIdx}">${statusLabel}</span>`
+          : `<span class="status-badge ${statusClass}">${statusLabel}</span>`;
+
+        const nameField = editing
+          ? `<h3 class="loc-name" contenteditable="true" data-field="name" data-file="locations" data-idx="${realIdx}">${escapeHtml(loc.name)}</h3>`
+          : `<h3 class="loc-name">${escapeHtml(loc.name)}</h3>`;
+
+        const concreteField = editing
+          ? `<p class="loc-concrete" contenteditable="true" data-field="concrete" data-file="locations" data-idx="${realIdx}">${escapeHtml(loc.concrete)}</p>`
+          : `<p class="loc-concrete">${escapeHtml(loc.concrete)}</p>`;
+
+        const vibeField = editing
+          ? `<p class="loc-vibe" contenteditable="true" data-field="vibe" data-file="locations" data-idx="${realIdx}">${escapeHtml(loc.vibe)}</p>`
+          : `<p class="loc-vibe">${escapeHtml(loc.vibe)}</p>`;
+
         return `
           <div class="card loc-card">
+            ${deleteBtn}
             ${mapEmbed}
             <div class="loc-body">
               <div class="loc-header">
                 <span class="loc-id">#${String(loc.id).padStart(2, '0')}</span>
-                <span class="status-badge ${statusClass}">${statusLabel}</span>
+                ${statusBadge}
               </div>
-              <h3 class="loc-name">${loc.name}</h3>
-              <p class="loc-concrete">${loc.concrete}</p>
+              ${nameField}
+              ${concreteField}
               <div class="loc-badges">
                 ${loc.badges.map(b => `<span class="badge badge-${b.toLowerCase()}">${b}</span>`).join(' ')}
               </div>
-              <p class="loc-vibe">${loc.vibe}</p>
-              ${loc.reference ? `<div class="loc-ref">\uD83C\uDFAC ${loc.reference}</div>` : ''}
+              ${vibeField}
+              ${loc.reference ? `<div class="loc-ref">\uD83C\uDFAC ${escapeHtml(loc.reference)}</div>` : ''}
               ${mapLink}
             </div>
           </div>
         `;
       }).join('')}
     </div>
+    ${editing ? `<button class="add-item-btn" data-action="add-location">+ Location hinzuf\u00fcgen</button>` : ''}
   `;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // VIEW: SCHEDULE
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function viewSchedule() {
   const days = state.schedule;
   const calUrl = state.config.project.calendarUrl;
+  const editing = state.editMode;
 
   return `
     <h2 class="view-title">\uD83D\uDCC5 Drehplan</h2>
     <div class="schedule-grid">
-      ${days.map(day => {
+      ${days.map((day, idx) => {
         const locNames = day.locations.map(id => {
           const loc = state.locations.find(l => l.id === id);
           return loc ? loc.name : `#${id}`;
         });
+
+        const deleteBtn = editing ? `<button class="delete-btn" data-action="delete-schedule" data-idx="${idx}" title="L\u00f6schen">\u2715</button>` : '';
+
+        const titleField = editing
+          ? `<h3 class="sched-title"><span>${day.icon}</span> <span contenteditable="true" data-field="title" data-file="schedule" data-idx="${idx}">${escapeHtml(day.title)}</span></h3>`
+          : `<h3 class="sched-title">${day.icon} ${escapeHtml(day.title)}</h3>`;
+
+        const notesField = editing
+          ? `<div class="sched-notes" contenteditable="true" data-field="notes" data-file="schedule" data-idx="${idx}">${escapeHtml(day.notes || '')}</div>`
+          : (day.notes ? `<div class="sched-notes">\uD83D\uDCDD ${escapeHtml(day.notes)}</div>` : '');
+
         return `
           <div class="card schedule-card">
+            ${deleteBtn}
             <div class="sched-header">
               <span class="sched-day">Tag ${day.day}</span>
               <span class="sched-date">${formatDate(day.date)}</span>
             </div>
-            <h3 class="sched-title">${day.icon} ${day.title}</h3>
+            ${titleField}
             <div class="sched-time">\u23F0 ${day.time}</div>
             <div class="sched-locations">
               <strong>Locations:</strong>
               <div class="sched-loc-tags">
-                ${locNames.map(n => `<span class="sched-loc-tag">${n}</span>`).join('')}
+                ${locNames.map(n => `<span class="sched-loc-tag">${escapeHtml(n)}</span>`).join('')}
               </div>
             </div>
             <div class="sched-scenes">
               <strong>Szenen:</strong>
-              <ul>${day.scenes.map(s => `<li>${s}</li>`).join('')}</ul>
+              <ul>${day.scenes.map(s => `<li>${escapeHtml(s)}</li>`).join('')}</ul>
             </div>
-            ${day.notes ? `<div class="sched-notes">\uD83D\uDCDD ${day.notes}</div>` : ''}
-            ${day.conflict ? `<div class="sched-conflict">\u26A0\uFE0F <strong>Konflikt:</strong> ${day.conflict}</div>` : ''}
+            ${notesField}
+            ${day.conflict ? `<div class="sched-conflict">\u26A0\uFE0F <strong>Konflikt:</strong> ${escapeHtml(day.conflict)}</div>` : ''}
           </div>
         `;
       }).join('')}
     </div>
+    ${editing ? `<button class="add-item-btn" data-action="add-schedule">+ Drehtag hinzuf\u00fcgen</button>` : ''}
     <h3 class="sub-title">\uD83D\uDCC6 Google Kalender</h3>
     <div class="calendar-embed">
       <iframe src="${calUrl}&mode=WEEK" loading="lazy"></iframe>
@@ -330,11 +638,12 @@ function viewSchedule() {
   `;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // VIEW: TEAM
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function viewTeam() {
   const { lead, roles } = state.team;
+  const editing = state.editMode;
 
   return `
     <h2 class="view-title">\uD83D\uDC65 Team & Rollen</h2>
@@ -342,35 +651,46 @@ function viewTeam() {
       <div class="lead-icon">\uD83D\uDC51</div>
       <div class="lead-info">
         <h3>Projektleitung</h3>
-        <p class="lead-name">${lead.name}</p>
+        ${editing
+          ? `<p class="lead-name" contenteditable="true" data-field="lead.name" data-file="team">${escapeHtml(lead.name)}</p>`
+          : `<p class="lead-name">${escapeHtml(lead.name)}</p>`}
       </div>
       <span class="status-badge status-green">Zugewiesen</span>
     </div>
     <div class="team-grid">
-      ${roles.map(role => {
+      ${roles.map((role, idx) => {
         const assigned = role.assigned && role.assigned.trim() !== '';
+        const deleteBtn = editing ? `<button class="delete-btn" data-action="delete-role" data-idx="${idx}" title="L\u00f6schen">\u2715</button>` : '';
+
+        const personField = editing
+          ? `<input type="text" class="inline-input" value="${escapeHtml(role.assigned || '')}" placeholder="Name zuweisen..." data-action="assign-role" data-idx="${idx}" />`
+          : `<span class="role-person ${assigned ? '' : 'role-open'}">${assigned ? escapeHtml(role.assigned) : 'Offen'}</span>`;
+
         return `
           <div class="card role-card">
+            ${deleteBtn}
             <div class="role-icon">${role.icon}</div>
-            <h3 class="role-title">${role.title}</h3>
-            <p class="role-desc">${role.description}</p>
+            <h3 class="role-title">${escapeHtml(role.title)}</h3>
+            <p class="role-desc">${escapeHtml(role.description)}</p>
             <div class="role-footer">
-              <span class="role-person ${assigned ? '' : 'role-open'}">${assigned ? role.assigned : 'Offen'}</span>
+              ${personField}
               <span class="status-dot ${assigned ? 'status-green' : 'status-yellow'}"></span>
             </div>
           </div>
         `;
       }).join('')}
     </div>
+    ${editing ? `<button class="add-item-btn" data-action="add-role">+ Rolle hinzuf\u00fcgen</button>` : ''}
   `;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // VIEW: EQUIPMENT
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function viewEquipment() {
   const { categories } = state.equipment;
   const checked = getEquipmentChecked();
+  const editing = state.editMode;
 
   let total = 0, done = 0;
   categories.forEach(cat => {
@@ -389,9 +709,9 @@ function viewEquipment() {
       </div>
     </div>
     <div class="equipment-list">
-      ${categories.map(cat => `
+      ${categories.map((cat, catIdx) => `
         <div class="eq-category">
-          <h3 class="eq-cat-title">${cat.title}</h3>
+          <h3 class="eq-cat-title">${escapeHtml(cat.title)}</h3>
           <div class="eq-items">
             ${cat.items.map((item, idx) => {
               const key = `${cat.title}_${idx}`;
@@ -400,26 +720,34 @@ function viewEquipment() {
               const ownedBadge = item.owned
                 ? '<span class="eq-owned">Vorhanden</span>'
                 : '<span class="eq-rent">Mieten</span>';
+              const deleteBtn = editing ? `<button class="delete-btn-sm" data-action="delete-equipment" data-cat="${catIdx}" data-idx="${idx}" title="Entfernen">\u2715</button>` : '';
+              const nameField = editing
+                ? `<span class="eq-name" contenteditable="true" data-field="name" data-file="equipment" data-cat="${catIdx}" data-idx="${idx}">${escapeHtml(item.name)}</span>`
+                : `<span class="eq-name">${escapeHtml(item.name)}</span>`;
               return `
                 <div class="eq-item ${isChecked ? 'eq-checked' : ''}">
                   <span class="eq-checkbox" data-action="toggle-equipment" data-key="${key}">${checkbox}</span>
-                  <span class="eq-name">${item.name}</span>
+                  ${nameField}
                   ${ownedBadge}
+                  ${deleteBtn}
                 </div>
               `;
             }).join('')}
+            ${editing ? `<button class="add-item-btn-sm" data-action="add-equipment-item" data-cat="${catIdx}">+ Hinzuf\u00fcgen</button>` : ''}
           </div>
         </div>
       `).join('')}
     </div>
+    ${editing ? `<button class="add-item-btn" data-action="add-equipment-category">+ Kategorie hinzuf\u00fcgen</button>` : ''}
   `;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // VIEW: BUDGET
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function viewBudget() {
   const { items, currency } = state.budget;
+  const editing = state.editMode;
   const totalMin = items.reduce((s, i) => s + i.min, 0);
   const totalMax = items.reduce((s, i) => s + i.max, 0);
 
@@ -432,7 +760,7 @@ function viewBudget() {
       </div>
       <div class="budget-bar">
         <div class="budget-bar-fill budget-bar-max" style="width:100%"></div>
-        <div class="budget-bar-fill budget-bar-min" style="width:${(totalMin / totalMax * 100)}%"></div>
+        <div class="budget-bar-fill budget-bar-min" style="width:${totalMax > 0 ? (totalMin / totalMax * 100) : 0}%"></div>
       </div>
     </div>
     <div class="budget-table-wrap">
@@ -444,16 +772,28 @@ function viewBudget() {
             <th>Min ${currency}</th>
             <th>Max ${currency}</th>
             <th>Notizen</th>
+            ${editing ? '<th></th>' : ''}
           </tr>
         </thead>
         <tbody>
-          ${items.map(item => `
+          ${items.map((item, idx) => `
             <tr>
-              <td><span class="badge badge-info">${item.category}</span></td>
-              <td>${item.name}</td>
-              <td class="num-cell">${item.min}</td>
-              <td class="num-cell">${item.max}</td>
-              <td class="budget-note">${item.notes}</td>
+              <td><span class="badge badge-info">${editing
+                ? `<span contenteditable="true" data-field="category" data-file="budget" data-idx="${idx}">${escapeHtml(item.category)}</span>`
+                : escapeHtml(item.category)}</span></td>
+              <td>${editing
+                ? `<span contenteditable="true" data-field="name" data-file="budget" data-idx="${idx}">${escapeHtml(item.name)}</span>`
+                : escapeHtml(item.name)}</td>
+              <td class="num-cell">${editing
+                ? `<input type="number" class="inline-number" value="${item.min}" data-action="budget-min" data-idx="${idx}" />`
+                : item.min}</td>
+              <td class="num-cell">${editing
+                ? `<input type="number" class="inline-number" value="${item.max}" data-action="budget-max" data-idx="${idx}" />`
+                : item.max}</td>
+              <td class="budget-note">${editing
+                ? `<span contenteditable="true" data-field="notes" data-file="budget" data-idx="${idx}">${escapeHtml(item.notes)}</span>`
+                : escapeHtml(item.notes)}</td>
+              ${editing ? `<td><button class="delete-btn-sm" data-action="delete-budget" data-idx="${idx}">\u2715</button></td>` : ''}
             </tr>
           `).join('')}
           <tr class="budget-total-row">
@@ -461,28 +801,31 @@ function viewBudget() {
             <td class="num-cell"><strong>${totalMin}${currency}</strong></td>
             <td class="num-cell"><strong>${totalMax}${currency}</strong></td>
             <td></td>
+            ${editing ? '<td></td>' : ''}
           </tr>
         </tbody>
       </table>
     </div>
+    ${editing ? `<button class="add-item-btn" data-action="add-budget">+ Posten hinzuf\u00fcgen</button>` : ''}
   `;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // VIEW: TIMELINE
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function viewTimeline() {
   const items = state.timeline;
+  const editing = state.editMode;
   let currentPhase = '';
 
   return `
     <h2 class="view-title">\u23F3 Timeline</h2>
     <div class="timeline">
-      ${items.map(item => {
+      ${items.map((item, idx) => {
         let phaseHeader = '';
         if (item.phase !== currentPhase) {
           currentPhase = item.phase;
-          phaseHeader = `<div class="timeline-phase">${item.phase}</div>`;
+          phaseHeader = `<div class="timeline-phase">${escapeHtml(item.phase)}</div>`;
         }
         const dotClass = item.status === 'done' ? 'tl-done'
           : item.status === 'active' ? 'tl-active'
@@ -490,34 +833,46 @@ function viewTimeline() {
           : 'tl-upcoming';
         const deadlineBadge = item.deadline ? '<span class="tl-deadline">Deadline!</span>' : '';
 
+        const statusAction = editing
+          ? `data-action="cycle-timeline-status" data-idx="${idx}" style="cursor:pointer"`
+          : '';
+
+        const titleField = editing
+          ? `<span contenteditable="true" data-field="title" data-file="timeline" data-idx="${idx}">${escapeHtml(item.title)}</span>`
+          : escapeHtml(item.title);
+
+        const deleteBtn = editing ? `<button class="delete-btn-sm" data-action="delete-timeline" data-idx="${idx}">\u2715</button>` : '';
+
         return `
           ${phaseHeader}
-          <div class="timeline-item ${dotClass}">
+          <div class="timeline-item ${dotClass}" ${statusAction}>
             <div class="tl-dot"></div>
             <div class="tl-content">
-              <div class="tl-title">${item.title} ${deadlineBadge}</div>
-              <div class="tl-date">${item.date}</div>
+              <div class="tl-title">${titleField} ${deadlineBadge} ${deleteBtn}</div>
+              <div class="tl-date">${escapeHtml(item.date)}</div>
             </div>
           </div>
         `;
       }).join('')}
     </div>
+    ${editing ? `<button class="add-item-btn" data-action="add-timeline">+ Meilenstein hinzuf\u00fcgen</button>` : ''}
   `;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // VIEW: CONTACTS
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function viewContacts() {
   const { contacts, permits } = state.contacts;
   const permitStatuses = getPermitStatus();
+  const editing = state.editMode;
 
   const catColors = { 'dhbw': 'cat-purple', 'park': 'cat-green', 'city': 'cat-gold', 'gastro': 'cat-pink' };
 
   return `
     <h2 class="view-title">\uD83D\uDCDE Kontakte</h2>
     <div class="contacts-grid">
-      ${contacts.map(c => {
+      ${contacts.map((c, idx) => {
         const catClass = catColors[c.category] || '';
         const phone = c.phone
           ? `<a href="tel:${c.phone.replace(/\s/g, '')}" target="_blank" class="contact-link">\uD83D\uDCF1 ${c.phone}</a>` : '';
@@ -526,22 +881,34 @@ function viewContacts() {
         const instagram = c.instagram
           ? `<a href="https://instagram.com/${c.instagram.replace('@', '')}" target="_blank" class="contact-link">\uD83D\uDCF7 ${c.instagram}</a>` : '';
 
+        const deleteBtn = editing ? `<button class="delete-btn" data-action="delete-contact" data-idx="${idx}" title="L\u00f6schen">\u2715</button>` : '';
+
+        const nameField = editing
+          ? `<h3 contenteditable="true" data-field="name" data-file="contacts" data-idx="${idx}" data-subkey="contacts">${escapeHtml(c.name)}</h3>`
+          : `<h3>${escapeHtml(c.name)}</h3>`;
+
+        const roleField = editing
+          ? `<p class="contact-role" contenteditable="true" data-field="role" data-file="contacts" data-idx="${idx}" data-subkey="contacts">${escapeHtml(c.role)}</p>`
+          : `<p class="contact-role">${escapeHtml(c.role)}</p>`;
+
         return `
           <div class="card contact-card ${catClass}">
+            ${deleteBtn}
             <div class="contact-header">
               <span class="contact-cat-dot ${catClass}"></span>
-              <h3>${c.name}</h3>
+              ${nameField}
             </div>
-            <p class="contact-role">${c.role}</p>
+            ${roleField}
             <div class="contact-details">
               ${phone}${email}${instagram}
-              ${c.address ? `<div class="contact-address">\uD83D\uDCCD ${c.address}</div>` : ''}
+              ${c.address ? `<div class="contact-address">\uD83D\uDCCD ${escapeHtml(c.address)}</div>` : ''}
             </div>
-            ${c.note ? `<div class="contact-note">\uD83D\uDCDD ${c.note}</div>` : ''}
+            ${c.note ? `<div class="contact-note">\uD83D\uDCDD ${escapeHtml(c.note)}</div>` : ''}
           </div>
         `;
       }).join('')}
     </div>
+    ${editing ? `<button class="add-item-btn" data-action="add-contact">+ Kontakt hinzuf\u00fcgen</button>` : ''}
 
     <h3 class="sub-title">Genehmigungen</h3>
     <div class="budget-table-wrap">
@@ -561,14 +928,14 @@ function viewContacts() {
             const contactName = contact ? contact.name : '\u2014';
             return `
               <tr>
-                <td>${p.location}</td>
-                <td>${contactName}</td>
+                <td>${escapeHtml(p.location)}</td>
+                <td>${escapeHtml(contactName)}</td>
                 <td>
                   <span class="permit-badge permit-${savedStatus}" data-action="cycle-permit" data-permit-idx="${idx}">
                     ${getPermitLabel(savedStatus)}
                   </span>
                 </td>
-                <td>${p.notes}</td>
+                <td>${escapeHtml(p.notes)}</td>
               </tr>
             `;
           }).join('')}
@@ -578,9 +945,9 @@ function viewContacts() {
   `;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // VIEW: CALENDAR
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 function viewCalendar() {
   const calUrl = state.config.project.calendarUrl;
 
@@ -610,15 +977,18 @@ function viewCalendar() {
   `;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // EVENT DELEGATION (single listener on document)
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
+let contentEditableDebounce = null;
+
 document.addEventListener('click', (e) => {
-  // Action buttons (theme, equipment, permits)
+  // Action buttons
   const actionEl = e.target.closest('[data-action]');
   if (actionEl) {
     const action = actionEl.dataset.action;
 
+    // --- Theme ---
     if (action === 'toggle-theme') {
       e.preventDefault();
       const next = getTheme() === 'dark' ? 'light' : 'dark';
@@ -627,6 +997,47 @@ document.addEventListener('click', (e) => {
       return;
     }
 
+    // --- Edit mode ---
+    if (action === 'enter-edit') {
+      e.preventDefault();
+      enterEditMode();
+      return;
+    }
+
+    if (action === 'save-changes') {
+      e.preventDefault();
+      saveAllDirty();
+      return;
+    }
+
+    if (action === 'cancel-edit') {
+      e.preventDefault();
+      cancelEditMode();
+      return;
+    }
+
+    // --- Token modal ---
+    if (action === 'close-modal') {
+      e.preventDefault();
+      closeTokenModal();
+      return;
+    }
+
+    if (action === 'save-token') {
+      e.preventDefault();
+      const input = document.getElementById('token-input');
+      const token = input ? input.value.trim() : '';
+      if (token) {
+        setGithubToken(token);
+        closeTokenModal();
+        enterEditMode();
+      } else {
+        showToast('Bitte Token eingeben', 'error');
+      }
+      return;
+    }
+
+    // --- Equipment checkbox ---
     if (action === 'toggle-equipment') {
       e.preventDefault();
       const key = actionEl.dataset.key;
@@ -637,6 +1048,7 @@ document.addEventListener('click', (e) => {
       return;
     }
 
+    // --- Permit cycling ---
     if (action === 'cycle-permit') {
       e.preventDefault();
       const idx = actionEl.dataset.permitIdx;
@@ -645,6 +1057,241 @@ document.addEventListener('click', (e) => {
       const current = statuses[`permit_${idx}`] || permit.status;
       statuses[`permit_${idx}`] = cyclePermitStatus(current);
       setPermitStatus(statuses);
+      render();
+      return;
+    }
+
+    // --- Location status cycling ---
+    if (action === 'cycle-location-status') {
+      e.preventDefault();
+      const idx = parseInt(actionEl.dataset.idx);
+      const loc = state.locations[idx];
+      const cycle = ['open', 'pending', 'confirmed'];
+      const curIdx = cycle.indexOf(loc.status);
+      loc.status = cycle[(curIdx + 1) % cycle.length];
+      markDirty('locations');
+      render();
+      return;
+    }
+
+    // --- Timeline status cycling ---
+    if (action === 'cycle-timeline-status') {
+      e.preventDefault();
+      const idx = parseInt(actionEl.dataset.idx);
+      const item = state.timeline[idx];
+      const cycle = ['upcoming', 'active', 'done'];
+      const curIdx = cycle.indexOf(item.status);
+      item.status = cycle[(curIdx + 1) % cycle.length];
+      markDirty('timeline');
+      render();
+      return;
+    }
+
+    // --- Add location ---
+    if (action === 'add-location') {
+      e.preventDefault();
+      const maxId = state.locations.reduce((max, l) => Math.max(max, l.id), 0);
+      state.locations.push({
+        id: maxId + 1,
+        name: 'Neue Location',
+        concrete: 'Beschreibung...',
+        badges: [],
+        vibe: '',
+        reference: '',
+        mapEmbed: '',
+        mapLink: '',
+        status: 'open',
+        cluster: ''
+      });
+      markDirty('locations');
+      render();
+      return;
+    }
+
+    // --- Delete location ---
+    if (action === 'delete-location') {
+      e.preventDefault();
+      if (!confirm('Location wirklich l\u00f6schen?')) return;
+      const idx = parseInt(actionEl.dataset.idx);
+      state.locations.splice(idx, 1);
+      markDirty('locations');
+      render();
+      return;
+    }
+
+    // --- Add schedule day ---
+    if (action === 'add-schedule') {
+      e.preventDefault();
+      const maxDay = state.schedule.reduce((max, d) => Math.max(max, d.day), 0);
+      state.schedule.push({
+        day: maxDay + 1,
+        date: '2026-06-22',
+        weekday: 'So',
+        title: 'Neuer Drehtag',
+        icon: '\uD83C\uDFAC',
+        time: '08:00 \u2013 18:00',
+        duration: 'Ganzer Tag',
+        locations: [],
+        scenes: ['Szene 1'],
+        notes: '',
+        conflict: ''
+      });
+      markDirty('schedule');
+      render();
+      return;
+    }
+
+    // --- Delete schedule day ---
+    if (action === 'delete-schedule') {
+      e.preventDefault();
+      if (!confirm('Drehtag wirklich l\u00f6schen?')) return;
+      const idx = parseInt(actionEl.dataset.idx);
+      state.schedule.splice(idx, 1);
+      markDirty('schedule');
+      render();
+      return;
+    }
+
+    // --- Add role ---
+    if (action === 'add-role') {
+      e.preventDefault();
+      state.team.roles.push({
+        id: generateId(),
+        title: 'Neue Rolle',
+        icon: '\uD83C\uDFAC',
+        description: 'Beschreibung...',
+        assigned: '',
+        status: 'open'
+      });
+      markDirty('team');
+      render();
+      return;
+    }
+
+    // --- Delete role ---
+    if (action === 'delete-role') {
+      e.preventDefault();
+      if (!confirm('Rolle wirklich l\u00f6schen?')) return;
+      const idx = parseInt(actionEl.dataset.idx);
+      state.team.roles.splice(idx, 1);
+      markDirty('team');
+      render();
+      return;
+    }
+
+    // --- Add equipment item ---
+    if (action === 'add-equipment-item') {
+      e.preventDefault();
+      const catIdx = parseInt(actionEl.dataset.cat);
+      state.equipment.categories[catIdx].items.push({
+        name: 'Neues Equipment',
+        owned: false,
+        checked: false
+      });
+      markDirty('equipment');
+      render();
+      return;
+    }
+
+    // --- Add equipment category ---
+    if (action === 'add-equipment-category') {
+      e.preventDefault();
+      state.equipment.categories.push({
+        title: 'Neue Kategorie',
+        items: []
+      });
+      markDirty('equipment');
+      render();
+      return;
+    }
+
+    // --- Delete equipment item ---
+    if (action === 'delete-equipment') {
+      e.preventDefault();
+      const catIdx = parseInt(actionEl.dataset.cat);
+      const idx = parseInt(actionEl.dataset.idx);
+      state.equipment.categories[catIdx].items.splice(idx, 1);
+      markDirty('equipment');
+      render();
+      return;
+    }
+
+    // --- Add budget item ---
+    if (action === 'add-budget') {
+      e.preventDefault();
+      state.budget.items.push({
+        category: 'Sonstiges',
+        name: 'Neuer Posten',
+        min: 0,
+        max: 0,
+        notes: ''
+      });
+      markDirty('budget');
+      render();
+      return;
+    }
+
+    // --- Delete budget item ---
+    if (action === 'delete-budget') {
+      e.preventDefault();
+      if (!confirm('Posten wirklich l\u00f6schen?')) return;
+      const idx = parseInt(actionEl.dataset.idx);
+      state.budget.items.splice(idx, 1);
+      markDirty('budget');
+      render();
+      return;
+    }
+
+    // --- Add timeline item ---
+    if (action === 'add-timeline') {
+      e.preventDefault();
+      state.timeline.push({
+        phase: 'Post-Production',
+        title: 'Neuer Meilenstein',
+        date: 'TBD',
+        status: 'upcoming'
+      });
+      markDirty('timeline');
+      render();
+      return;
+    }
+
+    // --- Delete timeline item ---
+    if (action === 'delete-timeline') {
+      e.preventDefault();
+      if (!confirm('Meilenstein wirklich l\u00f6schen?')) return;
+      const idx = parseInt(actionEl.dataset.idx);
+      state.timeline.splice(idx, 1);
+      markDirty('timeline');
+      render();
+      return;
+    }
+
+    // --- Add contact ---
+    if (action === 'add-contact') {
+      e.preventDefault();
+      state.contacts.contacts.push({
+        id: generateId(),
+        name: 'Neuer Kontakt',
+        role: 'Rolle...',
+        category: 'city',
+        phone: '',
+        email: '',
+        address: '',
+        note: ''
+      });
+      markDirty('contacts');
+      render();
+      return;
+    }
+
+    // --- Delete contact ---
+    if (action === 'delete-contact') {
+      e.preventDefault();
+      if (!confirm('Kontakt wirklich l\u00f6schen?')) return;
+      const idx = parseInt(actionEl.dataset.idx);
+      state.contacts.contacts.splice(idx, 1);
+      markDirty('contacts');
       render();
       return;
     }
@@ -660,15 +1307,116 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// --- Debounced contenteditable input handler ---
+document.addEventListener('input', (e) => {
+  const el = e.target;
+
+  // ContentEditable fields
+  if (el.hasAttribute('contenteditable') && el.dataset.field && el.dataset.file) {
+    clearTimeout(contentEditableDebounce);
+    contentEditableDebounce = setTimeout(() => {
+      const file = el.dataset.file;
+      const field = el.dataset.field;
+      const idx = el.dataset.idx !== undefined ? parseInt(el.dataset.idx) : null;
+      const subkey = el.dataset.subkey || null;
+      const value = el.textContent.trim();
+
+      if (file === 'locations' && idx !== null) {
+        state.locations[idx][field] = value;
+      } else if (file === 'schedule' && idx !== null) {
+        state.schedule[idx][field] = value;
+      } else if (file === 'team') {
+        if (field === 'lead.name') {
+          state.team.lead.name = value;
+        }
+      } else if (file === 'budget' && idx !== null) {
+        state.budget.items[idx][field] = value;
+      } else if (file === 'timeline' && idx !== null) {
+        state.timeline[idx][field] = value;
+      } else if (file === 'contacts' && idx !== null && subkey === 'contacts') {
+        state.contacts.contacts[idx][field] = value;
+      } else if (file === 'equipment') {
+        const catIdx = parseInt(el.dataset.cat);
+        const itemIdx = parseInt(el.dataset.idx);
+        if (!isNaN(catIdx) && !isNaN(itemIdx)) {
+          state.equipment.categories[catIdx].items[itemIdx][field] = value;
+        }
+      }
+
+      markDirty(file);
+    }, 400);
+    return;
+  }
+
+  // Budget number inputs
+  if (el.dataset.action === 'budget-min' || el.dataset.action === 'budget-max') {
+    const idx = parseInt(el.dataset.idx);
+    const val = parseInt(el.value) || 0;
+    if (el.dataset.action === 'budget-min') {
+      state.budget.items[idx].min = val;
+    } else {
+      state.budget.items[idx].max = val;
+    }
+    markDirty('budget');
+    return;
+  }
+
+  // Role assignment input
+  if (el.dataset.action === 'assign-role') {
+    const idx = parseInt(el.dataset.idx);
+    state.team.roles[idx].assigned = el.value;
+    markDirty('team');
+    return;
+  }
+});
+
+// =============================================================================
+// KEYBOARD SHORTCUTS
+// =============================================================================
+document.addEventListener('keydown', (e) => {
+  // Escape = cancel edit mode
+  if (e.key === 'Escape') {
+    if (document.getElementById('token-modal')) {
+      closeTokenModal();
+      return;
+    }
+    if (state.editMode) {
+      cancelEditMode();
+      return;
+    }
+  }
+
+  // Ctrl+S / Cmd+S = save
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    if (state.editMode) {
+      saveAllDirty();
+    }
+    return;
+  }
+});
+
+// Handle Enter in token modal input
+document.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter' && e.target.id === 'token-input') {
+    e.preventDefault();
+    const token = e.target.value.trim();
+    if (token) {
+      setGithubToken(token);
+      closeTokenModal();
+      enterEditMode();
+    }
+  }
+});
+
+// =============================================================================
 // ROUTE CHANGE WITH FADE TRANSITION
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 window.addEventListener('hashchange', () => {
   const container = document.getElementById('view-container');
   if (container) {
     container.classList.add('fade-out');
     setTimeout(() => {
-      // Reset location filter when leaving locations view
       if (getRoute() !== 'locations') {
         state.activeFilter = 'all';
       }
@@ -682,11 +1430,13 @@ window.addEventListener('hashchange', () => {
   }
 });
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 // BOOTSTRAP
-// ═══════════════════════════════════════════════════════════════════════════════
+// =============================================================================
 async function init() {
+  renderSkeleton();
   await fetchAllData();
+  state.loaded = true;
   render();
 }
 

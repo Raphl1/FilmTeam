@@ -895,12 +895,430 @@ body.light .loc-map iframe { filter: none; }
   .team-lead .status-badge { margin-left: 0; }
 }
 
+/* ── EDIT MODE ─────────────────────────────── */
+.site-header.editing {
+  border-bottom-color: var(--accent);
+  box-shadow: 0 0 20px rgba(247,37,133,.2), inset 0 -2px 0 var(--accent);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.header-btn {
+  background: rgba(108,63,197,.15);
+  border: 1px solid rgba(108,63,197,.3);
+  color: var(--text);
+  font-size: 1.1rem;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, transform .2s, box-shadow .2s;
+  flex-shrink: 0;
+}
+.header-btn:hover {
+  background: rgba(108,63,197,.3);
+  transform: scale(1.1);
+}
+.header-btn:active { transform: scale(.95); }
+
+.edit-btn:hover { box-shadow: 0 0 12px rgba(108,63,197,.4); }
+.save-btn {
+  background: rgba(67,170,139,.15);
+  border-color: rgba(67,170,139,.4);
+}
+.save-btn:hover {
+  background: rgba(67,170,139,.3);
+  box-shadow: 0 0 12px rgba(67,170,139,.4);
+}
+.cancel-btn {
+  background: rgba(247,37,133,.1);
+  border-color: rgba(247,37,133,.3);
+}
+.cancel-btn:hover {
+  background: rgba(247,37,133,.2);
+  box-shadow: 0 0 12px rgba(247,37,133,.3);
+}
+
+.edit-label {
+  font-size: .7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--accent);
+  padding: .3em .6em;
+  background: rgba(247,37,133,.1);
+  border: 1px solid rgba(247,37,133,.3);
+  border-radius: 6px;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 4px rgba(247,37,133,.2); }
+  50% { box-shadow: 0 0 12px rgba(247,37,133,.4); }
+}
+
+/* ── TOAST SYSTEM ─────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: .7rem 1.4rem;
+  border-radius: 10px;
+  font-size: .85rem;
+  font-weight: 500;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity .3s ease, transform .3s ease;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.toast-success {
+  background: rgba(67,170,139,.9);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(67,170,139,.3);
+}
+.toast-error {
+  background: rgba(247,37,133,.9);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(247,37,133,.3);
+}
+.toast-info {
+  background: rgba(108,63,197,.9);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(108,63,197,.3);
+}
+
+/* ── MODAL ─────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9000;
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.modal-overlay.show { opacity: 1; }
+
+.modal-content {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 2rem;
+  max-width: 440px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,.4);
+}
+.modal-content h3 {
+  font-size: 1.2rem;
+  margin-bottom: .8rem;
+  color: var(--text);
+}
+.modal-content p {
+  font-size: .85rem;
+  color: var(--text2);
+  margin-bottom: .6rem;
+  line-height: 1.5;
+}
+.modal-content a {
+  color: var(--violet);
+  text-decoration: underline;
+}
+.modal-content code {
+  background: var(--bg);
+  padding: .15em .4em;
+  border-radius: 4px;
+  font-size: .8rem;
+}
+
+.token-input {
+  width: 100%;
+  padding: .7rem 1rem;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: .9rem;
+  margin: 1rem 0;
+  outline: none;
+  transition: border-color .2s;
+}
+.token-input:focus {
+  border-color: var(--violet);
+  box-shadow: 0 0 0 3px rgba(108,63,197,.2);
+}
+
+.modal-actions {
+  display: flex;
+  gap: .8rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.btn {
+  padding: .6rem 1.2rem;
+  border-radius: var(--radius-sm);
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all .2s;
+}
+.btn-primary {
+  background: var(--violet);
+  color: #fff;
+  border-color: var(--violet);
+}
+.btn-primary:hover {
+  background: var(--lilac);
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--text2);
+  border-color: var(--border2);
+}
+.btn-secondary:hover {
+  background: var(--card2);
+}
+
+/* ── SKELETON LOADING ─────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, var(--card) 25%, var(--card2) 50%, var(--card) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+@keyframes skeleton-pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton-tag { width: 160px; height: 18px; margin-bottom: .5rem; }
+.skeleton-title { width: 300px; height: 32px; margin-bottom: .4rem; }
+.skeleton-subtitle { width: 180px; height: 16px; }
+.skeleton-nav-item { width: 70px; height: 32px; display: inline-block; margin: .5rem; }
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+.skeleton-card { height: 180px; border-radius: var(--radius); }
+
+/* ── INLINE EDITING ──────────────────────── */
+[contenteditable="true"] {
+  outline: none;
+  border-bottom: 2px dashed var(--violet);
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: background .2s, border-color .2s;
+  min-width: 40px;
+  display: inline-block;
+}
+[contenteditable="true"]:focus {
+  background: rgba(108,63,197,.08);
+  border-bottom-color: var(--accent);
+}
+[contenteditable="true"]:hover {
+  background: rgba(108,63,197,.05);
+}
+
+.inline-input {
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: .35rem .6rem;
+  color: var(--text);
+  font-size: .8rem;
+  width: 100%;
+  max-width: 180px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.inline-input:focus {
+  border-color: var(--violet);
+  box-shadow: 0 0 0 3px rgba(108,63,197,.15);
+}
+
+.inline-number {
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: .3rem .5rem;
+  color: var(--text);
+  font-size: .8rem;
+  width: 70px;
+  outline: none;
+  text-align: right;
+  transition: border-color .2s;
+}
+.inline-number:focus {
+  border-color: var(--violet);
+  box-shadow: 0 0 0 3px rgba(108,63,197,.15);
+}
+
+/* ── ADD/DELETE BUTTONS ──────────────────── */
+.add-item-btn {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 1.5rem auto;
+  padding: .7rem 1.2rem;
+  background: rgba(108,63,197,.1);
+  border: 2px dashed rgba(108,63,197,.3);
+  border-radius: var(--radius);
+  color: var(--violet);
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+}
+.add-item-btn:hover {
+  background: rgba(108,63,197,.2);
+  border-color: var(--violet);
+  transform: translateY(-2px);
+}
+.add-item-btn:active { transform: translateY(0); }
+
+.add-item-btn-sm {
+  display: block;
+  width: 100%;
+  margin-top: .5rem;
+  padding: .4rem .8rem;
+  background: transparent;
+  border: 1px dashed var(--border2);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: .75rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+.add-item-btn-sm:hover {
+  border-color: var(--violet);
+  color: var(--violet);
+  background: rgba(108,63,197,.05);
+}
+
+.delete-btn {
+  position: absolute;
+  top: .6rem;
+  right: .6rem;
+  width: 28px; height: 28px;
+  background: rgba(247,37,133,.1);
+  border: 1px solid rgba(247,37,133,.2);
+  border-radius: 50%;
+  color: var(--accent);
+  font-size: .8rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transition: all .2s;
+  z-index: 5;
+}
+.card:hover .delete-btn,
+.loc-card:hover .delete-btn,
+.schedule-card:hover .delete-btn { opacity: 1; }
+.delete-btn:hover {
+  background: rgba(247,37,133,.25);
+  transform: scale(1.15);
+}
+
+.delete-btn-sm {
+  width: 22px; height: 22px;
+  background: rgba(247,37,133,.08);
+  border: 1px solid rgba(247,37,133,.15);
+  border-radius: 50%;
+  color: var(--accent);
+  font-size: .65rem;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  opacity: .5;
+  transition: all .2s;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.delete-btn-sm:hover {
+  opacity: 1;
+  background: rgba(247,37,133,.2);
+  transform: scale(1.15);
+}
+
+/* ── EDITABLE BADGES ─────────────────────── */
+.editable-badge {
+  cursor: pointer !important;
+  transition: all .2s;
+}
+.editable-badge:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.editable-badge:active { transform: scale(.95); }
+
+/* ── EMPTY STATE ─────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+/* ── CARD POSITION (for delete btn) ─────── */
+.card, .loc-card, .schedule-card, .role-card, .contact-card {
+  position: relative;
+}
+
+/* ── MICRO INTERACTIONS ──────────────────── */
+.edit-mode-active .card:hover,
+.edit-mode-active .loc-card:hover {
+  box-shadow: 0 8px 32px rgba(108,63,197,.15), 0 0 0 1px var(--violet);
+}
+
+.edit-mode-active .status-badge { cursor: pointer; }
+.edit-mode-active .timeline-item { cursor: pointer; }
+.edit-mode-active .timeline-item:hover .tl-dot {
+  transform: scale(1.3);
+  box-shadow: 0 0 8px var(--violet);
+}
+
+/* ── FADE TRANSITION ─────────────────────── */
+.view-container {
+  transition: opacity .15s ease;
+}
+.view-container.fade-out {
+  opacity: 0;
+}
+
 /* ── PRINT ───────────────────────────────── */
 @media print {
   body { background: #fff !important; color: #111 !important; }
   .site-header { background: #fff !important; border-bottom: 2px solid #333; }
   .site-nav { display: none !important; }
   .theme-toggle { display: none !important; }
+  .header-btn { display: none !important; }
+  .edit-label { display: none !important; }
   .card { border: 1px solid #ddd; box-shadow: none !important; }
   .card:hover { transform: none; }
+  .toast { display: none !important; }
+  .modal-overlay { display: none !important; }
+}
+
+/* ── RESPONSIVE ADJUSTMENTS FOR EDIT MODE ── */
+@media (max-width: 768px) {
+  .header-actions { gap: .3rem; }
+  .header-btn { width: 36px; height: 36px; font-size: 1rem; }
+  .edit-label { font-size: .6rem; padding: .2em .4em; }
+  .modal-content { padding: 1.5rem; }
+  .toast { bottom: 100px; font-size: .8rem; }
 }

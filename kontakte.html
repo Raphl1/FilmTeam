@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontakte & Genehmigungen — FR(AI)ME · NOTG 2026</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .contact-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: var(--radius);
+      padding: 1.3rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+      transition: transform .2s, border-color .2s;
+    }
+    .contact-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(108,63,197,.3);
+    }
+    .contact-card .cc-cat {
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--lilac);
+      font-weight: 700;
+    }
+    .contact-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: .1rem 0 .3rem;
+    }
+    .contact-card .cc-details {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .contact-card .cc-details a { color: var(--violet); }
+    .contact-card .cc-details .cc-line {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .contact-card .cc-details .cc-icon { flex-shrink: 0; width: 1.1em; text-align: center; }
+
+    .permit-section {
+      margin-top: 2rem;
+    }
+    .permit-table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.07);
+      background: var(--card);
+    }
+    .permit-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .84rem;
+      min-width: 600px;
+    }
+    .permit-table th {
+      background: rgba(108,63,197,.2);
+      color: var(--lilac);
+      font-weight: 700;
+      text-align: left;
+      padding: .7em 1em;
+      font-size: .74rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .permit-table td {
+      padding: .65em 1em;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      vertical-align: middle;
+    }
+    .permit-table tr:last-child td { border-bottom: none; }
+    .permit-table tr:hover td { background: rgba(255,255,255,.03); }
+    .status-pending {
+      display: inline-block;
+      background: rgba(249,199,79,.12);
+      color: var(--gold);
+      border: 1px solid rgba(249,199,79,.25);
+      font-size: .72rem;
+      font-weight: 700;
+      padding: .2em .6em;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .status-ok {
+      display: inline-block;
+      background: rgba(67,170,139,.12);
+      color: var(--green);
+      border: 1px solid rgba(67,170,139,.25);
+      font-size: .72rem;
+      font-weight: 700;
+      padding: .2em .6em;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .status-open {
+      display: inline-block;
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      border: 1px solid rgba(255,255,255,.12);
+      font-size: .72rem;
+      font-weight: 700;
+      padding: .2em .6em;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="tag">Filmteam DHBW Mannheim MPG24</div>
+  <h1>FR<span class="ai">(AI)</span>ME<span class="sep"> — </span>Night of the Graduates</h1>
+  <div class="subtitle">Kontakte &amp; Genehmigungen &middot; Alle Ansprechpartner</div>
+</header>
+
+<nav class="site-nav">
+  <a href="index.html">Hub</a>
+  <a href="locations.html">Drehorte</a>
+  <a href="drehplan.html">Drehplan</a>
+  <a href="shotlist.html">Shotlist</a>
+  <a href="equipment.html">Equipment</a>
+  <a href="team.html">Team</a>
+  <a href="budget.html">Budget</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="kalender.html">Kalender</a>
+  <a href="kontakte.html" class="active">Kontakte</a>
+</nav>
+
+<main class="page-main">
+
+  <div class="section-title">
+    <div class="num">1</div>
+    <h2>DHBW Mannheim</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="contact-grid">
+
+    <div class="contact-card">
+      <div class="cc-cat">DHBW Raumplanung</div>
+      <h3>Maik Mittelst&auml;dt</h3>
+      <div class="cc-details">
+        <div class="cc-line"><span class="cc-icon">&#x1F4DE;</span> +49 621 4105-1383</div>
+        <div class="cc-line"><span class="cc-icon">&#x1F4CD;</span> Raum C 382</div>
+        <div class="cc-line"><span class="cc-icon">&#x1F3AC;</span> Equipment-Reservierung &amp; Raumplanung</div>
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <div class="cc-cat">DHBW Geb&auml;udetechnik</div>
+      <h3>Andreas Ullrich</h3>
+      <div class="cc-details">
+        <div class="cc-line"><span class="cc-icon">&#x1F4DE;</span> +49 621 4105-1156</div>
+        <div class="cc-line"><span class="cc-icon">&#x1F527;</span> Strom, Zugang Geb&auml;ude au&szlig;erhalb der &Ouml;ffnungszeiten</div>
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <div class="cc-cat">DHBW Allgemein</div>
+      <h3>DHBW Mannheim</h3>
+      <div class="cc-details">
+        <div class="cc-line"><span class="cc-icon">&#x2709;</span> <a href="mailto:info.ma@dhbw.de">info.ma@dhbw.de</a></div>
+        <div class="cc-line"><span class="cc-icon">&#x1F4CD;</span> Coblitzallee 1-9, 68163 Mannheim</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">
+    <div class="num">2</div>
+    <h2>Luisenpark</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="contact-grid">
+
+    <div class="contact-card">
+      <div class="cc-cat">Vermietungen &amp; Drehgenehmigung</div>
+      <h3>Stadtpark Mannheim gGmbH</h3>
+      <div class="cc-details">
+        <div class="cc-line"><span class="cc-icon">&#x1F4DE;</span> (0621) 4 10 05 15</div>
+        <div class="cc-line"><span class="cc-icon">&#x2709;</span> <a href="mailto:vermietungen@stadtpark-mannheim.de">vermietungen@stadtpark-mannheim.de</a></div>
+        <div class="cc-line"><span class="cc-icon">&#x1F4CD;</span> Gartenschauweg 12, Mannheim</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">
+    <div class="num">3</div>
+    <h2>Stadt Mannheim</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="contact-grid">
+
+    <div class="contact-card">
+      <div class="cc-cat">Ordnungsamt &mdash; Drehgenehmigung &ouml;ffentlicher Raum</div>
+      <h3>Stadt Mannheim Ordnungsamt</h3>
+      <div class="cc-details">
+        <div class="cc-line"><span class="cc-icon">&#x1F4DE;</span> 0621 293-3201</div>
+        <div class="cc-line"><span class="cc-icon">&#x1F4CD;</span> Rathaus E5, Mannheim</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">
+    <div class="num">4</div>
+    <h2>Gastro-Locations</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="contact-grid">
+
+    <div class="contact-card">
+      <div class="cc-cat">Caf&eacute; / Patisserie</div>
+      <h3>Pastry Poets</h3>
+      <div class="cc-details">
+        <div class="cc-line"><span class="cc-icon">&#x1F310;</span> <a href="https://pastry-poets.de" target="_blank">pastry-poets.de</a></div>
+        <div class="cc-line"><span class="cc-icon">&#x2709;</span> <a href="mailto:info@pastry-poets.de">info@pastry-poets.de</a></div>
+        <div class="cc-line"><span class="cc-icon">&#x1F4F7;</span> <a href="https://instagram.com/patisserie_pastry.poets" target="_blank">@patisserie_pastry.poets</a></div>
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <div class="cc-cat">Caf&eacute;</div>
+      <h3>Caf&eacute; Lauri</h3>
+      <div class="cc-details">
+        <div class="cc-line"><span class="cc-icon">&#x1F4CD;</span> Laurentiusstr. 21, Mannheim</div>
+        <div class="cc-line"><span class="cc-icon">&#x1F4F7;</span> <a href="https://instagram.com/cafelauri_mannheim" target="_blank">@cafelauri_mannheim</a></div>
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <div class="cc-cat">Caf&eacute;</div>
+      <h3>Caf&eacute; Karl Otto</h3>
+      <div class="cc-details">
+        <div class="cc-line"><span class="cc-icon">&#x1F4CD;</span> Karl-Ludwig-Str., Mannheim</div>
+        <div class="cc-line"><span class="cc-icon">&#x1F4F7;</span> <a href="https://instagram.com/cafe_karlotto" target="_blank">@cafe_karlotto</a></div>
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <div class="cc-cat">Caf&eacute;</div>
+      <h3>Caf&eacute; Meerwiesen</h3>
+      <div class="cc-details">
+        <div class="cc-line"><span class="cc-icon">&#x1F4CD;</span> Stephanienufer, Mannheim</div>
+        <div class="cc-line"><span class="cc-icon">&#x1F4F7;</span> <a href="https://instagram.com/cafemeerwiesen" target="_blank">@cafemeerwiesen</a></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ GENEHMIGUNGSSTATUS ═══ -->
+  <div class="permit-section">
+    <div class="section-title">
+      <div class="num">&#x2714;</div>
+      <h2>Genehmigungsstatus</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="permit-table-wrap">
+      <table class="permit-table">
+        <thead>
+          <tr>
+            <th>Location</th>
+            <th>Genehmigung bei</th>
+            <th>Status</th>
+            <th>Anmerkungen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>DHBW Geb&auml;ude &amp; Campus</td>
+            <td>Maik Mittelst&auml;dt / Andreas Ullrich</td>
+            <td><span class="status-pending">Ausstehend</span></td>
+            <td>Raumreservierung + Wochenend-Zugang kl&auml;ren</td>
+          </tr>
+          <tr>
+            <td>Luisenpark</td>
+            <td>Stadtpark Mannheim gGmbH</td>
+            <td><span class="status-open">Noch nicht angefragt</span></td>
+            <td>Drehgenehmigung erforderlich, ggf. Geb&uuml;hr</td>
+          </tr>
+          <tr>
+            <td>&Ouml;ffentlicher Raum (Stra&szlig;en, Pl&auml;tze)</td>
+            <td>Stadt Mannheim Ordnungsamt</td>
+            <td><span class="status-open">Noch nicht angefragt</span></td>
+            <td>Nur n&ouml;tig bei Absperrungen / gr&ouml;&szlig;erem Setup</td>
+          </tr>
+          <tr>
+            <td>Pastry Poets</td>
+            <td>Inhaber (per Mail/Instagram)</td>
+            <td><span class="status-open">Noch nicht angefragt</span></td>
+            <td>Dreh au&szlig;erhalb der &Ouml;ffnungszeiten ideal</td>
+          </tr>
+          <tr>
+            <td>Caf&eacute; Lauri</td>
+            <td>Inhaber (Instagram DM)</td>
+            <td><span class="status-open">Noch nicht angefragt</span></td>
+            <td>Anfrage &uuml;ber @cafelauri_mannheim</td>
+          </tr>
+          <tr>
+            <td>Caf&eacute; Karl Otto</td>
+            <td>Inhaber (Instagram DM)</td>
+            <td><span class="status-open">Noch nicht angefragt</span></td>
+            <td>Anfrage &uuml;ber @cafe_karlotto</td>
+          </tr>
+          <tr>
+            <td>Caf&eacute; Meerwiesen</td>
+            <td>Inhaber (Instagram DM)</td>
+            <td><span class="status-open">Noch nicht angefragt</span></td>
+            <td>Anfrage &uuml;ber @cafemeerwiesen</td>
+          </tr>
+          <tr>
+            <td>Airbnb</td>
+            <td>Host (Booking-Plattform)</td>
+            <td><span class="status-open">Noch nicht gebucht</span></td>
+            <td>Filmdreh in Beschreibung erw&auml;hnen</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div style="font-size:.9rem; font-weight:600; color:var(--text);">FR(AI)ME — Night of the Graduates 2026</div>
+  <div style="margin-top:.3rem;">Filmteam DHBW Mannheim MPG24 &middot; Projektleitung: Dilara Sabuncuo &middot; Stand: Mai 2026</div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drehorte — FR(AI)ME · NOTG 2026</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .locations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.3rem;
+    }
+    .loc-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .loc-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(108,63,197,.4);
+      box-shadow: 0 12px 40px rgba(108,63,197,.12);
+    }
+    .loc-map {
+      width: 100%;
+      aspect-ratio: 16/9;
+      position: relative;
+      overflow: hidden;
+      background: var(--card2);
+    }
+    .loc-map iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      filter: saturate(.85) contrast(1.05);
+    }
+    .loc-map .loc-num-badge {
+      position: absolute;
+      top: 10px; left: 10px;
+      background: rgba(10,15,30,.8);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.15);
+      color: var(--lilac);
+      font-size: .72rem;
+      font-weight: 700;
+      padding: .25em .75em;
+      border-radius: 99px;
+      z-index: 2;
+    }
+    .loc-map .filmteil-badges {
+      position: absolute;
+      top: 10px; right: 10px;
+      display: flex;
+      gap: .25rem;
+      z-index: 2;
+    }
+    .loc-body {
+      padding: 1.1rem 1.3rem 1.3rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .loc-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .loc-concrete {
+      font-size: .82rem;
+      color: var(--muted);
+    }
+    .loc-ref {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .8rem;
+      color: var(--muted);
+      background: rgba(255,255,255,.04);
+      border-radius: 6px;
+      padding: .45em .75em;
+      border-left: 2px solid var(--purple);
+    }
+    .loc-ref strong { color: var(--text); }
+    .loc-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      align-items: center;
+      margin-top: auto;
+      padding-top: .6rem;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .status-open {
+      font-size: .76rem;
+      color: var(--gold);
+      display: flex; align-items: center; gap: .3em;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem 1.2rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+      font-size: .8rem;
+      color: var(--muted);
+      padding: .6rem 1rem;
+      background: var(--card);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .legend .legend-label { font-weight: 700; color: var(--text); }
+
+    /* Options grid */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 700px) { .options-grid { grid-template-columns: 1fr; } }
+    .option-card {
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+    }
+    .option-card .option-label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--lilac);
+      margin-bottom: .4rem;
+    }
+    .option-card h4 { font-size: .95rem; margin-bottom: .5rem; }
+    .pros-cons { list-style: none; font-size: .83rem; color: var(--muted); }
+    .pros-cons li::before { margin-right: .4em; }
+    .pros-cons li.pro::before  { content: '\2713'; color: var(--green); }
+    .pros-cons li.con::before  { content: '\2717'; color: var(--accent); }
+
+    @media (max-width: 480px) {
+      .locations-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="tag">Locationplan</div>
+  <h1>FR<span class="ai">(AI)</span>ME<span class="sep"> — </span>Drehorte</h1>
+  <div class="subtitle">15 Locations &middot; Mannheim & Weinheim &middot; Stand: Mai 2026</div>
+</header>
+
+<nav class="site-nav">
+  <a href="index.html">Hub</a>
+  <a href="locations.html" class="active">Drehorte</a>
+  <a href="drehplan.html">Drehplan</a>
+  <a href="shotlist.html">Shotlist</a>
+  <a href="equipment.html">Equipment</a>
+  <a href="team.html">Team</a>
+  <a href="budget.html">Budget</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="kalender.html">Kalender</a>
+  <a href="kontakte.html">Kontakte</a>
+</nav>
+
+<main class="page-main">
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-num">15</div><div class="stat-label">Drehorte</div></div>
+    <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">Drehtage</div></div>
+    <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Filmteile</div></div>
+    <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">Film-Referenzen</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--gold);">1</div><div class="stat-label">Noch offen</div></div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <span class="legend-label">Legende:</span>
+    <span><span class="badge badge-cd">CD</span> Countdown</span>
+    <span><span class="badge badge-op">OP</span> Opener</span>
+    <span><span class="badge badge-hf">HF</span> Hauptfilm</span>
+    <span><span class="badge badge-open">TBD</span> Noch offen</span>
+  </div>
+
+  <!-- ═══ LOCATION CARDS ═══ -->
+  <div id="overview" class="section-title">
+    <div class="num">1</div>
+    <h2>Alle Drehorte</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="locations-grid">
+
+    <!-- #01 Techniker-Base -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d800!2d8.534!3d49.4743!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#01</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-cd">CD</span>
+          <span class="badge badge-op">OP</span>
+          <span class="badge badge-hf">HF</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">Techniker-Keller / "Base"</div>
+        <div class="loc-concrete">DHBW Cure-Werkstatt &middot; Rechenzentrum &middot; Privatraum</div>
+        <div class="loc-ref">
+          <span>&#x1F3A5;</span>
+          <span><strong>Vibe:</strong> Server-Racks, Neonlicht, Kabel &mdash; futuristische KI-Zentrale</span>
+        </div>
+        <div class="loc-footer">
+          <a class="maps-btn" href="https://maps.google.com/?q=49.4743,8.5340" target="_blank">&#x1F4CD; Google Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #02 WG Flur -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1200!2d8.471!3d49.496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#02</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-op">OP</span>
+          <span class="badge badge-hf">HF</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">WG &mdash; Flur & Eingang</div>
+        <div class="loc-concrete">Nikos WG oder Airbnb Mannheim &middot; Hauptdrehort (50 %)</div>
+        <div class="loc-ref">
+          <span>&#x1F3E0;</span>
+          <span><strong>Look:</strong> Typischer WG-Eingang &mdash; Schuhe, Post, Garderobe</span>
+        </div>
+        <div class="loc-footer">
+          <span style="font-size:.78rem; color:var(--muted);">&rarr; Gleiche Location wie #03&ndash;05</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- #03 BWL-Zimmer -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1200!2d8.471!3d49.496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#03</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-op">OP</span>
+          <span class="badge badge-hf">HF</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">WG &mdash; Zimmer BWL-Student</div>
+        <div class="loc-concrete">Gleiche Location wie #02</div>
+        <div class="loc-ref">
+          <span>&#x1F4DA;</span>
+          <span><strong>Look:</strong> Aktenordner, Krawatte, Fachbücher &mdash; ordentlich-gehetzt</span>
+        </div>
+        <div class="loc-footer">
+          <span style="font-size:.78rem; color:var(--muted);">&rarr; WG-Cluster</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- #04 Atelier -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1200!2d8.471!3d49.496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#04</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-op">OP</span>
+          <span class="badge badge-hf">HF</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">WG &mdash; Atelier Kreative</div>
+        <div class="loc-concrete">Gleiche Location wie #02</div>
+        <div class="loc-ref">
+          <span>&#x1F3A8;</span>
+          <span><strong>Look:</strong> Leinwände, Pinsel, kreatives Chaos</span>
+        </div>
+        <div class="loc-footer">
+          <span style="font-size:.78rem; color:var(--muted);">&rarr; WG-Cluster</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- #05 Treppenhaus -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d800!2d8.471!3d49.496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#05</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-hf">HF</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">Treppenhaus & Sicherungskeller</div>
+        <div class="loc-concrete">Wohnhaus der WG-Location</div>
+        <div class="loc-ref">
+          <span>&#x1F511;</span>
+          <span><strong>Look:</strong> Beton, Sicherungskasten, Rohre &mdash; düster</span>
+        </div>
+        <div class="loc-footer">
+          <span style="font-size:.78rem; color:var(--muted);">&rarr; Im selben Gebäude wie WG</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- #06 Restaurant Date -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d800!2d8.471!3d49.4965!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#06</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-op">OP</span>
+          <span class="badge badge-hf">HF</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">Restaurant / Café (Date)</div>
+        <div class="loc-concrete">Café Lauri &middot; Karl Otto &middot; Flo &middot; Meerwiesen</div>
+        <div class="loc-ref">
+          <span>&#x1F37D;&#xFE0F;</span>
+          <span><strong>Szene:</strong> Romantisches Date, Kerzenlicht, Nervosität</span>
+        </div>
+        <div class="loc-footer">
+          <a class="maps-btn" href="https://maps.google.com/?q=49.4965,8.4710" target="_blank">&#x1F4CD; Lauri</a>
+          <a class="maps-btn" href="https://maps.google.com/?q=49.4780,8.4690" target="_blank">&#x1F4CD; Karl Otto</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #07 Café Terrasse -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1500!2d8.6645!3d49.549!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#07</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-hf">HF</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">Café-Terrasse (Versöhnung)</div>
+        <div class="loc-concrete">Pastry Poets Weinheim &middot; Café Meerwiesen</div>
+        <div class="loc-ref">
+          <span>&#x2615;</span>
+          <span><strong>Szene:</strong> Draußen sitzen, Versöhnung, Morgenlicht</span>
+        </div>
+        <div class="loc-footer">
+          <a class="maps-btn" href="https://maps.google.com/?q=49.5490,8.6645" target="_blank">&#x1F4CD; Pastry Poets</a>
+          <a class="maps-btn" href="https://maps.google.com/?q=49.4750,8.4600" target="_blank">&#x1F4CD; Meerwiesen</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #08 Parkbank Luisenpark -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2000!2d8.493!3d49.477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#08</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-cd">CD 2</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">Parkbank</div>
+        <div class="loc-concrete">Luisenpark Mannheim</div>
+        <div class="loc-ref">
+          <span>&#x1F33F;</span>
+          <span><strong>Referenz:</strong> Forrest Gump &mdash; Parkbank, nachdenkliche Stimmung</span>
+        </div>
+        <div class="loc-footer">
+          <a class="maps-btn" href="https://maps.google.com/?q=49.4770,8.4930" target="_blank">&#x1F4CD; Google Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #09 Wasserturm Rocky -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d800!2d8.473!3d49.4835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#09</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-cd">CD 3</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">Treppe (Rocky)</div>
+        <div class="loc-concrete">Wasserturm Mannheim</div>
+        <div class="loc-ref">
+          <span>&#x1F3C6;</span>
+          <span><strong>Referenz:</strong> Rocky Balboa &mdash; Treppenrennen, Triumph</span>
+        </div>
+        <div class="loc-footer">
+          <a class="maps-btn" href="https://maps.google.com/?q=49.4835,8.4730" target="_blank">&#x1F4CD; Google Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #10 Tanzfläche Pulp Fiction -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d800!2d8.534!3d49.4743!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#10</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-cd">CD 4</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">Tanzfläche (Pulp Fiction)</div>
+        <div class="loc-concrete">DHBW-Aula &middot; Bar im Jungbusch</div>
+        <div class="loc-ref">
+          <span>&#x1F57A;</span>
+          <span><strong>Referenz:</strong> Pulp Fiction Twist &mdash; Retro-Dancefloor</span>
+        </div>
+        <div class="loc-footer">
+          <a class="maps-btn" href="https://maps.google.com/?q=49.4743,8.5340" target="_blank">&#x1F4CD; DHBW Aula</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #11 Western Industriehafen -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2000!2d8.444!3d49.507!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#11</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-cd">CD 5</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">Western-Kulisse</div>
+        <div class="loc-concrete">Industriehafen / Gleise Mannheim</div>
+        <div class="loc-ref">
+          <span>&#x1F920;</span>
+          <span><strong>Referenz:</strong> Spaghetti-Western &mdash; Duell, Mundharmonika, Staub</span>
+        </div>
+        <div class="loc-footer">
+          <a class="maps-btn" href="https://maps.google.com/?q=49.5070,8.4440" target="_blank">&#x1F4CD; Google Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #12 Bar HIMYM -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d600!2d8.471!3d49.4965!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#12</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-cd">CD 6</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">Bar / Kneipe (HIMYM)</div>
+        <div class="loc-concrete">Café Lauri &middot; Karl Otto</div>
+        <div class="loc-ref">
+          <span>&#x1F37A;</span>
+          <span><strong>Referenz:</strong> How I Met Your Mother &mdash; MacLaren's, Freundesrunde</span>
+        </div>
+        <div class="loc-footer">
+          <a class="maps-btn" href="https://maps.google.com/?q=49.4965,8.4710" target="_blank">&#x1F4CD; Café Lauri</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #13 Regen Shawshank -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2000!2d8.453!3d49.495!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#13</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-cd">CD 7</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">Regen-Außenbereich</div>
+        <div class="loc-concrete">Rheinufer &middot; Neckarwiese Mannheim</div>
+        <div class="loc-ref">
+          <span>&#x1F327;&#xFE0F;</span>
+          <span><strong>Referenz:</strong> Shawshank Redemption &mdash; Freiheit im Regen</span>
+        </div>
+        <div class="loc-footer">
+          <a class="maps-btn" href="https://maps.google.com/?q=49.4950,8.4530" target="_blank">&#x1F4CD; Google Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #14 Piano La La Land -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d800!2d8.534!3d49.4743!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#14</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-cd">CD 8</span>
+          <span class="badge badge-open">TBD</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">Piano-Raum (La La Land)</div>
+        <div class="loc-concrete">Noch offen &mdash; DHBW Aula? Proberaum?</div>
+        <div class="loc-ref">
+          <span>&#x1F3B9;</span>
+          <span><strong>Referenz:</strong> La La Land &mdash; Spotlight auf Klavier, dunkler Raum</span>
+        </div>
+        <div class="loc-footer">
+          <span class="status-open">&#x26A0;&#xFE0F; Location noch zu bestätigen</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- #15 Sonnenuntergang -->
+    <div class="loc-card">
+      <div class="loc-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1500!2d8.459!3d49.474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sde" loading="lazy"></iframe>
+        <div class="loc-num-badge">#15</div>
+        <div class="filmteil-badges">
+          <span class="badge badge-hf">HF</span>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="loc-name">Sonnenuntergang (Schluss)</div>
+        <div class="loc-concrete">Stephanienufer &middot; Neckarwiese Mannheim</div>
+        <div class="loc-ref">
+          <span>&#x1F307;</span>
+          <span><strong>Szene:</strong> Große Schlussszene &mdash; goldenes Licht, emotionaler Abschluss</span>
+        </div>
+        <div class="loc-footer">
+          <a class="maps-btn" href="https://maps.google.com/?q=49.4740,8.4590" target="_blank">&#x1F4CD; Google Maps</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /locations-grid -->
+
+  <!-- ═══ WG DETAIL ═══ -->
+  <div id="wg" class="section-title">
+    <div class="num">2</div>
+    <h2>WG-Location &mdash; Hauptdrehort (50 %)</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="info-box highlight">
+    <h3>&#x1F3E0; Anforderungen</h3>
+    <p>Mind. <strong>3 Zimmer + Flur + Küche</strong>. Typischer Studenten-WG-Charakter. Treppenhaus & Sicherungskeller im selben Gebäude nutzbar. Altbau bevorzugt.</p>
+  </div>
+
+  <div class="options-grid">
+    <div class="option-card">
+      <div class="option-label">Option A</div>
+      <h4>&#x1F511; Nikos WG</h4>
+      <ul class="pros-cons">
+        <li class="pro">Kostenlos</li>
+        <li class="pro">Authentisch, Treppenhaus direkt nutzbar</li>
+        <li class="con">Ggf. zu klein</li>
+        <li class="con">Nachbarn, eingeschränkte Drehzeiten</li>
+      </ul>
+    </div>
+    <div class="option-card">
+      <div class="option-label">Option B</div>
+      <h4>&#x1F3E1; Airbnb Mannheim</h4>
+      <ul class="pros-cons">
+        <li class="pro">Groß, flexibel, ungestört drehen</li>
+        <li class="pro">Mind. 3 Schlafzimmer / 80 m²+</li>
+        <li class="con">Kosten: 150&ndash;300 &euro; / Nacht</li>
+        <li class="con">WG-Charakter inszenieren</li>
+      </ul>
+      <div style="margin-top:.8rem;">
+        <a class="maps-btn" href="https://www.airbnb.de/s/Mannheim/homes?adults=6&min_bedrooms=3&room_types%5B%5D=Entire+home%2Fapt" target="_blank">&#x1F50D; Airbnb Suche</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TECHNIKER-BASE ═══ -->
+  <div id="base" class="section-title">
+    <div class="num">3</div>
+    <h2>Techniker-Base &mdash; 3 Optionen</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="info-box">
+    <table class="ref-table">
+      <thead><tr><th>Option</th><th>Look</th><th>Vorteil</th><th>Nachteil</th><th>Maps</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Cure-Werkstatt DHBW</strong></td><td>Werkbank, Lötkolben, Regale</td><td>Authentisch</td><td>Genehmigung nötig</td><td><a class="maps-btn" href="https://maps.google.com/?q=49.4743,8.5340" target="_blank">Maps</a></td></tr>
+        <tr><td><strong>Privater Bastelraum</strong></td><td>Eigene Ausrüstung</td><td>Volle Kontrolle</td><td>Herrichtung nötig</td><td>&mdash;</td></tr>
+        <tr><td><strong>Rechenzentrum DHBW</strong></td><td>Server-Racks, Blaulicht</td><td style="color:var(--green);">Perfekt für KI-Szenen</td><td>Zugang schwierig</td><td><a class="maps-btn" href="https://maps.google.com/?q=49.4743,8.5340" target="_blank">Maps</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══ GASTRONOMIE ═══ -->
+  <div id="gastro" class="section-title">
+    <div class="num">4</div>
+    <h2>Gastronomie-Locations</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="info-box">
+    <table class="ref-table">
+      <thead><tr><th>Name</th><th>Adresse</th><th>Szene</th><th>Maps</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Café Lauri</strong></td><td>Laurentiusstr. 21, Neckarstadt-West</td><td>Date / Bar</td><td><a class="maps-btn" href="https://maps.google.com/?q=49.4965,8.4710" target="_blank">Maps</a></td></tr>
+        <tr><td><strong>Café Karl Otto</strong></td><td>Karl-Ludwig-Str., Lindenhof</td><td>Date / Versöhnung</td><td><a class="maps-btn" href="https://maps.google.com/?q=49.4780,8.4690" target="_blank">Maps</a></td></tr>
+        <tr><td><strong>Café Meerwiesen</strong></td><td>Stephanienufer, Lindenhof</td><td>Terrasse</td><td><a class="maps-btn" href="https://maps.google.com/?q=49.4750,8.4600" target="_blank">Maps</a></td></tr>
+        <tr><td><strong>Café Flo</strong></td><td>Mannheim Innenstadt</td><td>Date / Bar</td><td><a class="maps-btn" href="https://maps.google.com/?q=49.4875,8.4660" target="_blank">Maps</a></td></tr>
+        <tr><td><strong>Pastry Poets</strong></td><td>Weinheim</td><td>Terrasse (elegant)</td><td><a class="maps-btn" href="https://maps.google.com/?q=49.5490,8.6645" target="_blank">Maps</a></td></tr>
+        <tr><td><strong>Restaurant Ehringer</strong></td><td>Weinheim</td><td>Gehoben</td><td><a class="maps-btn" href="https://maps.google.com/?q=49.5485,8.6640" target="_blank">Maps</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div style="font-size:.9rem; font-weight:600; color:var(--text);">FR(AI)ME &mdash; Night of the Graduates 2026</div>
+  <div style="margin-top:.3rem;">Filmteam DHBW Mannheim MPG24 &middot; Projektleitung: Dilara Sabuncuo &middot; Stand: Mai 2026</div>
+  <div style="margin-top:.4rem; color:var(--accent); font-weight:600;">Erster Drehtag: 17. Juni 2026</div>
+</footer>
+
+</body>
+</html>
