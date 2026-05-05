@@ -29,7 +29,7 @@ const state = {
 // =============================================================================
 const GITHUB_REPO = 'Raphl1/FilmTeam';
 const GITHUB_BRANCH = 'main';
-const DATA_PATH = 'website/data';
+const DATA_PATH = 'data';
 
 function getGithubToken() {
   return localStorage.getItem('github_token') || '';
@@ -490,54 +490,108 @@ function viewHub() {
 }
 
 // =============================================================================
-// VIEW: KANBAN
+// VIEW: KANBAN (Jira-Style)
 // =============================================================================
 function viewKanban() {
   const { columns, tasks, members } = state.kanban;
   const editing = state.editMode;
 
+  // Count per status
+  const counts = {};
+  columns.forEach(col => { counts[col.id] = tasks.filter(t => t.status === col.id).length; });
+  const totalTasks = tasks.length;
+  const doneTasks = counts['done'] || 0;
+
+  // Avatar color from name
+  function avatarColor(name) {
+    if (!name) return 'var(--muted)';
+    const colors = ['#6c3fc5', '#f72585', '#43aa8b', '#4285f4', '#f9c74f', '#ff6b35', '#9b5de5', '#00bbf9'];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    return colors[Math.abs(hash) % colors.length];
+  }
+
+  function avatarInitials(name) {
+    if (!name) return '?';
+    return name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+  }
+
   return `
-    <h2 class="view-title">\uD83D\uDCCB Kanban-Board</h2>
+    <div class="kanban-header-bar">
+      <h2 class="view-title">\uD83D\uDCCB Board</h2>
+      <div class="kanban-progress">
+        <span class="kanban-progress-text">${doneTasks}/${totalTasks} erledigt</span>
+        <div class="kanban-progress-bar">
+          <div class="kanban-progress-fill" style="width:${totalTasks > 0 ? (doneTasks/totalTasks*100) : 0}%"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="kanban-board">
       ${columns.map(col => {
         const colTasks = tasks.filter(t => t.status === col.id);
         return `
           <div class="kanban-column" data-column="${col.id}">
-            <div class="kanban-col-header" style="border-top:3px solid ${col.color}">
+            <div class="kanban-col-header">
+              <div class="kanban-col-dot" style="background:${col.color}"></div>
               <span class="kanban-col-title">${col.label}</span>
               <span class="kanban-col-count">${colTasks.length}</span>
             </div>
             <div class="kanban-col-body">
-              ${colTasks.map((task, idx) => {
+              ${colTasks.map(task => {
                 const realIdx = tasks.indexOf(task);
-                const deleteBtn = editing ? `<button class="delete-btn-sm" data-action="delete-kanban-task" data-idx="${realIdx}">\u2715</button>` : '';
+                const deleteBtn = editing ? `<button class="kanban-delete" data-action="delete-kanban-task" data-idx="${realIdx}">\u2715</button>` : '';
                 const statusSelect = editing ? `
                   <select class="kanban-status-select" data-action="change-kanban-status" data-idx="${realIdx}">
                     ${columns.map(c => `<option value="${c.id}" ${task.status === c.id ? 'selected' : ''}>${c.label}</option>`).join('')}
                   </select>` : '';
 
+                const ownerAvatar = task.owner ? `
+                  <div class="kanban-avatar" style="background:${avatarColor(task.owner)}" title="${escapeHtml(task.owner)}">
+                    ${avatarInitials(task.owner)}
+                  </div>` : '';
+
+                const assigneeTags = task.assignee ? task.assignee.split(',').map(a => a.trim()).filter(Boolean).map(a => `
+                  <span class="kanban-assignee-tag">${escapeHtml(a)}</span>
+                `).join('') : '';
+
+                const deadlineClass = task.deadline && new Date(task.deadline) < new Date() ? 'overdue' : '';
+
                 return `
-                  <div class="kanban-card card">
+                  <div class="kanban-card">
                     ${deleteBtn}
+                    <div class="kanban-card-top">
+                      <span class="kanban-card-id">${task.id.toUpperCase()}</span>
+                      ${ownerAvatar}
+                    </div>
                     <div class="kanban-card-title">${editing
                       ? `<span contenteditable="true" data-field="title" data-file="kanban" data-idx="${realIdx}" data-subkey="tasks">${escapeHtml(task.title)}</span>`
                       : escapeHtml(task.title)}</div>
                     ${task.description ? `<div class="kanban-card-desc">${escapeHtml(task.description)}</div>` : ''}
-                    <div class="kanban-card-meta">
-                      ${task.owner ? `<span class="kanban-owner">\uD83D\uDC64 ${escapeHtml(task.owner)}</span>` : ''}
-                      ${task.assignee ? `<span class="kanban-assignee">\u2192 ${escapeHtml(task.assignee)}</span>` : ''}
+                    ${assigneeTags ? `<div class="kanban-assignees">${assigneeTags}</div>` : ''}
+                    <div class="kanban-card-footer">
+                      ${task.deadline ? `<span class="kanban-deadline ${deadlineClass}">\uD83D\uDCC5 ${escapeHtml(task.deadline)}</span>` : ''}
                     </div>
-                    ${task.deadline ? `<div class="kanban-deadline">\uD83D\uDCC5 ${escapeHtml(task.deadline)}</div>` : ''}
                     ${statusSelect}
                   </div>
                 `;
               }).join('')}
               ${colTasks.length === 0 ? '<div class="kanban-empty">Keine Aufgaben</div>' : ''}
             </div>
-            ${editing ? `<button class="add-item-btn-sm kanban-add" data-action="add-kanban-task" data-status="${col.id}">+ Aufgabe</button>` : ''}
+            ${editing ? `<button class="kanban-add-btn" data-action="add-kanban-task" data-status="${col.id}">+ Aufgabe</button>` : ''}
           </div>
         `;
       }).join('')}
+    </div>
+
+    <div class="kanban-members-bar">
+      <span class="kanban-members-label">Team:</span>
+      ${members.map(m => `
+        <div class="kanban-member-chip" title="${escapeHtml(m)}">
+          <div class="kanban-avatar-sm" style="background:${avatarColor(m)}">${avatarInitials(m)}</div>
+          <span>${escapeHtml(m)}</span>
+        </div>
+      `).join('')}
     </div>
   `;
 }
