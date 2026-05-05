@@ -1,0 +1,14 @@
+{
+  "items": [
+    { "category": "Location", "name": "Airbnb WG (1-2 Nächte)", "min": 150, "max": 300, "notes": "3+ Zimmer, Altbau" },
+    { "category": "Equipment", "name": "Kamera-Miete (5 Tage)", "min": 150, "max": 250, "notes": "DSLR/Mirrorless 4K" },
+    { "category": "Equipment", "name": "Licht-Set Miete", "min": 80, "max": 150, "notes": "LED-Panels + Neon" },
+    { "category": "Equipment", "name": "Ton-Set Miete", "min": 60, "max": 120, "notes": "Shotgun + Funkstrecke + Recorder" },
+    { "category": "Requisiten", "name": "Kostüme & Props", "min": 50, "max": 100, "notes": "Cowboy-Hüte, Retro-Outfits" },
+    { "category": "Verpflegung", "name": "Crew-Catering (5 Tage)", "min": 100, "max": 200, "notes": "~6-8 Personen" },
+    { "category": "Transport", "name": "Benzin / Fahrkosten", "min": 50, "max": 80, "notes": "Mannheim + Weinheim" },
+    { "category": "Sonstiges", "name": "Speicherkarten, Batterien, Tape", "min": 30, "max": 50, "notes": "" },
+    { "category": "Reserve", "name": "Unvorhergesehenes (10%)", "min": 70, "max": 125, "notes": "Puffer" }
+  ],
+  "currency": "€"
+}

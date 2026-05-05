@@ -1,0 +1,100 @@
+{
+  "contacts": [
+    {
+      "id": "dhbw-raum",
+      "name": "Maik Mittelstädt",
+      "role": "Raumplanung DHBW",
+      "category": "dhbw",
+      "phone": "+49 621 4105-1383",
+      "email": "info.ma@dhbw.de",
+      "address": "Coblitzallee 1-9, 68163 Mannheim, Raum C 382",
+      "note": "Zuerst kontaktieren für Raumgenehmigungen"
+    },
+    {
+      "id": "dhbw-gebaeude",
+      "name": "Andreas Ullrich",
+      "role": "Leiter Gebäudebetrieb DHBW",
+      "category": "dhbw",
+      "phone": "+49 621 4105-1156",
+      "email": "info.ma@dhbw.de",
+      "address": "Coblitzallee 1-9, 68163 Mannheim, Raum C 384",
+      "note": ""
+    },
+    {
+      "id": "luisenpark",
+      "name": "Stadtpark Mannheim gGmbH",
+      "role": "Drehgenehmigung Luisenpark",
+      "category": "park",
+      "phone": "(0621) 4 10 05 15",
+      "email": "vermietungen@stadtpark-mannheim.de",
+      "address": "Gartenschauweg 12, 68165 Mannheim",
+      "note": "Anfrage über Vermietungsabteilung"
+    },
+    {
+      "id": "ordnungsamt",
+      "name": "Fachbereich Sicherheit und Ordnung",
+      "role": "Sondernutzung öffentliche Flächen",
+      "category": "city",
+      "phone": "0621 293-3201",
+      "email": "",
+      "address": "Rathaus E 5, 68159 Mannheim",
+      "note": "Für: Wasserturm, Industriehafen, Rheinufer, Stephanienufer"
+    },
+    {
+      "id": "pastry-poets",
+      "name": "Pastry Poets (Laura & Caro)",
+      "role": "Café-Terrasse Weinheim",
+      "category": "gastro",
+      "phone": "",
+      "email": "info@pastry-poets.de",
+      "address": "Weinheim",
+      "instagram": "@patisserie_pastry.poets",
+      "website": "https://www.pastry-poets.de",
+      "note": "Per E-Mail oder Instagram-DM anfragen"
+    },
+    {
+      "id": "cafe-lauri",
+      "name": "Café Lauri",
+      "role": "Date / Bar (HIMYM)",
+      "category": "gastro",
+      "phone": "",
+      "email": "",
+      "address": "Laurentiusstr. 21, 68169 Mannheim",
+      "instagram": "@cafelauri_mannheim",
+      "note": "Direkt vorbeigehen oder Instagram-DM"
+    },
+    {
+      "id": "cafe-karlotto",
+      "name": "Café Karl Otto",
+      "role": "Date / Versöhnung",
+      "category": "gastro",
+      "phone": "",
+      "email": "",
+      "address": "Karl-Ludwig-Str., 68163 Mannheim",
+      "instagram": "@cafe_karlotto",
+      "note": "Instagram-DM oder persönlich"
+    },
+    {
+      "id": "cafe-meerwiesen",
+      "name": "Café Meerwiesen",
+      "role": "Terrasse Stephanienufer",
+      "category": "gastro",
+      "phone": "",
+      "email": "",
+      "address": "Stephanienufer, 68163 Mannheim",
+      "instagram": "@cafemeerwiesen",
+      "note": "Instagram-DM oder persönlich"
+    }
+  ],
+  "permits": [
+    { "location": "DHBW Aula", "contact": "dhbw-raum", "status": "pending", "notes": "Mind. 2 Wochen Vorlauf" },
+    { "location": "DHBW Cure-Werkstatt", "contact": "dhbw-raum", "status": "pending", "notes": "" },
+    { "location": "DHBW Rechenzentrum", "contact": "dhbw-gebaeude", "status": "pending", "notes": "Zugang schwierig" },
+    { "location": "Luisenpark", "contact": "luisenpark", "status": "pending", "notes": "Film-Genehmigung" },
+    { "location": "Wasserturm / Rheinufer", "contact": "ordnungsamt", "status": "pending", "notes": "Sondernutzung" },
+    { "location": "Industriehafen / Gleise", "contact": "ordnungsamt", "status": "pending", "notes": "Sondernutzung" },
+    { "location": "Café Lauri", "contact": "cafe-lauri", "status": "not-asked", "notes": "" },
+    { "location": "Pastry Poets", "contact": "pastry-poets", "status": "not-asked", "notes": "" },
+    { "location": "Airbnb WG", "contact": "", "status": "not-booked", "notes": "150–300€/Nacht" }
+  ]
+}

@@ -1,0 +1,91 @@
+[
+  {
+    "day": 1,
+    "date": "2026-06-17",
+    "weekday": "Di",
+    "title": "WG & Treppenhaus",
+    "icon": "🏠",
+    "time": "08:00 – 20:00",
+    "duration": "Ganzer Tag",
+    "locations": [2, 3, 4, 5],
+    "scenes": [
+      "WG-Flur — Eingangsszenen",
+      "BWL-Zimmer — Character Setup",
+      "Atelier — Kreativ-Szenen",
+      "Treppenhaus — Kellerszene",
+      "Sicherungskeller — Spannungsszene"
+    ],
+    "notes": "Komplettes WG-Cluster an einem Ort. Requisiten für alle 3 Zimmer vorbereiten. Nachbarn vorab informieren.",
+    "conflict": "Digitale Fotografie 13:30–18:00"
+  },
+  {
+    "day": 2,
+    "date": "2026-06-18",
+    "weekday": "Mi",
+    "title": "Techniker-Base",
+    "icon": "🤖",
+    "time": "08:00 – 13:00",
+    "duration": "Halber Tag (Vormittag)",
+    "locations": [1],
+    "scenes": [
+      "KI-Zentrale — Hauptszene",
+      "Hacking / Coding Montage",
+      "Futuristische Inserts"
+    ],
+    "notes": "LED-Leisten mitbringen für Neon-Look. Laptops / Monitore als Requisiten. Dunkel = besser.",
+    "conflict": "Audiovisuelle Technik 13:30–18:00 — Dreh auf Vormittag!"
+  },
+  {
+    "day": 3,
+    "date": "2026-06-19",
+    "weekday": "Do",
+    "title": "Gastronomie",
+    "icon": "🍽️",
+    "time": "15:00 – 21:00",
+    "duration": "Nachmittag / Abend",
+    "locations": [6, 7],
+    "scenes": [
+      "Date-Szene im Restaurant",
+      "Versöhnungs-Szene auf Terrasse",
+      "Bar-Atmosphäre (Alternativ)"
+    ],
+    "notes": "Golden Hour nutzen für Terrassen-Szene. Vorab mit Café-Inhabern klären. Minimalcrew.",
+    "conflict": ""
+  },
+  {
+    "day": 4,
+    "date": "2026-06-20",
+    "weekday": "Fr",
+    "title": "Außen-Countdown",
+    "icon": "🌧️",
+    "time": "08:00 – Sonnenuntergang",
+    "duration": "Ganzer Tag (wetterabhängig)",
+    "locations": [8, 9, 11, 13, 15],
+    "scenes": [
+      "Parkbank (Forrest Gump)",
+      "Wasserturm-Treppe (Rocky)",
+      "Industriehafen (Western)",
+      "Rheinufer (Shawshank)",
+      "Stephanienufer (Schlussszene)"
+    ],
+    "notes": "Wetterabhängig! Backup-Termin einplanen. Regen-Szene braucht echten Regen ODER Regenmaschine. Schluss-Szene bei Sonnenuntergang.",
+    "conflict": ""
+  },
+  {
+    "day": 5,
+    "date": "2026-06-21",
+    "weekday": "Sa",
+    "title": "Spezial-Setups",
+    "icon": "🎬",
+    "time": "16:00 – 22:00",
+    "duration": "Halber Tag (Abend)",
+    "locations": [10, 12, 14],
+    "scenes": [
+      "Tanzfläche (Pulp Fiction)",
+      "Bar / Kneipe (HIMYM)",
+      "Piano-Raum (La La Land)"
+    ],
+    "notes": "Abends drehen — Club/Bar-Atmosphäre braucht Dunkelheit. Piano-Location noch TBD. Requisiten: Cowboy-Hüte, Retro-Outfits.",
+    "conflict": ""
+  }
+]

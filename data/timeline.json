@@ -1,0 +1,19 @@
+[
+  { "phase": "Pre-Production", "title": "Topic Pitch & Konzept", "date": "Januar 2026", "status": "done" },
+  { "phase": "Pre-Production", "title": "Projektdokumentation & Risikomatrix", "date": "Jan–Feb 2026", "status": "done" },
+  { "phase": "Pre-Production", "title": "Location Scouting & Übersicht", "date": "März–Mai 2026", "status": "done" },
+  { "phase": "Pre-Production", "title": "Genehmigungen & Buchungen", "date": "Mai–16. Juni 2026", "status": "active", "deadline": true },
+  { "phase": "Pre-Production", "title": "Casting & Team-Zuweisung", "date": "Bis 10. Juni", "status": "upcoming" },
+  { "phase": "Pre-Production", "title": "Shotlist finalisieren", "date": "Bis 14. Juni", "status": "upcoming" },
+  { "phase": "Pre-Production", "title": "Equipment organisieren", "date": "Bis 15. Juni", "status": "upcoming" },
+  { "phase": "Production", "title": "Drehtag 1 — WG & Treppenhaus", "date": "17. Juni 2026", "status": "upcoming" },
+  { "phase": "Production", "title": "Drehtag 2 — Techniker-Base", "date": "18. Juni 2026", "status": "upcoming" },
+  { "phase": "Production", "title": "Drehtag 3 — Gastronomie", "date": "19. Juni 2026", "status": "upcoming" },
+  { "phase": "Production", "title": "Drehtag 4 — Außen-Countdown", "date": "20. Juni 2026", "status": "upcoming" },
+  { "phase": "Production", "title": "Drehtag 5 — Spezial-Setups", "date": "21. Juni 2026", "status": "upcoming" },
+  { "phase": "Post-Production", "title": "Rohschnitt", "date": "Ende Juni–Juli", "status": "upcoming" },
+  { "phase": "Post-Production", "title": "Feinschnitt & Color Grading", "date": "Juli–August", "status": "upcoming" },
+  { "phase": "Post-Production", "title": "Sound-Design & Musik", "date": "August", "status": "upcoming" },
+  { "phase": "Post-Production", "title": "Master & Export", "date": "August–September", "status": "upcoming" },
+  { "phase": "Premiere", "title": "Night of the Graduates 2026", "date": "Okt/Nov 2026", "status": "goal" }
+]

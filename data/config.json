@@ -1,0 +1,29 @@
+{
+  "project": {
+    "title": "FR(AI)ME",
+    "subtitle": "Night of the Graduates 2026",
+    "team": "Filmteam DHBW Mannheim MPG24",
+    "lead": "Dilara Sabuncuo",
+    "date": "Mai 2026",
+    "firstShootDay": "17. Juni 2026",
+    "calendarUrl": "https://calendar.google.com/calendar/embed?src=9290d02891f1083a43bf4e5353cc6afb7119052c946845b06dcf4791362b8f76%40group.calendar.google.com&ctz=Europe%2FAmsterdam&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=1&showCalendars=0"
+  },
+  "navigation": [
+    { "id": "hub", "label": "Hub", "icon": "grid" },
+    { "id": "locations", "label": "Drehorte", "icon": "map-pin" },
+    { "id": "schedule", "label": "Drehplan", "icon": "calendar" },
+    { "id": "team", "label": "Team", "icon": "users" },
+    { "id": "equipment", "label": "Equipment", "icon": "camera" },
+    { "id": "budget", "label": "Budget", "icon": "wallet" },
+    { "id": "timeline", "label": "Timeline", "icon": "clock" },
+    { "id": "contacts", "label": "Kontakte", "icon": "phone" },
+    { "id": "calendar", "label": "Kalender", "icon": "calendar-days" }
+  ],
+  "stats": [
+    { "value": 15, "label": "Drehorte" },
+    { "value": 5, "label": "Drehtage" },
+    { "value": 3, "label": "Filmteile" },
+    { "value": 8, "label": "Film-Referenzen" },
+    { "value": 4, "label": "Spezial-Setups" }
+  ]
+}

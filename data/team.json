@@ -1,0 +1,13 @@
+{
+  "lead": { "name": "Dilara Sabuncuo", "role": "Projektleitung", "assigned": true },
+  "roles": [
+    { "id": "regie", "title": "Regie", "icon": "🎬", "description": "Kreative Vision, Szenenarbeit, Blocking", "assigned": "", "status": "open" },
+    { "id": "kamera", "title": "Kamera", "icon": "📷", "description": "Bildgestaltung, Kameraführung, Einstellungen", "assigned": "", "status": "open" },
+    { "id": "licht", "title": "Licht", "icon": "💡", "description": "Lichtsetup, LED-Panels, Neon-Look, natürliches Licht", "assigned": "", "status": "open" },
+    { "id": "ton", "title": "Ton", "icon": "🎙️", "description": "Richtmikro, Funkstrecke, Atmosphären", "assigned": "", "status": "open" },
+    { "id": "schnitt", "title": "Schnitt / Post", "icon": "✂️", "description": "Rohschnitt, Feinschnitt, Color Grading, VFX", "assigned": "", "status": "open" },
+    { "id": "schauspiel", "title": "Schauspiel", "icon": "🎭", "description": "Darsteller für Hauptrollen und Nebenrollen", "assigned": "", "status": "open" },
+    { "id": "produktion", "title": "Produktion / Orga", "icon": "📋", "description": "Zeitplan, Logistik, Genehmigungen, Catering", "assigned": "", "status": "open" },
+    { "id": "setdesign", "title": "Set-Design / Requisiten", "icon": "🎨", "description": "Cowboy-Hüte, Neon-LEDs, WG-Einrichtung, Kostüme", "assigned": "", "status": "open" }
+  ]
+}
