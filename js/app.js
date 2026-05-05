@@ -1,6 +1,6 @@
 /**
  * FR(AI)ME — Night of the Graduates 2026
- * Single Page Application with Inline Editing & GitHub Sync
+ * Single Page Application with Inline Editing, GitHub Sync & Kanban DnD
  * Vanilla JS · Hash Router · localStorage persistence
  */
 
@@ -94,7 +94,7 @@ async function saveFileToGithub(fileName, data) {
 // Save all dirty files to GitHub
 async function saveAllDirty() {
   if (state.dirty.size === 0) {
-    showToast('Keine Änderungen vorhanden', 'info');
+    showToast('Keine \u00c4nderungen vorhanden', 'info');
     return;
   }
 
@@ -260,12 +260,12 @@ function exitEditMode() {
 
 function cancelEditMode() {
   if (state.dirty.size > 0) {
-    if (!confirm('Ungespeicherte Änderungen verwerfen?')) return;
+    if (!confirm('Ungespeicherte \u00c4nderungen verwerfen?')) return;
   }
   // Reload data to discard changes
   fetchAllData().then(() => {
     exitEditMode();
-    showToast('Änderungen verworfen', 'info');
+    showToast('\u00c4nderungen verworfen', 'info');
   });
 }
 
@@ -281,7 +281,7 @@ function showTokenModal() {
   modal.innerHTML = `
     <div class="modal-content">
       <h3>GitHub Token erforderlich</h3>
-      <p>Um Änderungen zu speichern, benötigst du einen <strong>Personal Access Token</strong> mit <code>repo</code> Berechtigung.</p>
+      <p>Um \u00c4nderungen zu speichern, ben\u00f6tigst du einen <strong>Personal Access Token</strong> mit <code>repo</code> Berechtigung.</p>
       <p><a href="https://github.com/settings/tokens/new?scopes=repo&description=FRAIME+Editor" target="_blank" rel="noopener">Token erstellen &rarr;</a></p>
       <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxx" class="token-input" autocomplete="off" />
       <div class="modal-actions">
@@ -387,6 +387,11 @@ function render() {
 
   // Restore scroll position
   window.scrollTo(0, scrollPos);
+
+  // Initialize drag and drop if on kanban view and NOT in edit mode
+  if (route === 'kanban' && !state.editMode) {
+    initKanbanDragAndDrop();
+  }
 }
 
 function renderHeaderButtons(themeIcon) {
@@ -492,7 +497,7 @@ function viewHub() {
 }
 
 // =============================================================================
-// VIEW: MY TASKS (persönliche Aufgabenansicht)
+// VIEW: MY TASKS (persoenliche Aufgabenansicht)
 // =============================================================================
 function viewMyTasks() {
   const members = state.team.members || [];
@@ -552,7 +557,7 @@ function viewMyTasks() {
     ${!selectedMember ? `
       <div class="empty-state">
         <div class="empty-icon">\uD83D\uDC46</div>
-        <p>Wähle oben deinen Namen um deine Aufgaben zu sehen.</p>
+        <p>W\u00e4hle oben deinen Namen um deine Aufgaben zu sehen.</p>
       </div>
     ` : `
       <div class="my-tasks-summary">
@@ -563,7 +568,7 @@ function viewMyTasks() {
       ${myTasks.length === 0 ? `
         <div class="empty-state">
           <div class="empty-icon">\u2705</div>
-          <p>Keine Aufgaben — alles erledigt!</p>
+          <p>Keine Aufgaben \u2014 alles erledigt!</p>
         </div>
       ` : `
         ${renderTaskList(inProgressTasks, 'In Arbeit', '#6c3fc5')}
@@ -576,7 +581,7 @@ function viewMyTasks() {
 }
 
 // =============================================================================
-// VIEW: KANBAN (Jira-Style)
+// VIEW: KANBAN (Jira-Style with Drag-and-Drop)
 // =============================================================================
 function viewKanban() {
   const { columns, tasks } = state.kanban;
@@ -587,7 +592,7 @@ function viewKanban() {
   const counts = {};
   columns.forEach(col => { counts[col.id] = tasks.filter(t => t.status === col.id).length; });
   const totalTasks = tasks.length;
-  const doneTasks = counts['done'] || 0;
+  const doneTasksCount = counts['done'] || 0;
 
   // Avatar color from name
   function avatarColor(name) {
@@ -603,13 +608,16 @@ function viewKanban() {
     return name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
   }
 
+  // Determine if cards should be draggable (only when NOT in edit mode)
+  const draggableAttr = !editing ? 'draggable="true"' : '';
+
   return `
     <div class="kanban-header-bar">
       <h2 class="view-title">\uD83D\uDCCB Board</h2>
       <div class="kanban-progress">
-        <span class="kanban-progress-text">${doneTasks}/${totalTasks} erledigt</span>
+        <span class="kanban-progress-text">${doneTasksCount}/${totalTasks} erledigt</span>
         <div class="kanban-progress-bar">
-          <div class="kanban-progress-fill" style="width:${totalTasks > 0 ? (doneTasks/totalTasks*100) : 0}%"></div>
+          <div class="kanban-progress-fill" style="width:${totalTasks > 0 ? (doneTasksCount/totalTasks*100) : 0}%"></div>
         </div>
       </div>
     </div>
@@ -624,7 +632,7 @@ function viewKanban() {
               <span class="kanban-col-title">${col.label}</span>
               <span class="kanban-col-count">${colTasks.length}</span>
             </div>
-            <div class="kanban-col-body">
+            <div class="kanban-col-body" data-col-id="${col.id}">
               ${colTasks.map(task => {
                 const realIdx = tasks.indexOf(task);
                 const deleteBtn = editing ? `<button class="kanban-delete" data-action="delete-kanban-task" data-idx="${realIdx}">\u2715</button>` : '';
@@ -666,7 +674,7 @@ function viewKanban() {
                   : (task.deadline ? `<span class="kanban-deadline ${deadlineClass}">\uD83D\uDCC5 ${escapeHtml(task.deadline)}</span>` : '');
 
                 return `
-                  <div class="kanban-card">
+                  <div class="kanban-card" ${draggableAttr} data-task-idx="${realIdx}">
                     ${deleteBtn}
                     <div class="kanban-card-top">
                       <span class="kanban-card-id">${task.id.toUpperCase()}</span>
@@ -1070,9 +1078,9 @@ function viewBudget() {
           ${items.map((item, idx) => {
             const paidBySelect = editing ? `
               <select class="kanban-status-select" data-action="budget-paidby" data-idx="${idx}">
-                <option value="">— wählen —</option>
+                <option value="">\u2014 w\u00e4hlen \u2014</option>
                 ${members.map(m => `<option value="${m.name}" ${item.paidBy === m.name ? 'selected' : ''}>${m.name}</option>`).join('')}
-              </select>` : escapeHtml(item.paidBy || '—');
+              </select>` : escapeHtml(item.paidBy || '\u2014');
 
             const statusField = editing ? `
               <select class="kanban-status-select" data-action="budget-status" data-idx="${idx}">
@@ -1279,6 +1287,324 @@ function viewCalendar() {
       <iframe src="${calUrl}&mode=MONTH" loading="lazy"></iframe>
     </div>
   `;
+}
+
+// =============================================================================
+// DRAG AND DROP — KANBAN (Native HTML5 API + Touch Fallback)
+// =============================================================================
+
+/**
+ * Initializes drag-and-drop on kanban cards.
+ * Called after render() when route === 'kanban' and NOT in edit mode.
+ */
+function initKanbanDragAndDrop() {
+  const cards = document.querySelectorAll('.kanban-card[draggable="true"]');
+  const colBodies = document.querySelectorAll('.kanban-col-body');
+
+  // --- HTML5 Drag and Drop (desktop) ---
+  cards.forEach(card => {
+    card.addEventListener('dragstart', handleDragStart);
+    card.addEventListener('dragend', handleDragEnd);
+  });
+
+  colBodies.forEach(colBody => {
+    colBody.addEventListener('dragover', handleDragOver);
+    colBody.addEventListener('dragleave', handleDragLeave);
+    colBody.addEventListener('drop', handleDrop);
+  });
+
+  // --- Touch Fallback (mobile: long-press to drag) ---
+  initTouchDragAndDrop(cards, colBodies);
+}
+
+// ---- Desktop DnD handlers ----
+
+function handleDragStart(e) {
+  const card = e.currentTarget;
+  const taskIdx = card.dataset.taskIdx;
+
+  e.dataTransfer.setData('text/plain', taskIdx);
+  e.dataTransfer.effectAllowed = 'move';
+
+  // Add visual feedback with slight delay for smooth feel
+  requestAnimationFrame(() => {
+    card.classList.add('dragging');
+  });
+}
+
+function handleDragEnd(e) {
+  const card = e.currentTarget;
+  card.classList.remove('dragging');
+
+  // Clean up all drag-over states and drop indicators
+  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+  document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+
+  const colBody = e.currentTarget;
+  colBody.classList.add('drag-over');
+
+  // Show drop indicator
+  removeDropIndicators(colBody);
+
+  const afterElement = getDragAfterElement(colBody, e.clientY);
+  const indicator = document.createElement('div');
+  indicator.className = 'drop-indicator';
+
+  if (afterElement === null) {
+    // Append at the end (but before kanban-empty if present)
+    const emptyDiv = colBody.querySelector('.kanban-empty');
+    if (emptyDiv) {
+      colBody.insertBefore(indicator, emptyDiv);
+    } else {
+      colBody.appendChild(indicator);
+    }
+  } else {
+    colBody.insertBefore(indicator, afterElement);
+  }
+}
+
+function handleDragLeave(e) {
+  const colBody = e.currentTarget;
+  // Only remove if we truly left the column body
+  if (!colBody.contains(e.relatedTarget)) {
+    colBody.classList.remove('drag-over');
+    removeDropIndicators(colBody);
+  }
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  const colBody = e.currentTarget;
+  const targetColId = colBody.dataset.colId;
+  const taskIdx = parseInt(e.dataTransfer.getData('text/plain'));
+
+  // Clean up visual states
+  colBody.classList.remove('drag-over');
+  removeDropIndicators(colBody);
+  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+  document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+
+  // Update state
+  if (!isNaN(taskIdx) && targetColId && state.kanban.tasks[taskIdx]) {
+    const task = state.kanban.tasks[taskIdx];
+    if (task.status !== targetColId) {
+      task.status = targetColId;
+      markDirty('kanban');
+      render();
+    }
+  }
+}
+
+/**
+ * Get the element that the dragged item should be placed before.
+ * Uses vertical mouse position to find closest card below cursor.
+ */
+function getDragAfterElement(container, y) {
+  const draggableElements = [...container.querySelectorAll('.kanban-card:not(.dragging)')];
+
+  return draggableElements.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) {
+      return { offset: offset, element: child };
+    } else {
+      return closest;
+    }
+  }, { offset: Number.NEGATIVE_INFINITY }).element || null;
+}
+
+function removeDropIndicators(container) {
+  container.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+}
+
+// ---- Touch DnD (mobile fallback: long-press to initiate drag) ----
+
+let touchDragState = {
+  active: false,
+  timer: null,
+  startX: 0,
+  startY: 0,
+  card: null,
+  ghost: null,
+  taskIdx: null,
+  moved: false
+};
+
+function initTouchDragAndDrop(cards, colBodies) {
+  cards.forEach(card => {
+    card.addEventListener('touchstart', handleTouchStart, { passive: false });
+    card.addEventListener('touchmove', handleTouchMove, { passive: false });
+    card.addEventListener('touchend', handleTouchEnd, { passive: false });
+    card.addEventListener('touchcancel', handleTouchCancel, { passive: false });
+  });
+}
+
+function handleTouchStart(e) {
+  // Only trigger for single finger
+  if (e.touches.length !== 1) return;
+
+  const touch = e.touches[0];
+  const card = e.currentTarget;
+
+  touchDragState.startX = touch.clientX;
+  touchDragState.startY = touch.clientY;
+  touchDragState.card = card;
+  touchDragState.taskIdx = card.dataset.taskIdx;
+  touchDragState.moved = false;
+
+  // Start long-press timer (500ms)
+  touchDragState.timer = setTimeout(() => {
+    startTouchDrag(card, touch);
+  }, 500);
+}
+
+function handleTouchMove(e) {
+  const touch = e.touches[0];
+  const dx = Math.abs(touch.clientX - touchDragState.startX);
+  const dy = Math.abs(touch.clientY - touchDragState.startY);
+
+  // If user moves finger before long-press fires, cancel
+  if (!touchDragState.active && (dx > 10 || dy > 10)) {
+    clearTimeout(touchDragState.timer);
+    touchDragState.timer = null;
+    return;
+  }
+
+  // If drag is active, move the ghost element
+  if (touchDragState.active) {
+    e.preventDefault(); // Prevent scrolling while dragging
+    moveTouchGhost(touch);
+    highlightDropTarget(touch);
+    touchDragState.moved = true;
+  }
+}
+
+function handleTouchEnd(e) {
+  clearTimeout(touchDragState.timer);
+  touchDragState.timer = null;
+
+  if (touchDragState.active) {
+    e.preventDefault();
+    completeTouchDrag(e.changedTouches[0]);
+  }
+}
+
+function handleTouchCancel(e) {
+  clearTimeout(touchDragState.timer);
+  touchDragState.timer = null;
+  cancelTouchDrag();
+}
+
+function startTouchDrag(card, touch) {
+  touchDragState.active = true;
+
+  // Visual feedback on the original card
+  card.classList.add('dragging');
+
+  // Create ghost element
+  const ghost = card.cloneNode(true);
+  ghost.className = 'kanban-card kanban-drag-ghost';
+  ghost.style.width = card.offsetWidth + 'px';
+  ghost.style.left = (touch.clientX - card.offsetWidth / 2) + 'px';
+  ghost.style.top = (touch.clientY - 20) + 'px';
+  document.body.appendChild(ghost);
+  touchDragState.ghost = ghost;
+
+  // Haptic feedback if available
+  if (navigator.vibrate) {
+    navigator.vibrate(30);
+  }
+}
+
+function moveTouchGhost(touch) {
+  if (touchDragState.ghost) {
+    touchDragState.ghost.style.left = (touch.clientX - touchDragState.ghost.offsetWidth / 2) + 'px';
+    touchDragState.ghost.style.top = (touch.clientY - 20) + 'px';
+  }
+}
+
+function highlightDropTarget(touch) {
+  // Remove previous drag-over states
+  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+  document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+
+  // Find the column body under the touch point
+  const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (!elemBelow) return;
+
+  const colBody = elemBelow.closest('.kanban-col-body');
+  if (colBody) {
+    colBody.classList.add('drag-over');
+
+    // Show drop indicator
+    const afterElement = getDragAfterElement(colBody, touch.clientY);
+    const indicator = document.createElement('div');
+    indicator.className = 'drop-indicator';
+    if (afterElement === null) {
+      const emptyDiv = colBody.querySelector('.kanban-empty');
+      if (emptyDiv) {
+        colBody.insertBefore(indicator, emptyDiv);
+      } else {
+        colBody.appendChild(indicator);
+      }
+    } else {
+      colBody.insertBefore(indicator, afterElement);
+    }
+  }
+}
+
+function completeTouchDrag(touch) {
+  const taskIdx = parseInt(touchDragState.taskIdx);
+
+  // Find drop target column
+  // We need to temporarily hide the ghost to get the element beneath
+  if (touchDragState.ghost) {
+    touchDragState.ghost.style.display = 'none';
+  }
+  const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (touchDragState.ghost) {
+    touchDragState.ghost.style.display = '';
+  }
+
+  if (elemBelow) {
+    const colBody = elemBelow.closest('.kanban-col-body');
+    if (colBody) {
+      const targetColId = colBody.dataset.colId;
+      if (!isNaN(taskIdx) && targetColId && state.kanban.tasks[taskIdx]) {
+        const task = state.kanban.tasks[taskIdx];
+        if (task.status !== targetColId) {
+          task.status = targetColId;
+          markDirty('kanban');
+        }
+      }
+    }
+  }
+
+  // Clean up
+  cancelTouchDrag();
+  render();
+}
+
+function cancelTouchDrag() {
+  if (touchDragState.ghost) {
+    touchDragState.ghost.remove();
+    touchDragState.ghost = null;
+  }
+  if (touchDragState.card) {
+    touchDragState.card.classList.remove('dragging');
+  }
+  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+  document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+
+  touchDragState.active = false;
+  touchDragState.card = null;
+  touchDragState.taskIdx = null;
+  touchDragState.moved = false;
 }
 
 // =============================================================================
