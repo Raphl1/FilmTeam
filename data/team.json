@@ -1,13 +1,27 @@
 {
-  "lead": { "name": "Dilara Sabuncuo", "role": "Projektleitung", "assigned": true },
+  "lead": { "name": "Dilara", "role": "Projektleitung", "assigned": true },
+  "members": [
+    { "id": "dilara", "name": "Dilara", "color": "#6c3fc5" },
+    { "id": "jetmir", "name": "Jetmir", "color": "#f72585" },
+    { "id": "lia", "name": "Lia", "color": "#43aa8b" },
+    { "id": "runa", "name": "Runa", "color": "#4285f4" },
+    { "id": "raphael", "name": "Raphael", "color": "#f9c74f" },
+    { "id": "luca", "name": "Luca", "color": "#ff6b35" },
+    { "id": "miriam", "name": "Miriam", "color": "#9b5de5" },
+    { "id": "quyen", "name": "Quyen", "color": "#00bbf9" },
+    { "id": "benicio", "name": "Benicio", "color": "#ef476f" },
+    { "id": "nico", "name": "Nico", "color": "#06d6a0" },
+    { "id": "yudong", "name": "Yudong", "color": "#118ab2" },
+    { "id": "tobi", "name": "Tobi", "color": "#ffd166" }
+  ],
   "roles": [
-    { "id": "regie", "title": "Regie", "icon": "🎬", "description": "Kreative Vision, Szenenarbeit, Blocking", "assigned": "", "status": "open" },
-    { "id": "kamera", "title": "Kamera", "icon": "📷", "description": "Bildgestaltung, Kameraführung, Einstellungen", "assigned": "", "status": "open" },
-    { "id": "licht", "title": "Licht", "icon": "💡", "description": "Lichtsetup, LED-Panels, Neon-Look, natürliches Licht", "assigned": "", "status": "open" },
-    { "id": "ton", "title": "Ton", "icon": "🎙️", "description": "Richtmikro, Funkstrecke, Atmosphären", "assigned": "", "status": "open" },
-    { "id": "schnitt", "title": "Schnitt / Post", "icon": "✂️", "description": "Rohschnitt, Feinschnitt, Color Grading, VFX", "assigned": "", "status": "open" },
-    { "id": "schauspiel", "title": "Schauspiel", "icon": "🎭", "description": "Darsteller für Hauptrollen und Nebenrollen", "assigned": "", "status": "open" },
-    { "id": "produktion", "title": "Produktion / Orga", "icon": "📋", "description": "Zeitplan, Logistik, Genehmigungen, Catering", "assigned": "", "status": "open" },
-    { "id": "setdesign", "title": "Set-Design / Requisiten", "icon": "🎨", "description": "Cowboy-Hüte, Neon-LEDs, WG-Einrichtung, Kostüme", "assigned": "", "status": "open" }
+    { "id": "regie", "title": "Regie", "icon": "\uD83C\uDFAC", "description": "Kreative Vision, Szenenarbeit, Blocking", "assigned": "", "status": "open" },
+    { "id": "kamera", "title": "Kamera", "icon": "\uD83D\uDCF7", "description": "Bildgestaltung, Kameraführung, Einstellungen", "assigned": "", "status": "open" },
+    { "id": "licht", "title": "Licht", "icon": "\uD83D\uDCA1", "description": "Lichtsetup, LED-Panels, Neon-Look, natürliches Licht", "assigned": "", "status": "open" },
+    { "id": "ton", "title": "Ton", "icon": "\uD83C\uDF99\uFE0F", "description": "Richtmikro, Funkstrecke, Atmosphären", "assigned": "", "status": "open" },
+    { "id": "schnitt", "title": "Schnitt / Post", "icon": "\u2702\uFE0F", "description": "Rohschnitt, Feinschnitt, Color Grading, VFX", "assigned": "", "status": "open" },
+    { "id": "schauspiel", "title": "Schauspiel", "icon": "\uD83C\uDFAD", "description": "Darsteller für Hauptrollen und Nebenrollen", "assigned": "", "status": "open" },
+    { "id": "produktion", "title": "Produktion / Orga", "icon": "\uD83D\uDCCB", "description": "Zeitplan, Logistik, Genehmigungen, Catering", "assigned": "", "status": "open" },
+    { "id": "setdesign", "title": "Set-Design / Requisiten", "icon": "\uD83C\uDFA8", "description": "Cowboy-Hüte, Neon-LEDs, WG-Einrichtung, Kostüme", "assigned": "", "status": "open" }
   ]
 }

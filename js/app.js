@@ -155,6 +155,7 @@ const ICONS = {
   'phone': '\uD83D\uDCDE',
   'calendar-days': '\uD83D\uDDD3\uFE0F',
   'kanban': '\uD83D\uDCCB',
+  'user': '\uD83D\uDC64',
   'sun': '\u2600\uFE0F',
   'moon': '\uD83C\uDF19'
 };
@@ -427,6 +428,7 @@ function renderHeaderControls() {
 function renderView(route) {
   switch (route) {
     case 'hub':       return viewHub();
+    case 'my-tasks':  return viewMyTasks();
     case 'kanban':    return viewKanban();
     case 'locations': return viewLocations();
     case 'schedule':  return viewSchedule();
@@ -490,10 +492,95 @@ function viewHub() {
 }
 
 // =============================================================================
+// VIEW: MY TASKS (persönliche Aufgabenansicht)
+// =============================================================================
+function viewMyTasks() {
+  const members = state.team.members || [];
+  const tasks = state.kanban.tasks || [];
+  const selectedMember = localStorage.getItem('my_tasks_user') || '';
+
+  // Filter tasks for selected member
+  const myTasks = selectedMember
+    ? tasks.filter(t =>
+        (t.owner && t.owner.toLowerCase() === selectedMember.toLowerCase()) ||
+        (t.assignee && t.assignee.toLowerCase().includes(selectedMember.toLowerCase()))
+      )
+    : [];
+
+  const todoTasks = myTasks.filter(t => t.status === 'todo');
+  const inProgressTasks = myTasks.filter(t => t.status === 'in-progress');
+  const doneTasks = myTasks.filter(t => t.status === 'done');
+  const otherTasks = myTasks.filter(t => !['todo','in-progress','done'].includes(t.status));
+
+  function renderTaskList(taskList, label, color) {
+    if (taskList.length === 0) return '';
+    return `
+      <div class="my-tasks-section">
+        <div class="my-tasks-section-header" style="border-left:3px solid ${color}">
+          <span>${label}</span>
+          <span class="my-tasks-count">${taskList.length}</span>
+        </div>
+        ${taskList.map(t => `
+          <div class="my-task-item">
+            <div class="my-task-title">${escapeHtml(t.title)}</div>
+            ${t.description ? `<div class="my-task-desc">${escapeHtml(t.description)}</div>` : ''}
+            <div class="my-task-meta">
+              ${t.deadline ? `<span class="my-task-deadline">\uD83D\uDCC5 ${escapeHtml(t.deadline)}</span>` : ''}
+              ${t.owner ? `<span class="my-task-owner">Owner: ${escapeHtml(t.owner)}</span>` : ''}
+              ${t.assignee ? `<span class="my-task-assignee">Zugewiesen: ${escapeHtml(t.assignee)}</span>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  return `
+    <h2 class="view-title">\uD83D\uDC64 Meine Aufgaben</h2>
+
+    <div class="my-tasks-selector">
+      <label class="my-tasks-label">Wer bist du?</label>
+      <div class="my-tasks-chips">
+        ${members.map(m => `
+          <button class="my-tasks-chip ${selectedMember === m.name ? 'active' : ''}" data-action="select-member" data-member="${escapeHtml(m.name)}" style="${selectedMember === m.name ? `background:${m.color}20; border-color:${m.color}; color:${m.color}` : ''}">
+            ${escapeHtml(m.name)}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+
+    ${!selectedMember ? `
+      <div class="empty-state">
+        <div class="empty-icon">\uD83D\uDC46</div>
+        <p>Wähle oben deinen Namen um deine Aufgaben zu sehen.</p>
+      </div>
+    ` : `
+      <div class="my-tasks-summary">
+        <span class="my-tasks-name">${escapeHtml(selectedMember)}</span>
+        <span class="my-tasks-total">${myTasks.length} Aufgabe${myTasks.length !== 1 ? 'n' : ''}</span>
+      </div>
+
+      ${myTasks.length === 0 ? `
+        <div class="empty-state">
+          <div class="empty-icon">\u2705</div>
+          <p>Keine Aufgaben — alles erledigt!</p>
+        </div>
+      ` : `
+        ${renderTaskList(inProgressTasks, 'In Arbeit', '#6c3fc5')}
+        ${renderTaskList(todoTasks, 'Zu erledigen', '#f72585')}
+        ${renderTaskList(otherTasks, 'Sonstiges', '#f9c74f')}
+        ${renderTaskList(doneTasks, 'Erledigt', '#43aa8b')}
+      `}
+    `}
+  `;
+}
+
+// =============================================================================
 // VIEW: KANBAN (Jira-Style)
 // =============================================================================
 function viewKanban() {
-  const { columns, tasks, members } = state.kanban;
+  const { columns, tasks } = state.kanban;
+  const members = state.team.members || [];
   const editing = state.editMode;
 
   // Count per status
@@ -884,70 +971,146 @@ function viewEquipment() {
 }
 
 // =============================================================================
-// VIEW: BUDGET
+// VIEW: BUDGET (Split-Style)
 // =============================================================================
 function viewBudget() {
   const { items, currency } = state.budget;
+  const members = state.team.members || [];
   const editing = state.editMode;
-  const totalMin = items.reduce((s, i) => s + i.min, 0);
-  const totalMax = items.reduce((s, i) => s + i.max, 0);
+
+  // Calculate totals
+  const totalSpent = items.reduce((s, i) => s + (i.amount || 0), 0);
+  const perPerson = members.length > 0 ? totalSpent / members.length : 0;
+
+  // Calculate who paid how much
+  const paidByPerson = {};
+  members.forEach(m => { paidByPerson[m.name] = 0; });
+  items.forEach(item => {
+    if (item.paidBy && paidByPerson[item.paidBy] !== undefined) {
+      paidByPerson[item.paidBy] += (item.amount || 0);
+    }
+  });
+
+  // Calculate balance (paid - fair share)
+  const balances = members.map(m => ({
+    name: m.name,
+    color: m.color,
+    paid: paidByPerson[m.name] || 0,
+    balance: (paidByPerson[m.name] || 0) - perPerson
+  }));
+
+  // Status badge helper
+  function approvalBadge(status) {
+    if (status === 'approved') return '<span class="status-badge status-green">Genehmigt</span>';
+    if (status === 'pending') return '<span class="status-badge status-yellow">Ausstehend</span>';
+    if (status === 'declined') return '<span class="status-badge" style="background:rgba(247,37,133,.1);color:var(--accent);border:1px solid rgba(247,37,133,.2);">Abgelehnt</span>';
+    return '<span class="status-badge status-gray">Offen</span>';
+  }
 
   return `
-    <h2 class="view-title">\uD83D\uDCB0 Budget</h2>
-    <div class="budget-visual">
-      <div class="budget-range-labels">
-        <span>Min: <strong>${totalMin}${currency}</strong></span>
-        <span>Max: <strong>${totalMax}${currency}</strong></span>
+    <h2 class="view-title">\uD83D\uDCB0 Budget & Ausgaben</h2>
+
+    <!-- Summary Cards -->
+    <div class="budget-summary-grid">
+      <div class="budget-summary-card">
+        <div class="bsc-label">Gesamt ausgegeben</div>
+        <div class="bsc-value">${totalSpent.toFixed(2)}${currency}</div>
       </div>
-      <div class="budget-bar">
-        <div class="budget-bar-fill budget-bar-max" style="width:100%"></div>
-        <div class="budget-bar-fill budget-bar-min" style="width:${totalMax > 0 ? (totalMin / totalMax * 100) : 0}%"></div>
+      <div class="budget-summary-card">
+        <div class="bsc-label">Pro Person</div>
+        <div class="bsc-value">${perPerson.toFixed(2)}${currency}</div>
+      </div>
+      <div class="budget-summary-card">
+        <div class="bsc-label">Posten</div>
+        <div class="bsc-value">${items.length}</div>
+      </div>
+      <div class="budget-summary-card">
+        <div class="bsc-label">Personen</div>
+        <div class="bsc-value">${members.length}</div>
       </div>
     </div>
+
+    <!-- Balances (who owes whom) -->
+    ${items.length > 0 ? `
+    <h3 class="sub-title">Saldo pro Person</h3>
+    <div class="balance-grid">
+      ${balances.map(b => `
+        <div class="balance-card" style="border-left:3px solid ${b.color}">
+          <div class="balance-name">${escapeHtml(b.name)}</div>
+          <div class="balance-paid">${b.paid.toFixed(2)}${currency} bezahlt</div>
+          <div class="balance-amount ${b.balance >= 0 ? 'positive' : 'negative'}">
+            ${b.balance >= 0 ? '+' : ''}${b.balance.toFixed(2)}${currency}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    ` : ''}
+
+    <!-- Expenses Table -->
+    <h3 class="sub-title">Ausgaben</h3>
+    ${items.length === 0 && !editing ? `
+      <div class="empty-state">
+        <div class="empty-icon">\uD83D\uDCB8</div>
+        <p>Noch keine Ausgaben eingetragen. Klicke auf \u270F\uFE0F um welche hinzuzuf\u00fcgen.</p>
+      </div>
+    ` : `
     <div class="budget-table-wrap">
       <table class="ref-table">
         <thead>
           <tr>
-            <th>Kategorie</th>
             <th>Posten</th>
-            <th>Min ${currency}</th>
-            <th>Max ${currency}</th>
+            <th>Betrag</th>
+            <th>Bezahlt von</th>
+            <th>Status</th>
             <th>Notizen</th>
             ${editing ? '<th></th>' : ''}
           </tr>
         </thead>
         <tbody>
-          ${items.map((item, idx) => `
-            <tr>
-              <td><span class="badge badge-info">${editing
-                ? `<span contenteditable="true" data-field="category" data-file="budget" data-idx="${idx}">${escapeHtml(item.category)}</span>`
-                : escapeHtml(item.category)}</span></td>
-              <td>${editing
-                ? `<span contenteditable="true" data-field="name" data-file="budget" data-idx="${idx}">${escapeHtml(item.name)}</span>`
-                : escapeHtml(item.name)}</td>
-              <td class="num-cell">${editing
-                ? `<input type="number" class="inline-number" value="${item.min}" data-action="budget-min" data-idx="${idx}" />`
-                : item.min}</td>
-              <td class="num-cell">${editing
-                ? `<input type="number" class="inline-number" value="${item.max}" data-action="budget-max" data-idx="${idx}" />`
-                : item.max}</td>
-              <td class="budget-note">${editing
-                ? `<span contenteditable="true" data-field="notes" data-file="budget" data-idx="${idx}">${escapeHtml(item.notes)}</span>`
-                : escapeHtml(item.notes)}</td>
-              ${editing ? `<td><button class="delete-btn-sm" data-action="delete-budget" data-idx="${idx}">\u2715</button></td>` : ''}
-            </tr>
-          `).join('')}
+          ${items.map((item, idx) => {
+            const paidBySelect = editing ? `
+              <select class="kanban-status-select" data-action="budget-paidby" data-idx="${idx}">
+                <option value="">— wählen —</option>
+                ${members.map(m => `<option value="${m.name}" ${item.paidBy === m.name ? 'selected' : ''}>${m.name}</option>`).join('')}
+              </select>` : escapeHtml(item.paidBy || '—');
+
+            const statusField = editing ? `
+              <select class="kanban-status-select" data-action="budget-status" data-idx="${idx}">
+                <option value="open" ${item.status === 'open' ? 'selected' : ''}>Offen</option>
+                <option value="pending" ${item.status === 'pending' ? 'selected' : ''}>Ausstehend</option>
+                <option value="approved" ${item.status === 'approved' ? 'selected' : ''}>Genehmigt</option>
+                <option value="declined" ${item.status === 'declined' ? 'selected' : ''}>Abgelehnt</option>
+              </select>` : approvalBadge(item.status);
+
+            return `
+              <tr>
+                <td>${editing
+                  ? `<span contenteditable="true" data-field="name" data-file="budget" data-idx="${idx}">${escapeHtml(item.name)}</span>`
+                  : escapeHtml(item.name)}</td>
+                <td class="num-cell">${editing
+                  ? `<input type="number" class="inline-number" value="${item.amount || 0}" step="0.01" data-action="budget-amount" data-idx="${idx}" />`
+                  : `${(item.amount || 0).toFixed(2)}${currency}`}</td>
+                <td>${paidBySelect}</td>
+                <td>${statusField}</td>
+                <td class="budget-note">${editing
+                  ? `<span contenteditable="true" data-field="notes" data-file="budget" data-idx="${idx}">${escapeHtml(item.notes || '')}</span>`
+                  : escapeHtml(item.notes || '')}</td>
+                ${editing ? `<td><button class="delete-btn-sm" data-action="delete-budget" data-idx="${idx}">\u2715</button></td>` : ''}
+              </tr>
+            `;
+          }).join('')}
+          ${items.length > 0 ? `
           <tr class="budget-total-row">
-            <td colspan="2"><strong>Gesamt</strong></td>
-            <td class="num-cell"><strong>${totalMin}${currency}</strong></td>
-            <td class="num-cell"><strong>${totalMax}${currency}</strong></td>
-            <td></td>
+            <td><strong>Gesamt</strong></td>
+            <td class="num-cell"><strong>${totalSpent.toFixed(2)}${currency}</strong></td>
+            <td colspan="3"></td>
             ${editing ? '<td></td>' : ''}
-          </tr>
+          </tr>` : ''}
         </tbody>
       </table>
     </div>
-    ${editing ? `<button class="add-item-btn" data-action="add-budget">+ Posten hinzuf\u00fcgen</button>` : ''}
+    `}
+    ${editing ? `<button class="add-item-btn" data-action="add-budget">+ Ausgabe hinzuf\u00fcgen</button>` : ''}
   `;
 }
 
@@ -1361,10 +1524,10 @@ document.addEventListener('click', (e) => {
     if (action === 'add-budget') {
       e.preventDefault();
       state.budget.items.push({
-        category: 'Sonstiges',
-        name: 'Neuer Posten',
-        min: 0,
-        max: 0,
+        name: 'Neue Ausgabe',
+        amount: 0,
+        paidBy: '',
+        status: 'open',
         notes: ''
       });
       markDirty('budget');
@@ -1433,6 +1596,14 @@ document.addEventListener('click', (e) => {
       const idx = parseInt(actionEl.dataset.idx);
       state.contacts.contacts.splice(idx, 1);
       markDirty('contacts');
+      render();
+      return;
+    }
+
+    // --- Select member (my tasks) ---
+    if (action === 'select-member') {
+      e.preventDefault();
+      localStorage.setItem('my_tasks_user', actionEl.dataset.member);
       render();
       return;
     }
@@ -1521,14 +1692,25 @@ document.addEventListener('input', (e) => {
   }
 
   // Budget number inputs
-  if (el.dataset.action === 'budget-min' || el.dataset.action === 'budget-max') {
+  if (el.dataset.action === 'budget-amount') {
     const idx = parseInt(el.dataset.idx);
-    const val = parseInt(el.value) || 0;
-    if (el.dataset.action === 'budget-min') {
-      state.budget.items[idx].min = val;
-    } else {
-      state.budget.items[idx].max = val;
-    }
+    state.budget.items[idx].amount = parseFloat(el.value) || 0;
+    markDirty('budget');
+    return;
+  }
+
+  // Budget paidBy select
+  if (el.dataset.action === 'budget-paidby') {
+    const idx = parseInt(el.dataset.idx);
+    state.budget.items[idx].paidBy = el.value;
+    markDirty('budget');
+    return;
+  }
+
+  // Budget status select
+  if (el.dataset.action === 'budget-status') {
+    const idx = parseInt(el.dataset.idx);
+    state.budget.items[idx].status = el.value;
     markDirty('budget');
     return;
   }

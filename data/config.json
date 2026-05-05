@@ -10,6 +10,7 @@
   },
   "navigation": [
     { "id": "hub", "label": "Hub", "icon": "grid" },
+    { "id": "my-tasks", "label": "Meine Aufgaben", "icon": "user" },
     { "id": "kanban", "label": "Kanban", "icon": "kanban" },
     { "id": "locations", "label": "Drehorte", "icon": "map-pin" },
     { "id": "schedule", "label": "Drehplan", "icon": "calendar" },
