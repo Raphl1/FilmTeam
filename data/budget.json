@@ -1,4 +1,12 @@
 {
-  "items": [],
-  "currency": "\u20ac"
+  "items": [
+    {
+      "name": "Neue Ausgabe",
+      "amount": 50,
+      "paidBy": "Dilara",
+      "status": "approved",
+      "notes": ""
+    }
+  ],
+  "currency": "€"
 }
