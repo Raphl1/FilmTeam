@@ -6,6 +6,48 @@
       "paidBy": "Dilara",
       "status": "approved",
       "notes": ""
+    },
+    {
+      "name": "Transport / Benzin",
+      "amount": 0,
+      "paidBy": "",
+      "status": "open",
+      "notes": "Fahrten zu Locations in Mannheim & Weinheim"
+    },
+    {
+      "name": "Essen / Catering (5 Drehtage)",
+      "amount": 0,
+      "paidBy": "",
+      "status": "open",
+      "notes": "Snacks, Getränke, Mittagessen für Team"
+    },
+    {
+      "name": "Requisiten",
+      "amount": 0,
+      "paidBy": "",
+      "status": "open",
+      "notes": "Kostüme, Deko, Kleinteile für Szenen"
+    },
+    {
+      "name": "Licht-Miete",
+      "amount": 0,
+      "paidBy": "",
+      "status": "open",
+      "notes": "LED-Panel, Softbox falls DHBW-Bestand nicht reicht"
+    },
+    {
+      "name": "Speicherkarten",
+      "amount": 0,
+      "paidBy": "",
+      "status": "open",
+      "notes": "SD / CFexpress Backup-Karten"
+    },
+    {
+      "name": "Druckkosten",
+      "amount": 0,
+      "paidBy": "",
+      "status": "open",
+      "notes": "Drehplan-Ausdrucke, Storyboard-Kopien, Schilder"
     }
   ],
   "currency": "€"

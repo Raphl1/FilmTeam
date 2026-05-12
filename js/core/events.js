@@ -101,8 +101,22 @@ document.addEventListener('click', async e => {
 
 // ── Input delegation ─────────────────────────────────────────────────────────
 let ceTimer = null;
+let searchTimer = null;
 document.addEventListener('input', e => {
   const el = e.target;
+
+  // ── Search input handler ──
+  if (el.dataset.action === 'search-input') {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(async () => {
+      state.searchQuery = el.value.trim();
+      const { getSearchResults, renderSearchResults } = await import('../components/search.js');
+      const results = getSearchResults(state.searchQuery);
+      renderSearchResults(results);
+    }, 300);
+    return;
+  }
+
   if (el.hasAttribute('contenteditable') && el.dataset.field && el.dataset.file) {
     clearTimeout(ceTimer);
     ceTimer = setTimeout(() => {
@@ -144,3 +158,13 @@ document.addEventListener('keydown', e => {
 document.addEventListener('keypress', e => {
   if (e.key==='Enter' && e.target.id==='token-input') { e.preventDefault(); handleSaveToken(); }
 });
+
+// ── Close search results on outside click ────────────────────────────────────
+document.addEventListener('click', e => {
+  const wrapper = document.getElementById('search-wrapper');
+  const results = document.getElementById('search-results');
+  if (results && wrapper && !wrapper.contains(e.target)) {
+    results.classList.add('hidden');
+    results.textContent = '';
+  }
+}, true);

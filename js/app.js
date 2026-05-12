@@ -6,6 +6,12 @@ import { navigate } from './core/router.js';
 import './core/events.js';
 
 async function init() {
+  // Auto-detect theme if none saved
+  if (!localStorage.getItem('theme')) {
+    const preferLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    localStorage.setItem('theme', preferLight ? 'light' : 'dark');
+  }
+
   const app = document.getElementById('app');
   app.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;color:#8892a4;font-family:system-ui,sans-serif"><div style="font-size:2rem">🎬</div><div>Lade FR(AI)ME...</div></div>`;
 
@@ -29,6 +35,15 @@ async function init() {
     app.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;color:#f72585;font-family:system-ui,sans-serif;padding:24px;text-align:center"><div style="font-size:2rem">⚠️</div><div style="font-size:1.1rem;font-weight:700">Rendering-Fehler</div><div style="color:#8892a4;font-size:.85rem;max-width:400px">${err.message}</div><button onclick="location.reload()" style="margin-top:16px;padding:8px 24px;border-radius:8px;border:1px solid #f72585;color:#f72585;background:transparent;cursor:pointer;font-size:.85rem">Neu laden</button></div>`;
     console.error('FR(AI)ME render failed:', err);
   }
+}
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => {
+      console.warn('SW registration failed:', err);
+    });
+  });
 }
 
 init();

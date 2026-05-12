@@ -1,4 +1,5 @@
 import { state } from '../core/state.js';
+import { renderSearch } from './search.js';
 
 const LUCIDE = {
   'hub':'layout-grid','my-tasks':'user','kanban':'kanban','locations':'map-pin',
@@ -15,7 +16,8 @@ export function renderShell(route) {
     return;
   }
   const { navigation, project } = state.config;
-  const theme = localStorage.getItem('theme') || 'dark';
+  const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  localStorage.setItem('theme', theme);
   document.body.className = theme;
 
   const navItems = navigation.map(item => {
@@ -56,6 +58,7 @@ export function renderShell(route) {
             </div>
             <div class="flex items-center gap-sm" id="header-actions"></div>
           </div>
+          <div class="px-lg pb-sm max-w-main mx-auto w-full max-md:hidden">${renderSearch()}</div>
         </header>
         <nav class="hidden max-md:flex fixed bottom-0 left-0 right-0 bg-card border-t border-border px-xs z-[200] overflow-x-auto" style="-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:max(4px,env(safe-area-inset-bottom))" id="bottom-nav">${bottomItems}</nav>
         <main class="flex-1 max-w-main px-lg py-xl pb-2xl max-md:px-md max-md:pb-[calc(24px+64px+env(safe-area-inset-bottom))]">

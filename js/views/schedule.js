@@ -13,8 +13,11 @@ export default async function viewSchedule() {
   const safeCalUrl = isSafeUrl(calUrl) ? `${calUrl}&mode=WEEK` : '';
   const editing = state.editMode;
   return `
-    <h2 class="text-xl font-extrabold tracking-tight mb-lg"><i data-lucide="calendar"></i> Drehplan</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+    <div class="flex items-center justify-between mb-lg flex-wrap gap-md">
+      <h2 class="text-xl font-extrabold tracking-tight m-0"><i data-lucide="calendar"></i> Drehplan</h2>
+      <button onclick="window.print()" class="flex items-center gap-xs px-md py-sm rounded-sm text-sm font-semibold border border-border text-muted cursor-pointer bg-transparent hover:bg-violet/10 hover:text-violet hover:border-violet/30 transition-all duration-base print-hidden">🖨️ Drucken</button>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md schedule-print-grid">
       ${days.map((day, idx) => {
         const locNames = day.locations.map(id => {
           const loc = state.locations.find(l => l.id === id);

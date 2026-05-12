@@ -163,7 +163,22 @@
   @media print {
     body { @apply bg-white text-gray-900; font-size: 12pt; }
     .sidebar, .bottom-nav, .header-actions, .toast, .modal-overlay,
-    [data-action] { @apply hidden; }
+    [data-action], .print-hidden, #site-header, #bottom-nav { @apply hidden; }
+    main { padding: 0 !important; max-width: 100% !important; }
+    .schedule-print-grid { display: block !important; }
+    .schedule-print-grid > div {
+      break-inside: avoid;
+      margin-bottom: 12pt;
+      border: 1px solid #ccc !important;
+      box-shadow: none !important;
+      transform: none !important;
+      width: 100% !important;
+    }
+    .schedule-print-grid > div:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+    #view-container { width: 100% !important; }
   }
 
   /* ── Reduced motion ── */
