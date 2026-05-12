@@ -33,7 +33,8 @@ function getCountdownBanner() {
       <span class="text-2xl">🎬</span>
       <div class="flex flex-col gap-xs">
         <span class="${subClass} text-base">${text}</span>
-        <span class="text-sm text-muted">5 Drehtage · 15 Locations · Mannheim & Weinheim</span>
+        <span class="text-sm text-muted">Stummfilm · 5 Drehtage · 15 Locations · Mannheim & Weinheim</span>
+        <span class="text-xs text-muted">Premiere: <strong class="text-gold">20. November 2026</strong> — Night of the Graduates</span>
       </div>
     </div>
   `;

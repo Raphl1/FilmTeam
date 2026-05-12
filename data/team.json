@@ -31,7 +31,6 @@
   "roles": [
     { "id": "kamera",        "title": "Kamera",              "icon": "📷",  "description": "Bildgestaltung, Kameraführung, Einstellungen",         "assigned": "Raphael, Emily, Maxim, Alexa",                          "status": "assigned" },
     { "id": "licht",         "title": "Licht",               "icon": "💡",  "description": "Lichtsetup, LED-Panels, Neon-Look, natürliches Licht", "assigned": "Luca, Raphael, Maxim, Emily, Niko",                     "status": "assigned" },
-    { "id": "ton",           "title": "Ton",                 "icon": "🎙️", "description": "Richtmikro, Funkstrecke, Atmosphären",                  "assigned": "",                                                       "status": "open"     },
     { "id": "schnitt",       "title": "Schnitt / Post",      "icon": "✂️",  "description": "Rohschnitt, Feinschnitt, Color Grading, VFX",           "assigned": "Tobi, Salome, Luca, Quyen, Miriam",                     "status": "assigned" },
     { "id": "maske",         "title": "Maske",               "icon": "💄",  "description": "Make-up, Styling, Haare",                               "assigned": "Alesia, Miriam, Pauline, Esther, Elisa, Charlotte, Lia, Lea", "status": "assigned" },
     { "id": "szenenbild",    "title": "Szenenbild",          "icon": "🖼️",  "description": "Set-Dekoration, Requisiten, Art Direction",             "assigned": "Pauline, Esther, Elisa, Miriam, Charlotte",             "status": "assigned" },
