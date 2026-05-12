@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPhoneNumber, RecaptchaVerifier, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBrr1BynxNFHz6D3_kTd_18fWyOTiR19ns",
@@ -13,7 +13,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
 
 export function getCurrentUser() {
   return auth.currentUser;
@@ -25,11 +25,38 @@ export function onAuth(callback) {
 
 export async function loginWithGoogle() {
   try {
-    const result = await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, googleProvider);
     return result.user;
   } catch (e) {
-    console.error('Login failed:', e);
-    return null;
+    console.error('Google Login failed:', e);
+    throw e;
+  }
+}
+
+export async function loginWithEmail(email, password) {
+  try {
+    const result = await signInWithEmailAndPassword(auth, email, password);
+    return result.user;
+  } catch (e) {
+    if (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential') {
+      // Try creating new account
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      return result.user;
+    }
+    throw e;
+  }
+}
+
+export async function loginWithPhone(phoneNumber, containerEl) {
+  try {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, containerEl, { size: 'invisible' });
+    }
+    const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
+    return confirmationResult;
+  } catch (e) {
+    console.error('Phone Login failed:', e);
+    throw e;
   }
 }
 
