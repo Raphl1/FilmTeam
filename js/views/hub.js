@@ -16,6 +16,9 @@ export default async function viewHub() {
     </div>
     <div class="grid grid-cols-2 xs:grid-cols-4 gap-md mb-lg">${stats.map(s=>`<div class="bg-card border border-border rounded p-md text-center"><div class="text-xl font-extrabold text-violet">${escapeHtml(String(s.value))}</div><div class="text-xs text-muted mt-xs">${escapeHtml(s.label)}</div></div>`).join('')}</div>
     <h2 class="text-xl font-extrabold tracking-tight mb-lg">Schnellzugriff</h2>
-    <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-md">${links.map(item=>`<a href="#${encodeURIComponent(item.id)}" class="bg-card border border-border rounded p-lg flex flex-col gap-sm no-underline transition-all duration-base hover:-translate-y-0.5 hover:shadow-md hover:border-purple/30"><i data-lucide="${ICONS[item.id]||'circle'}" class="w-5 h-5 text-violet"></i><div class="text-base font-bold text-txt">${escapeHtml(item.label)}</div><div class="text-sm text-muted leading-snug">${DESCS[item.id]||''}</div></a>`).join('')}</div>
+    <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-md">
+      <a href="https://drive.google.com/drive/folders/1s1rMK-EZMx79g7yWUCoXA_Otdb4crZLi?usp=sharing" target="_blank" rel="noopener" class="bg-card border border-border rounded p-lg flex flex-col gap-sm no-underline transition-all duration-base hover:-translate-y-0.5 hover:shadow-md hover:border-purple/30"><i data-lucide="hard-drive" class="w-5 h-5 text-violet"></i><div class="text-base font-bold text-txt">Google Drive</div><div class="text-sm text-muted leading-snug">Gemeinsamer Ordner mit allen Dateien.</div></a>
+      ${links.map(item=>`<a href="#${encodeURIComponent(item.id)}" class="bg-card border border-border rounded p-lg flex flex-col gap-sm no-underline transition-all duration-base hover:-translate-y-0.5 hover:shadow-md hover:border-purple/30"><i data-lucide="${ICONS[item.id]||'circle'}" class="w-5 h-5 text-violet"></i><div class="text-base font-bold text-txt">${escapeHtml(item.label)}</div><div class="text-sm text-muted leading-snug">${DESCS[item.id]||''}</div></a>`).join('')}
+    </div>
   `;
 }
