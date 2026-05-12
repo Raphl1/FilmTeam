@@ -12,7 +12,7 @@
     "reference": "",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1200!2d8.5327!3d49.4741!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4797cc24e90ed35d%3A0x6e9b4b0e5c5b5a0!2sDHBW+Mannheim!5e0!3m2!1sde!2sde",
     "mapLink": "https://www.google.com/maps/search/DHBW+Mannheim+Coblitzallee",
-    "status": "confirmed",
+    "status": "pending",
     "cluster": "base",
     "referenceUrl": ""
   },
@@ -153,7 +153,7 @@
     "mapLink": "https://www.google.com/maps/search/DHBW+Mannheim+Aula",
     "status": "confirmed",
     "cluster": "special",
-    "referenceUrl": "https://www.youtube.com/watch?v=WSLMN6g_Od4"
+    "referenceUrl": ""
   },
   {
     "id": 11,
