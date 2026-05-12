@@ -3,180 +3,231 @@
     "id": 1,
     "name": "Techniker-Keller / \"Base\"",
     "concrete": "DHBW Mannheim, Coblitzallee 1-9, Cure-Werkstatt / Rechenzentrum",
-    "badges": ["CD", "OP", "HF"],
+    "badges": [
+      "CD",
+      "OP",
+      "HF"
+    ],
     "vibe": "Server-Racks, Neonlicht, Kabel — futuristische KI-Zentrale",
     "reference": "",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1200!2d8.5327!3d49.4741!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4797cc24e90ed35d%3A0x6e9b4b0e5c5b5a0!2sDHBW+Mannheim!5e0!3m2!1sde!2sde",
     "mapLink": "https://www.google.com/maps/search/DHBW+Mannheim+Coblitzallee",
     "status": "confirmed",
-    "cluster": "base"
+    "cluster": "base",
+    "referenceUrl": ""
   },
   {
     "id": 2,
     "name": "WG — Flur & Eingang",
     "concrete": "Nikos WG oder Lias WG in Mannheim",
-    "badges": ["OP", "HF"],
+    "badges": [
+      "OP",
+      "HF"
+    ],
     "vibe": "Typischer WG-Eingang — Schuhe, Post, Garderobe",
     "reference": "Hauptdrehort (50% aller Szenen)",
     "mapEmbed": "",
     "mapLink": "",
     "status": "pending",
-    "cluster": "wg"
+    "cluster": "wg",
+    "referenceUrl": ""
   },
   {
     "id": 3,
     "name": "WG — Zimmer BWL-Student",
     "concrete": "Gleiche Location wie #02",
-    "badges": ["OP", "HF"],
+    "badges": [
+      "OP",
+      "HF"
+    ],
     "vibe": "Aktenordner, Krawatte, Fachbücher — ordentlich-gehetzt",
     "reference": "",
     "mapEmbed": "",
     "mapLink": "",
     "status": "pending",
-    "cluster": "wg"
+    "cluster": "wg",
+    "referenceUrl": ""
   },
   {
     "id": 4,
     "name": "WG — Atelier Kreative",
     "concrete": "Gleiche Location wie #02",
-    "badges": ["OP", "HF"],
+    "badges": [
+      "OP",
+      "HF"
+    ],
     "vibe": "Leinwände, Pinsel, kreatives Chaos",
     "reference": "",
     "mapEmbed": "",
     "mapLink": "",
     "status": "pending",
-    "cluster": "wg"
+    "cluster": "wg",
+    "referenceUrl": ""
   },
   {
     "id": 5,
     "name": "Treppenhaus & Sicherungskeller",
     "concrete": "Wohnhaus der WG-Location",
-    "badges": ["HF"],
+    "badges": [
+      "HF"
+    ],
     "vibe": "Beton, Sicherungskasten, Rohre — düster, klaustrophobisch",
     "reference": "",
     "mapEmbed": "",
     "mapLink": "",
     "status": "pending",
-    "cluster": "wg"
+    "cluster": "wg",
+    "referenceUrl": ""
   },
   {
     "id": 6,
     "name": "Restaurant / Café (Date)",
     "concrete": "Café Flo, Mannheim",
-    "badges": ["OP", "HF"],
+    "badges": [
+      "OP",
+      "HF"
+    ],
     "vibe": "Romantisches Date, Kerzenlicht, Nervosität",
     "reference": "",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d800!2d8.4625!3d49.4945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4797c946db7db805%3A0x1!2sJungbusch+Mannheim!5e0!3m2!1sde!2sde",
     "mapLink": "https://www.google.com/maps/search/Café+Flo+Mannheim",
     "status": "pending",
-    "cluster": "gastro"
+    "cluster": "gastro",
+    "referenceUrl": ""
   },
   {
     "id": 7,
     "name": "Café-Terrasse (Versöhnung)",
     "concrete": "Pastry Poets, Weinheim (Laura & Caro)",
-    "badges": ["HF"],
+    "badges": [
+      "HF"
+    ],
     "vibe": "Draußen sitzen, Versöhnung, Morgenlicht / Golden Hour",
     "reference": "",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1200!2d8.6670!3d49.5493!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4797bff3b89bfc43%3A0x1!2sPastry+Poets+Weinheim!5e0!3m2!1sde!2sde",
     "mapLink": "https://www.google.com/maps/search/Pastry+Poets+Weinheim",
     "status": "pending",
-    "cluster": "gastro"
+    "cluster": "gastro",
+    "referenceUrl": ""
   },
   {
     "id": 8,
     "name": "Parkbank (Forrest Gump)",
     "concrete": "Luisenpark oder Waldpark Mannheim",
-    "badges": ["CD"],
+    "badges": [
+      "CD"
+    ],
     "vibe": "Forrest Gump — Parkbank, nachdenkliche Stimmung, erzählerisch",
     "reference": "Forrest Gump",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2000!2d8.4930!3d49.4770!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4797cb51591135b3%3A0x6c45c4b0b5bfdf6e!2sLuisenpark!5e0!3m2!1sde!2sde",
     "mapLink": "https://www.google.com/maps/search/Luisenpark+Mannheim",
     "status": "pending",
-    "cluster": "outdoor"
+    "cluster": "outdoor",
+    "referenceUrl": "https://www.youtube.com/watch?v=vdtqSaJO-iM"
   },
   {
     "id": 9,
     "name": "Treppe (Rocky)",
     "concrete": "Wasserturm Mannheim / Friedrichsplatz",
-    "badges": ["CD"],
+    "badges": [
+      "CD"
+    ],
     "vibe": "Rocky Balboa — Treppenrennen, Triumph, Fäuste hoch",
     "reference": "Rocky",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d800!2d8.4730!3d49.4835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4797cc21d6e1c0ab%3A0x64cba1e6df06f76b!2sWasserturm!5e0!3m2!1sde!2sde",
     "mapLink": "https://www.google.com/maps/search/Wasserturm+Mannheim",
     "status": "pending",
-    "cluster": "outdoor"
+    "cluster": "outdoor",
+    "referenceUrl": ""
   },
   {
     "id": 10,
     "name": "Tanzfläche (Pulp Fiction)",
     "concrete": "DHBW Aula oder Bar im Jungbusch",
-    "badges": ["CD"],
+    "badges": [
+      "CD"
+    ],
     "vibe": "Pulp Fiction Twist — Retro-Dancefloor, schummrig",
     "reference": "Pulp Fiction",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d800!2d8.5327!3d49.4741!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4797cc24e90ed35d%3A0x6e9b4b0e5c5b5a0!2sDHBW+Mannheim!5e0!3m2!1sde!2sde",
     "mapLink": "https://www.google.com/maps/search/DHBW+Mannheim+Aula",
     "status": "confirmed",
-    "cluster": "special"
+    "cluster": "special",
+    "referenceUrl": ""
   },
   {
     "id": 11,
     "name": "Western-Kulisse",
     "concrete": "Industriehafen Mannheim / Gleisbereich",
-    "badges": ["CD"],
+    "badges": [
+      "CD"
+    ],
     "vibe": "Spaghetti-Western — Duell, Mundharmonika, Staub, weite Fläche",
     "reference": "Spiel mir das Lied vom Tod",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d8.4440!3d49.5070!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4797c946c8e2ae89%3A0x1!2sIndustriehafen+Mannheim!5e0!3m2!1sde!2sde",
     "mapLink": "https://www.google.com/maps/search/Industriehafen+Mannheim",
     "status": "pending",
-    "cluster": "outdoor"
+    "cluster": "outdoor",
+    "referenceUrl": ""
   },
   {
     "id": 12,
     "name": "Bar / Kneipe (HIMYM)",
     "concrete": "Café Lauri, Jungbusch Mannheim",
-    "badges": ["CD"],
+    "badges": [
+      "CD"
+    ],
     "vibe": "How I Met Your Mother — MacLaren's, Freundesrunde, Stammtisch",
     "reference": "How I Met Your Mother",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d600!2d8.4625!3d49.4945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4797c946db7db805%3A0x1!2sJungbusch+Mannheim!5e0!3m2!1sde!2sde",
     "mapLink": "https://www.google.com/maps/search/Café+Lauri+Mannheim+Jungbusch",
     "status": "pending",
-    "cluster": "special"
+    "cluster": "special",
+    "referenceUrl": ""
   },
   {
     "id": 13,
     "name": "Regen-Außenbereich (Shawshank)",
     "concrete": "Rheinufer Mannheim / Neckarwiese",
-    "badges": ["CD"],
+    "badges": [
+      "CD"
+    ],
     "vibe": "Shawshank Redemption — Freiheit im Regen, Arme ausbreiten",
     "reference": "Shawshank Redemption",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2000!2d8.4530!3d49.4950!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4797c946c8e2ae89%3A0x1!2sRheinufer+Mannheim!5e0!3m2!1sde!2sde",
     "mapLink": "https://www.google.com/maps/search/Rheinufer+Mannheim",
     "status": "pending",
-    "cluster": "outdoor"
+    "cluster": "outdoor",
+    "referenceUrl": ""
   },
   {
     "id": 14,
     "name": "Piano-Raum (La La Land)",
     "concrete": "Noch offen — DHBW Aula? Proberaum? Musikschule?",
-    "badges": ["CD"],
+    "badges": [
+      "CD"
+    ],
     "vibe": "La La Land — Spotlight auf Klavier, dunkler Raum, magisch",
     "reference": "La La Land",
     "mapEmbed": "",
     "mapLink": "",
     "status": "open",
-    "cluster": "special"
+    "cluster": "special",
+    "referenceUrl": ""
   },
   {
     "id": 15,
     "name": "Sonnenuntergang (Schlussszene)",
     "concrete": "Stephanienufer Mannheim / Neckarwiese",
-    "badges": ["HF"],
+    "badges": [
+      "HF"
+    ],
     "vibe": "Große Schlussszene — goldenes Licht, emotionaler Abschluss, Weite",
     "reference": "",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1500!2d8.4590!3d49.4740!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4797c946c8e2ae89%3A0x1!2sStephanienufer+Mannheim!5e0!3m2!1sde!2sde",
     "mapLink": "https://www.google.com/maps/search/Stephanienufer+Mannheim",
     "status": "confirmed",
-    "cluster": "outdoor"
+    "cluster": "outdoor",
+    "referenceUrl": ""
   }
 ]

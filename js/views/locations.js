@@ -33,6 +33,7 @@ export default async function viewLocations() {
         const statusLabel = loc.status === 'confirmed' ? 'Bestätigt' : loc.status === 'pending' ? 'Ausstehend' : 'Offen';
         const mapEmbed = loc.mapEmbed && isSafeMapUrl(loc.mapEmbed) ? `<div class="w-full h-[180px] overflow-hidden"><iframe src="${loc.mapEmbed}" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" class="w-full h-full border-none" sandbox="allow-scripts allow-same-origin"></iframe></div>` : '';
         const mapLink = loc.mapLink && isSafeMapUrl(loc.mapLink) ? `<a href="${loc.mapLink}" target="_blank" rel="noopener" class="inline-flex items-center gap-xs text-sm text-violet font-semibold no-underline mt-sm hover:text-lilac transition-colors duration-base">🗺️ Google Maps</a>` : '';
+        const refLink = loc.referenceUrl ? `<a href="${loc.referenceUrl}" target="_blank" rel="noopener" class="inline-flex items-center gap-xs text-sm text-accent font-semibold no-underline mt-sm hover:text-lilac transition-colors duration-base">🎬 Referenz ansehen</a>` : '';
         const deleteBtn = editing ? `<button class="absolute top-sm right-sm w-6 h-6 flex items-center justify-center rounded-full bg-accent/10 text-accent text-xs cursor-pointer border-none hover:bg-accent/20 z-10" data-action="delete-location" data-idx="${realIdx}" title="Löschen">✕</button>` : '';
         const statusBadge = editing
           ? `<span class="text-xs font-semibold px-[10px] py-[3px] rounded-full border ${statusColor} cursor-pointer" data-action="cycle-location-status" data-idx="${realIdx}">${statusLabel}</span>`
@@ -61,6 +62,7 @@ export default async function viewLocations() {
               ${vibeField}
               ${loc.reference ? `<div class="text-xs text-muted mt-sm">🎬 ${escapeHtml(loc.reference)}</div>` : ''}
               ${mapLink}
+              ${refLink}
             </div>
           </div>`;
       }).join('')}
