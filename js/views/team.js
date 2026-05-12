@@ -73,8 +73,8 @@ export default async function viewTeam() {
     </div>`;
   }).join('');
 
-  // ── Casting Chips ──
-  const castingHtml = (casting || []).map(m => `
+  // ── Mitwirkende: alle aus dem Kurs (members + casting) ──
+  const allPeopleChips = [...(members || []), ...(casting || [])].map(m => `
     <div class="flex items-center gap-sm bg-card border border-border rounded-full px-md py-xs transition-all duration-base hover:border-purple/30 hover:shadow-sm">
       <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style="background:${m.color}">${m.name.substring(0,2).toUpperCase()}</div>
       <span class="text-sm font-semibold text-txt whitespace-nowrap">${escapeHtml(m.name)}</span>
@@ -123,8 +123,8 @@ export default async function viewTeam() {
     <h3 class="text-md font-bold text-txt mt-2xl mb-md">🎭 Schauspiel-Besetzung</h3>
     <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-md">${filmrollenHtml}</div>
 
-    <h3 class="text-md font-bold text-txt mt-2xl mb-md">🎪 Mitwirkende</h3>
-    <div class="flex flex-wrap gap-sm mb-2xl">${castingHtml}</div>
+    <h3 class="text-md font-bold text-txt mt-2xl mb-md">🎪 Mitwirkende — Kurs MPG24 (${[...(members||[]),...(casting||[])].length})</h3>
+    <div class="flex flex-wrap gap-sm mb-2xl">${allPeopleChips}</div>
 
     <h3 class="text-md font-bold text-txt mt-2xl mb-md">📋 Alle Personen & Zuordnungen</h3>
     ${filterBar}
