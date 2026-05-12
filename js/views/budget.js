@@ -7,19 +7,6 @@ export default async function viewBudget() {
   const editing = state.editMode;
   const totalSpent = items.reduce((s, i) => s + (i.amount || 0), 0);
   const paidItems = items.filter(i => i.amount > 0).length;
-  const perPerson = members.length > 0 ? totalSpent / members.length : 0;
-  const paidByPerson = {};
-  members.forEach(m => { paidByPerson[m.name] = 0; });
-  items.forEach(item => {
-    if (item.paidBy && paidByPerson[item.paidBy] !== undefined) {
-      paidByPerson[item.paidBy] += (item.amount || 0);
-    }
-  });
-  const balances = members.map(m => ({
-    name: m.name, color: m.color,
-    paid: paidByPerson[m.name] || 0,
-    balance: (paidByPerson[m.name] || 0) - perPerson
-  }));
   function approvalBadge(status) {
     if (status === 'approved') return '<span class="text-xs font-semibold px-[10px] py-[3px] rounded-full border border-green/30 bg-green/10 text-green">Genehmigt</span>';
     if (status === 'pending') return '<span class="text-xs font-semibold px-[10px] py-[3px] rounded-full border border-gold/30 bg-gold/10 text-gold">Ausstehend</span>';
@@ -28,22 +15,11 @@ export default async function viewBudget() {
   }
   return `
     <h2 class="text-xl font-extrabold tracking-tight mb-lg"><i data-lucide="wallet"></i> Budget & Ausgaben</h2>
-    <div class="grid grid-cols-2 xs:grid-cols-4 gap-md mb-lg">
+    <div class="grid grid-cols-2 xs:grid-cols-3 gap-md mb-lg">
       <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><div class="text-xs text-muted">Gesamt ausgegeben</div><div class="text-lg font-extrabold text-txt">${totalSpent.toFixed(2)}${currency}</div></div>
-      <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><div class="text-xs text-muted">Pro Person</div><div class="text-lg font-extrabold text-txt">${perPerson.toFixed(2)}${currency}</div></div>
       <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><div class="text-xs text-muted">Ausgaben</div><div class="text-lg font-extrabold text-txt">${paidItems}/${items.length}</div></div>
-      <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><div class="text-xs text-muted">Personen</div><div class="text-lg font-extrabold text-txt">${members.length}</div></div>
+      <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><div class="text-xs text-muted">Posten</div><div class="text-lg font-extrabold text-txt">${items.length}</div></div>
     </div>
-    ${items.length > 0 ? `
-    <h3 class="text-md font-bold text-txt mt-2xl mb-md">Saldo pro Person</h3>
-    <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-md mb-lg">
-      ${balances.map(b => `
-        <div class="bg-card border border-border rounded p-md flex flex-col gap-xs" style="border-left:3px solid ${b.color}">
-          <div class="text-sm font-bold text-txt">${escapeHtml(b.name)}</div>
-          <div class="text-xs text-muted">${b.paid.toFixed(2)}${currency} bezahlt</div>
-          <div class="text-base font-extrabold ${b.balance >= 0 ? 'text-green' : 'text-accent'}">${b.balance >= 0 ? '+' : ''}${b.balance.toFixed(2)}${currency}</div>
-        </div>`).join('')}
-    </div>` : ''}
     <h3 class="text-md font-bold text-txt mt-2xl mb-md">Ausgaben</h3>
     ${items.length === 0 && !editing ? `
       <div class="flex flex-col items-center justify-center py-2xl text-muted text-sm"><div class="text-3xl mb-sm">💸</div><p>Noch keine Ausgaben eingetragen.</p></div>
