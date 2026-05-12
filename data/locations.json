@@ -14,7 +14,7 @@
   {
     "id": 2,
     "name": "WG — Flur & Eingang",
-    "concrete": "Airbnb oder Nikos WG in Mannheim (noch offen)",
+    "concrete": "Nikos WG oder Lias WG in Mannheim",
     "badges": ["OP", "HF"],
     "vibe": "Typischer WG-Eingang — Schuhe, Post, Garderobe",
     "reference": "Hauptdrehort (50% aller Szenen)",
@@ -62,12 +62,12 @@
   {
     "id": 6,
     "name": "Restaurant / Café (Date)",
-    "concrete": "Café Lauri, Mannheim Jungbusch · oder Café Karl Otto",
+    "concrete": "Café Flo, Mannheim",
     "badges": ["OP", "HF"],
     "vibe": "Romantisches Date, Kerzenlicht, Nervosität",
     "reference": "",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d800!2d8.4625!3d49.4945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4797c946db7db805%3A0x1!2sJungbusch+Mannheim!5e0!3m2!1sde!2sde",
-    "mapLink": "https://www.google.com/maps/search/Café+Lauri+Mannheim",
+    "mapLink": "https://www.google.com/maps/search/Café+Flo+Mannheim",
     "status": "pending",
     "cluster": "gastro"
   },
@@ -86,7 +86,7 @@
   {
     "id": 8,
     "name": "Parkbank (Forrest Gump)",
-    "concrete": "Luisenpark Mannheim",
+    "concrete": "Luisenpark oder Waldpark Mannheim",
     "badges": ["CD"],
     "vibe": "Forrest Gump — Parkbank, nachdenkliche Stimmung, erzählerisch",
     "reference": "Forrest Gump",
