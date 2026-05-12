@@ -14,7 +14,7 @@ export const getPermitStatus = () => { try { return JSON.parse(localStorage.getI
 export const setPermitStatus = d => localStorage.setItem('permit_status', JSON.stringify(d));
 export const getPermitLabel = s => ({'not-asked':'Nicht angefragt','not-booked':'Nicht gebucht','pending':'Ausstehend','approved':'Genehmigt','declined':'Abgelehnt'})[s] || s;
 export const cyclePermitStatus = s => { const c=['not-asked','pending','approved','declined']; return c[(c.indexOf(s)+1)%c.length]; };
-export function formatDate(ds) { const d=new Date(ds); return `${['So','Mo','Di','Mi','Do','Fr','Sa'][d.getDay()]}, ${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`; }
+export function formatDate(ds) { if (!ds || ds === 'TBD') return 'TBD'; const d=new Date(ds); if (isNaN(d)) return ds; return `${['So','Mo','Di','Mi','Do','Fr','Sa'][d.getDay()]}, ${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`; }
 
 // ── Click delegation ─────────────────────────────────────────────────────────
 document.addEventListener('click', async e => {
