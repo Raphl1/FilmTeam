@@ -1,27 +1,50 @@
 {
   "lead": { "name": "Dilara", "role": "Projektleitung", "assigned": true },
   "members": [
-    { "id": "dilara", "name": "Dilara", "color": "#6c3fc5" },
-    { "id": "jetmir", "name": "Jetmir", "color": "#f72585" },
-    { "id": "lia", "name": "Lia", "color": "#43aa8b" },
-    { "id": "runa", "name": "Runa", "color": "#4285f4" },
+    { "id": "dilara",  "name": "Dilara",  "color": "#6c3fc5" },
+    { "id": "jetmir",  "name": "Jetmir",  "color": "#f72585" },
+    { "id": "lia",     "name": "Lia",     "color": "#43aa8b" },
+    { "id": "runa",    "name": "Runa",    "color": "#4285f4" },
     { "id": "raphael", "name": "Raphael", "color": "#f9c74f" },
-    { "id": "luca", "name": "Luca", "color": "#ff6b35" },
-    { "id": "miriam", "name": "Miriam", "color": "#9b5de5" },
-    { "id": "quyen", "name": "Quyen", "color": "#00bbf9" },
+    { "id": "luca",    "name": "Luca",    "color": "#ff6b35" },
+    { "id": "miriam",  "name": "Miriam",  "color": "#9b5de5" },
+    { "id": "quyen",   "name": "Quyen",   "color": "#00bbf9" },
     { "id": "benicio", "name": "Benicio", "color": "#ef476f" },
-    { "id": "nico", "name": "Nico", "color": "#06d6a0" },
-    { "id": "yudong", "name": "Yudong", "color": "#118ab2" },
-    { "id": "tobi", "name": "Tobi", "color": "#ffd166" }
+    { "id": "nico",    "name": "Nico",    "color": "#06d6a0" },
+    { "id": "yudong",  "name": "Yudong",  "color": "#118ab2" },
+    { "id": "tobi",    "name": "Tobi",    "color": "#ffd166" }
+  ],
+  "casting": [
+    { "id": "cosima",    "name": "Cosima",    "color": "#e76f51" },
+    { "id": "salome",    "name": "Salome",    "color": "#2a9d8f" },
+    { "id": "emily",     "name": "Emily",     "color": "#e9c46a" },
+    { "id": "maxim",     "name": "Maxim",     "color": "#264653" },
+    { "id": "alexa",     "name": "Alexa",     "color": "#a8dadc" },
+    { "id": "niko",      "name": "Niko",      "color": "#457b9d" },
+    { "id": "alesia",    "name": "Alesia",    "color": "#c77dff" },
+    { "id": "pauline",   "name": "Pauline",   "color": "#f4a261" },
+    { "id": "esther",    "name": "Esther",    "color": "#52b788" },
+    { "id": "elisa",     "name": "Elisa",     "color": "#ff6b6b" },
+    { "id": "charlotte", "name": "Charlotte", "color": "#48cae4" },
+    { "id": "lea",       "name": "Lea",       "color": "#b5838d" }
   ],
   "roles": [
-    { "id": "regie", "title": "Regie", "icon": "\uD83C\uDFAC", "description": "Kreative Vision, Szenenarbeit, Blocking", "assigned": "", "status": "open" },
-    { "id": "kamera", "title": "Kamera", "icon": "\uD83D\uDCF7", "description": "Bildgestaltung, Kameraführung, Einstellungen", "assigned": "", "status": "open" },
-    { "id": "licht", "title": "Licht", "icon": "\uD83D\uDCA1", "description": "Lichtsetup, LED-Panels, Neon-Look, natürliches Licht", "assigned": "", "status": "open" },
-    { "id": "ton", "title": "Ton", "icon": "\uD83C\uDF99\uFE0F", "description": "Richtmikro, Funkstrecke, Atmosphären", "assigned": "", "status": "open" },
-    { "id": "schnitt", "title": "Schnitt / Post", "icon": "\u2702\uFE0F", "description": "Rohschnitt, Feinschnitt, Color Grading, VFX", "assigned": "", "status": "open" },
-    { "id": "schauspiel", "title": "Schauspiel", "icon": "\uD83C\uDFAD", "description": "Darsteller für Hauptrollen und Nebenrollen", "assigned": "", "status": "open" },
-    { "id": "produktion", "title": "Produktion / Orga", "icon": "\uD83D\uDCCB", "description": "Zeitplan, Logistik, Genehmigungen, Catering", "assigned": "", "status": "open" },
-    { "id": "setdesign", "title": "Set-Design / Requisiten", "icon": "\uD83C\uDFA8", "description": "Cowboy-Hüte, Neon-LEDs, WG-Einrichtung, Kostüme", "assigned": "", "status": "open" }
+    { "id": "kamera",        "title": "Kamera",              "icon": "📷",  "description": "Bildgestaltung, Kameraführung, Einstellungen",         "assigned": "Raphael, Emily, Maxim, Alexa",                          "status": "assigned" },
+    { "id": "licht",         "title": "Licht",               "icon": "💡",  "description": "Lichtsetup, LED-Panels, Neon-Look, natürliches Licht", "assigned": "Luca, Raphael, Maxim, Emily, Niko",                     "status": "assigned" },
+    { "id": "ton",           "title": "Ton",                 "icon": "🎙️", "description": "Richtmikro, Funkstrecke, Atmosphären",                  "assigned": "",                                                       "status": "open"     },
+    { "id": "schnitt",       "title": "Schnitt / Post",      "icon": "✂️",  "description": "Rohschnitt, Feinschnitt, Color Grading, VFX",           "assigned": "Tobi, Salome, Luca, Quyen, Miriam",                     "status": "assigned" },
+    { "id": "maske",         "title": "Maske",               "icon": "💄",  "description": "Make-up, Styling, Haare",                               "assigned": "Alesia, Miriam, Pauline, Esther, Elisa, Charlotte, Lia, Lea", "status": "assigned" },
+    { "id": "szenenbild",    "title": "Szenenbild",          "icon": "🖼️",  "description": "Set-Dekoration, Requisiten, Art Direction",             "assigned": "Pauline, Esther, Elisa, Miriam, Charlotte",             "status": "assigned" },
+    { "id": "bts",           "title": "Behind The Scenes",   "icon": "📹",  "description": "Making-of, Social Media Content, Dokumentation",        "assigned": "Elisa, Alexa, Raphael, Miriam, Lia, Tobi, Charlotte",  "status": "assigned" },
+    { "id": "nachbearbeitung","title": "Nachbearbeitung (KI)","icon": "🤖",  "description": "KI-gestützte Postproduktion, VFX, AI-Effekte",          "assigned": "Benicio, Runa",                                         "status": "assigned" },
+    { "id": "datensicherung","title": "Datensicherung",      "icon": "💾",  "description": "Backup, Dateimanagement, Archivierung",                 "assigned": "Luca, Emily",                                           "status": "assigned" }
+  ],
+  "filmrollen": [
+    { "id": "regie", "title": "Regie",           "icon": "🎬", "description": "Kreative Vision, Szenenarbeit, Blocking",    "assigned": "Dilara, Benicio, Salome, Emily" },
+    { "id": "kai",   "title": "Kai (KI)",         "icon": "🤖", "description": "KI-Figur im Film — Darstellung und Performance", "assigned": "Jetmir, Quyen" },
+    { "id": "till",  "title": "Till (Techniker)", "icon": "🔧", "description": "Techniker-Rolle im Film",                    "assigned": "Cosima, Jetmir" },
+    { "id": "ben",   "title": "Ben (Bwler)",      "icon": "🎳", "description": "Bowler-Rolle im Film",                      "assigned": "Niko, Jetmir" },
+    { "id": "kate",  "title": "Kate (Kreative)",  "icon": "🎨", "description": "Kreative Figur im Film",                    "assigned": "Cosima, Runa, Lea" },
+    { "id": "blaue", "title": "Blaue (Date)",     "icon": "💙", "description": "Date-Szene Rolle im Film",                  "assigned": "Cosima, Lea" }
   ]
 }

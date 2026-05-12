@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ══ BASE LAYER ═══════════════════════════════════════════════════════════ */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+  /* ── Theme Variables (auto-switch via body class) ── */
+  body, body.dark {
+    --c-bg:      #0a0f1e;
+    --c-bg2:     #0f1629;
+    --c-card:    #111827;
+    --c-card2:   #1a2236;
+    --c-text:    #e2e8f0;
+    --c-text2:   #cbd5e1;
+    --c-muted:   #8892a4;
+    --c-violet:  #9b5de5;
+    --c-lilac:   #c77dff;
+    --c-accent:  #f72585;
+    --c-gold:    #f9c74f;
+    --c-green:   #43aa8b;
+    --c-blue:    #4285f4;
+    --c-border:  rgba(255,255,255,.07);
+    --c-border2: rgba(255,255,255,.12);
+    --c-shadow:  rgba(0,0,0,.35);
+    --c-focus:   rgba(155,93,229,.5);
+  }
+  body.light {
+    --c-bg:      #f5f5f7;
+    --c-bg2:     #ffffff;
+    --c-card:    #ffffff;
+    --c-card2:   #f0f0f5;
+    --c-text:    #1a1a2e;
+    --c-text2:   #374151;
+    --c-muted:   #6b7280;
+    --c-violet:  #7c4dff;
+    --c-lilac:   #5e35b1;
+    --c-accent:  #e91e63;
+    --c-gold:    #f59e0b;
+    --c-green:   #10b981;
+    --c-blue:    #2563eb;
+    --c-border:  rgba(0,0,0,.08);
+    --c-border2: rgba(0,0,0,.12);
+    --c-shadow:  rgba(0,0,0,.1);
+    --c-focus:   rgba(108,63,197,.3);
+  }
+
+  body {
+    @apply bg-bg text-txt font-sans text-base leading-relaxed min-h-screen overflow-x-hidden antialiased;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 300ms ease, color 300ms ease;
+  }
+
+  a { @apply text-violet no-underline; transition: color 200ms ease; }
+  a:hover { @apply text-lilac; }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--c-focus);
+    @apply rounded-xs;
+  }
+
+  img, iframe { @apply block max-w-full; }
+}
+
+/* ══ COMPONENT LAYER ══════════════════════════════════════════════════════ */
+@layer components {
+
+  /* ── Skeleton loading shimmer ── */
+  .skeleton {
+    background: linear-gradient(90deg, var(--c-card) 25%, var(--c-card2) 50%, var(--c-card) 75%);
+    background-size: 200% 100%;
+    @apply animate-skeleton-pulse rounded-sm;
+  }
+
+  /* ── Toast notification ── */
+  .toast {
+    @apply fixed z-[10000] opacity-0 pointer-events-none max-w-[90vw] text-center;
+    @apply px-xl py-md rounded-[10px] text-sm font-medium;
+    bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(8px);
+    transition: opacity 300ms ease, transform 300ms ease;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  .toast.show { @apply opacity-100; transform: translateX(-50%) translateY(0); }
+  .toast-success { background: rgba(67,170,139,.92); @apply text-white; box-shadow: 0 4px 20px rgba(67,170,139,.3); }
+  .toast-error   { background: rgba(247,37,133,.92); @apply text-white; box-shadow: 0 4px 20px rgba(247,37,133,.3); }
+  .toast-info    { background: rgba(108,63,197,.92); @apply text-white; box-shadow: 0 4px 20px rgba(108,63,197,.3); }
+
+  /* ── Kanban DnD states ── */
+  .kanban-card[draggable="true"] { cursor: grab; }
+  .kanban-card[draggable="true"]:active { cursor: grabbing; }
+  .kanban-card.dragging {
+    @apply opacity-50 shadow-lg z-[1000];
+    transform: scale(0.98) rotate(2deg);
+    border-color: var(--c-violet);
+  }
+  .kanban-col-body.drag-over {
+    background: rgba(108,63,197,.06);
+    @apply rounded-sm;
+    min-height: 100px;
+  }
+  .drop-indicator {
+    @apply h-[3px] rounded-full my-xs;
+    background: var(--c-violet);
+    animation: scaleIn 150ms ease;
+    box-shadow: 0 0 8px rgba(155,93,229,.4);
+  }
+  .kanban-drag-ghost {
+    @apply fixed z-[10000] pointer-events-none shadow-lg rounded-sm;
+    opacity: 0.85; transform: rotate(3deg) scale(1.05);
+    transition: none;
+  }
+
+  /* ── Contenteditable inline editing ── */
+  [contenteditable="true"] {
+    @apply outline-none px-1 rounded-[3px] inline-block min-w-[40px];
+    border-bottom: 2px dashed var(--c-violet);
+    padding-top: 2px; padding-bottom: 2px;
+    transition: background 200ms ease, border-color 200ms ease;
+  }
+  [contenteditable="true"]:focus {
+    background: rgba(108,63,197,.08);
+    border-color: var(--c-accent);
+  }
+
+  /* ── Edit mode body effects ── */
+  .edit-mode-active .card:hover {
+    box-shadow: 0 8px 32px rgba(108,63,197,.15), 0 0 0 1px var(--c-violet);
+  }
+
+  /* ── Timeline vertical line (pseudo-element) ── */
+  .timeline-line {
+    @apply relative;
+  }
+  .timeline-line::before {
+    content: '';
+    @apply absolute left-[18px] top-0 bottom-0 w-[2px];
+    background: var(--c-border2);
+  }
+
+  /* ── Fade transition for view container ── */
+  .fade-out { @apply opacity-0 transition-opacity duration-fast; }
+
+  /* ── Print ── */
+  @media print {
+    body { @apply bg-white text-gray-900; font-size: 12pt; }
+    .sidebar, .bottom-nav, .header-actions, .toast, .modal-overlay,
+    [data-action] { @apply hidden; }
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

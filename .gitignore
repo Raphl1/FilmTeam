@@ -3,3 +3,4 @@ credentials.json
 *.py
 *.ics
 .DS_Store
+node_modules/

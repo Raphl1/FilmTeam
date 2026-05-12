@@ -1,0 +1,11 @@
+{
+  "name": "fraime-website",
+  "private": true,
+  "scripts": {
+    "dev": "npx tailwindcss -i ./src/input.css -o ./css/output.css --watch",
+    "build:css": "npx tailwindcss -i ./src/input.css -o ./css/output.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4"
+  }
+}
