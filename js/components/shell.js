@@ -6,19 +6,22 @@ const LUCIDE = {
   'timeline':'clock','contacts':'phone','calendar':'calendar-days'
 };
 
-const NAV_BASE = 'group flex items-center gap-sm px-md py-sm min-h-[42px] rounded-sm text-muted no-underline overflow-hidden whitespace-nowrap transition-all duration-base hover:text-txt hover:bg-border2';
+const NAV_CLS = 'nav-item group flex items-center gap-sm px-md py-sm min-h-[42px] rounded-sm text-muted no-underline overflow-hidden whitespace-nowrap transition-all duration-base hover:text-txt hover:bg-border2';
 const NAV_ACTIVE = 'bg-purple/[.18] text-lilac';
 
 export function renderShell(route) {
   const app = document.getElementById('app');
-  if (!state.config) return;
+  if (!state.config) {
+    app.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#8892a4">Konfiguration fehlt</div>';
+    return;
+  }
   const { navigation, project } = state.config;
   const theme = localStorage.getItem('theme') || 'dark';
   document.body.className = theme;
 
   const navItems = navigation.map(item => {
     const active = item.id === route;
-    return `<a href="#${item.id}" class="${NAV_BASE} ${active ? NAV_ACTIVE : ''}" data-route="${item.id}" data-tooltip="${item.label}">
+    return `<a href="#${item.id}" class="${NAV_CLS} ${active ? NAV_ACTIVE : ''}" data-route="${item.id}" data-tooltip="${item.label}">
       <i data-lucide="${LUCIDE[item.id] || 'circle'}" class="w-5 h-5 shrink-0"></i>
       <span class="text-sm nav-label transition-opacity duration-medium">${item.label}</span>
     </a>`;
@@ -26,7 +29,7 @@ export function renderShell(route) {
 
   const bottomItems = navigation.map(item => {
     const active = item.id === route;
-    return `<a href="#${item.id}" class="flex flex-col items-center justify-center gap-[2px] px-sm py-xs min-w-[56px] min-h-[52px] text-muted no-underline rounded-sm shrink-0 transition-all duration-base ${active ? 'text-lilac bg-purple/[.12]' : ''}" data-route="${item.id}">
+    return `<a href="#${item.id}" class="bottom-nav-item flex flex-col items-center justify-center gap-[2px] px-sm py-xs min-w-[56px] min-h-[52px] text-muted no-underline rounded-sm shrink-0 transition-all duration-base ${active ? 'text-lilac bg-purple/[.12]' : ''}" data-route="${item.id}">
       <i data-lucide="${LUCIDE[item.id] || 'circle'}" class="w-[22px] h-[22px]"></i>
       <span class="text-[.6rem] font-semibold whitespace-nowrap">${item.label}</span>
     </a>`;

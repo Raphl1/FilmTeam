@@ -27,16 +27,25 @@ export function invalidateCache() {
 }
 
 export async function fetchAllData(forceRefresh = false) {
+  const errors = [];
   const results = await Promise.all(FILES.map(async name => {
     if (!forceRefresh) {
       const cached = readCache(name);
       if (cached) return { name, data: cached };
     }
-    const res = await fetch(`data/${name}.json`);
-    if (!res.ok) throw new Error(`${name}: HTTP ${res.status}`);
-    const data = await res.json();
-    writeCache(name, data);
-    return { name, data };
+    try {
+      const res = await fetch(`data/${name}.json`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      writeCache(name, data);
+      return { name, data };
+    } catch (err) {
+      errors.push(`${name}: ${err.message}`);
+      return { name, data: null };
+    }
   }));
-  results.forEach(({ name, data }) => { state[name] = data; });
+  results.forEach(({ name, data }) => { if (data) state[name] = data; });
+  if (errors.length > 0 && !state.config) {
+    throw new Error('Daten nicht erreichbar: ' + errors.join(', '));
+  }
 }
