@@ -60,6 +60,7 @@ document.addEventListener('click', async e => {
       markDirty('timeline'); navigate(getRoute(), true); return;
     }
     if (a === 'select-member') { localStorage.setItem('my_tasks_user', el.dataset.member); navigate(getRoute(), true); return; }
+    if (a === 'clear-member') { localStorage.removeItem('my_tasks_user'); navigate(getRoute(), true); return; }
     if (a === 'filter-team') { state.teamFilter = el.dataset.filter; navigate(getRoute(), true); return; }
 
     // CRUD helpers

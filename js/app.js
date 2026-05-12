@@ -18,7 +18,8 @@ async function init() {
   }
 
   state.loaded = true;
-  const route = window.location.hash.slice(1) || 'hub';
+  window.location.hash = '';
+  const route = 'hub';
 
   try {
     renderShell(route);
