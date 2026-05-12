@@ -1,6 +1,6 @@
 import { state } from './state.js';
 
-const TTL = 5 * 60 * 1000;
+const TTL = 60 * 1000; // 1 minute cache
 const FILES = ['config','locations','schedule','contacts','team','equipment','budget','timeline','kanban'];
 
 function readCache(name) {

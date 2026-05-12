@@ -31,6 +31,15 @@ document.addEventListener('click', async e => {
       return;
     }
     if (a === 'enter-edit')    { enterEditMode(); return; }
+    if (a === 'force-refresh') {
+      const { invalidateCache, fetchAllData } = await import('./data.js');
+      invalidateCache();
+      if ('caches' in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); }
+      await fetchAllData(true);
+      showToast('Daten neu geladen', 'success');
+      navigate(getRoute(), true);
+      return;
+    }
     if (a === 'save-changes')  { saveAllDirty(); return; }
     if (a === 'cancel-edit')   { cancelEditMode(); return; }
     if (a === 'close-modal')   { closeTokenModal(); return; }

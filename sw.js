@@ -1,4 +1,4 @@
-const CACHE_NAME = 'frame-v1';
+const CACHE_NAME = 'frame-v2';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -35,8 +35,22 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Cache-first for CSS, JS, JSON, images
-  if (url.pathname.match(/\.(css|js|json|png|jpg|svg|ico|woff2?)$/)) {
+  // Network-first for JSON data files (always fresh)
+  if (url.pathname.match(/\.json$/)) {
+    event.respondWith(
+      fetch(event.request).then(response => {
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        }
+        return response;
+      }).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // Cache-first for CSS, JS, images
+  if (url.pathname.match(/\.(css|js|png|jpg|svg|ico|woff2?)$/)) {
     event.respondWith(
       caches.match(event.request).then(cached => {
         const fetchPromise = fetch(event.request).then(response => {

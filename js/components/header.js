@@ -26,6 +26,9 @@ export function renderHeaderControls() {
       <button class="w-9 h-9 rounded-sm flex items-center justify-center border border-border text-muted hover:bg-violet/10 hover:text-violet hover:border-violet/30 transition-all duration-base cursor-pointer bg-transparent" data-action="enter-edit" title="Bearbeiten">
         <i data-lucide="pencil" class="w-[18px] h-[18px]"></i>
       </button>
+      <button class="w-9 h-9 rounded-sm flex items-center justify-center border border-border text-muted hover:bg-green/10 hover:text-green transition-all duration-base cursor-pointer bg-transparent" data-action="force-refresh" title="Daten neu laden">
+        <i data-lucide="refresh-cw" class="w-[18px] h-[18px]"></i>
+      </button>
       <button class="w-9 h-9 rounded-sm flex items-center justify-center border border-border text-muted hover:bg-violet/10 hover:text-violet transition-all duration-base cursor-pointer bg-transparent" data-action="toggle-theme" aria-label="Theme wechseln">
         <i data-lucide="${theme === 'dark' ? 'sun' : 'moon'}" class="w-[18px] h-[18px]"></i>
       </button>
