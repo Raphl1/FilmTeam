@@ -6,6 +6,7 @@ export default async function viewBudget() {
   const members = (state.team && state.team.members) || [];
   const editing = state.editMode;
   const totalSpent = items.reduce((s, i) => s + (i.amount || 0), 0);
+  const paidItems = items.filter(i => i.amount > 0).length;
   const perPerson = members.length > 0 ? totalSpent / members.length : 0;
   const paidByPerson = {};
   members.forEach(m => { paidByPerson[m.name] = 0; });
@@ -30,7 +31,7 @@ export default async function viewBudget() {
     <div class="grid grid-cols-2 xs:grid-cols-4 gap-md mb-lg">
       <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><div class="text-xs text-muted">Gesamt ausgegeben</div><div class="text-lg font-extrabold text-txt">${totalSpent.toFixed(2)}${currency}</div></div>
       <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><div class="text-xs text-muted">Pro Person</div><div class="text-lg font-extrabold text-txt">${perPerson.toFixed(2)}${currency}</div></div>
-      <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><div class="text-xs text-muted">Posten</div><div class="text-lg font-extrabold text-txt">${items.length}</div></div>
+      <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><div class="text-xs text-muted">Ausgaben</div><div class="text-lg font-extrabold text-txt">${paidItems}/${items.length}</div></div>
       <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><div class="text-xs text-muted">Personen</div><div class="text-lg font-extrabold text-txt">${members.length}</div></div>
     </div>
     ${items.length > 0 ? `
