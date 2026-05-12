@@ -143,6 +143,22 @@
   /* ── Fade transition for view container ── */
   .fade-out { @apply opacity-0 transition-opacity duration-fast; }
 
+  /* ── Sidebar collapsed state ── */
+  .sidebar.collapsed { width: 64px; }
+  .sidebar.collapsed .nav-label { opacity: 0; width: 0; overflow: hidden; }
+  .sidebar.collapsed .sidebar-logo-text { opacity: 0; width: 0; overflow: hidden; }
+  .sidebar.collapsed .sidebar-toggle { transform: rotate(180deg); }
+  .sidebar.collapsed [data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute; left: calc(100% + 8px); top: 50%; transform: translateY(-50%);
+    background: var(--c-card2); border: 1px solid var(--c-border2); color: var(--c-text);
+    padding: .3em .7em; border-radius: 6px; font-size: .7rem; white-space: nowrap;
+    z-index: 200; pointer-events: none;
+  }
+
+  /* ── Bottom nav scrollbar hide ── */
+  #bottom-nav::-webkit-scrollbar { display: none; }
+
   /* ── Print ── */
   @media print {
     body { @apply bg-white text-gray-900; font-size: 12pt; }

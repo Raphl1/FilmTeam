@@ -6,26 +6,31 @@ const LUCIDE = {
   'timeline':'clock','contacts':'phone','calendar':'calendar-days'
 };
 
+const NAV_BASE = 'group flex items-center gap-sm px-md py-sm min-h-[42px] rounded-sm text-muted no-underline overflow-hidden whitespace-nowrap transition-all duration-base hover:text-txt hover:bg-border2';
+const NAV_ACTIVE = 'bg-purple/[.18] text-lilac';
+
 export function renderShell(route) {
   const app = document.getElementById('app');
+  if (!state.config) return;
   const { navigation, project } = state.config;
   const theme = localStorage.getItem('theme') || 'dark';
   document.body.className = theme;
 
-  const navItems = navigation.map(item => `
-    <a href="#${item.id}" class="group flex items-center gap-sm px-md py-sm min-h-[42px] rounded-sm text-muted no-underline overflow-hidden whitespace-nowrap transition-all duration-base hover:text-txt hover:bg-border2 ${item.id === route ? 'bg-purple/[.18] text-lilac relative before:content-[\\'\\'] before:absolute before:left-0 before:top-[20%] before:bottom-[20%] before:w-[3px] before:bg-violet before:rounded-r-[3px]' : ''}"
-       data-route="${item.id}" data-tooltip="${item.label}">
+  const navItems = navigation.map(item => {
+    const active = item.id === route;
+    return `<a href="#${item.id}" class="${NAV_BASE} ${active ? NAV_ACTIVE : ''}" data-route="${item.id}" data-tooltip="${item.label}">
       <i data-lucide="${LUCIDE[item.id] || 'circle'}" class="w-5 h-5 shrink-0"></i>
       <span class="text-sm nav-label transition-opacity duration-medium">${item.label}</span>
-    </a>
-  `).join('');
+    </a>`;
+  }).join('');
 
-  const bottomItems = navigation.map(item => `
-    <a href="#${item.id}" class="flex flex-col items-center justify-center gap-[2px] px-sm py-xs min-w-[56px] min-h-[52px] text-muted no-underline rounded-sm shrink-0 transition-all duration-base ${item.id === route ? 'text-lilac bg-purple/[.12]' : ''}" data-route="${item.id}">
+  const bottomItems = navigation.map(item => {
+    const active = item.id === route;
+    return `<a href="#${item.id}" class="flex flex-col items-center justify-center gap-[2px] px-sm py-xs min-w-[56px] min-h-[52px] text-muted no-underline rounded-sm shrink-0 transition-all duration-base ${active ? 'text-lilac bg-purple/[.12]' : ''}" data-route="${item.id}">
       <i data-lucide="${LUCIDE[item.id] || 'circle'}" class="w-[22px] h-[22px]"></i>
       <span class="text-[.6rem] font-semibold whitespace-nowrap">${item.label}</span>
-    </a>
-  `).join('');
+    </a>`;
+  }).join('');
 
   app.innerHTML = `
     <div class="flex min-h-screen min-h-[100dvh]">
@@ -40,7 +45,7 @@ export function renderShell(route) {
         </button>
       </aside>
       <div class="flex-1 min-w-0 flex flex-col">
-        <header class="border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-40" id="site-header">
+        <header class="border-b border-border bg-card backdrop-blur-md sticky top-0 z-40" id="site-header">
           <div class="flex items-center justify-between px-lg py-md max-w-main mx-auto w-full">
             <div>
               <div class="text-xs font-semibold uppercase tracking-wider text-muted mb-1">${project.team}</div>
