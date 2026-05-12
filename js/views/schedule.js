@@ -1,8 +1,16 @@
 import { state } from '../core/state.js';
 import { escapeHtml, formatDate } from '../core/events.js';
+
+const ALLOWED_IFRAME_HOSTS = ['calendar.google.com', 'www.google.com'];
+function isSafeUrl(url) {
+  try { return ALLOWED_IFRAME_HOSTS.includes(new URL(url).hostname); } catch { return false; }
+}
+
 export default async function viewSchedule() {
+  if (!state.schedule || !state.config) return '<p class="text-muted p-lg">Laden...</p>';
   const days = state.schedule;
   const calUrl = state.config.project.calendarUrl;
+  const safeCalUrl = isSafeUrl(calUrl) ? `${calUrl}&mode=WEEK` : '';
   const editing = state.editMode;
   return `
     <h2 class="text-xl font-extrabold tracking-tight mb-lg"><i data-lucide="calendar"></i> Drehplan</h2>
@@ -44,7 +52,7 @@ export default async function viewSchedule() {
     ${editing ? `<button class="mt-md px-lg py-sm rounded-full text-sm font-semibold border border-dashed border-border text-muted cursor-pointer hover:border-violet hover:text-violet transition-all duration-base" data-action="add-schedule">+ Drehtag hinzufügen</button>` : ''}
     <h3 class="text-md font-bold text-txt mt-2xl mb-md">📆 Google Kalender</h3>
     <div class="w-full rounded overflow-hidden border border-border bg-card">
-      <iframe src="${calUrl}&mode=WEEK" loading="lazy" class="w-full h-[500px] max-md:h-[350px] border-none"></iframe>
+      ${safeCalUrl ? `<iframe src="${safeCalUrl}" loading="lazy" class="w-full h-[500px] max-md:h-[350px] border-none" sandbox="allow-scripts allow-same-origin"></iframe>` : ''}
     </div>
   `;
 }

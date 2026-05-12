@@ -1,8 +1,9 @@
 import { state } from '../core/state.js';
 import { escapeHtml } from '../core/events.js';
 export default async function viewBudget() {
+  if (!state.budget) return '<p class="text-muted p-lg">Laden...</p>';
   const { items, currency } = state.budget;
-  const members = state.team.members || [];
+  const members = (state.team && state.team.members) || [];
   const editing = state.editMode;
   const totalSpent = items.reduce((s, i) => s + (i.amount || 0), 0);
   const perPerson = members.length > 0 ? totalSpent / members.length : 0;

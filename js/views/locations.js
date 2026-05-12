@@ -1,6 +1,7 @@
 import { state } from '../core/state.js';
 import { escapeHtml } from '../core/events.js';
 export default async function viewLocations() {
+  if (!state.locations) return '<p class="text-muted p-lg">Laden...</p>';
   const locations = state.locations;
   const filter = state.activeFilter;
   const allBadges = [...new Set(locations.flatMap(l => l.badges))];

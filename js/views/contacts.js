@@ -1,6 +1,7 @@
 import { state } from '../core/state.js';
 import { escapeHtml, getPermitStatus, getPermitLabel } from '../core/events.js';
 export default async function viewContacts() {
+  if (!state.contacts) return '<p class="text-muted p-lg">Laden...</p>';
   const { contacts, permits } = state.contacts;
   const permitStatuses = getPermitStatus();
   const editing = state.editMode;

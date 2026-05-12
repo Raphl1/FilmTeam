@@ -2,6 +2,7 @@ import { state } from '../core/state.js';
 import { escapeHtml } from '../core/events.js';
 
 export default async function viewTeam() {
+  if (!state.team) return '<p class="text-muted p-lg">Laden...</p>';
   const { lead, roles, filmrollen, casting } = state.team;
   const editing = state.editMode;
 

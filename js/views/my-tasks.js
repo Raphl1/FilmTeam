@@ -1,6 +1,7 @@
 import { state } from '../core/state.js';
 import { escapeHtml } from '../core/events.js';
 export default async function viewMyTasks() {
+  if (!state.team || !state.kanban) return '<p class="text-muted p-lg">Laden...</p>';
   const members = state.team.members || [];
   const tasks = state.kanban.tasks || [];
   const sel = localStorage.getItem('my_tasks_user') || '';

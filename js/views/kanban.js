@@ -11,8 +11,9 @@ function avatarColor(name) {
 function avatarInitials(name) { return name ? name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase() : '?'; }
 
 export default async function viewKanban() {
+  if (!state.kanban) return '<p class="text-muted p-lg">Laden...</p>';
   const {columns,tasks} = state.kanban;
-  const members = state.team.members||[];
+  const members = (state.team && state.team.members)||[];
   const editing = state.editMode;
   const done = tasks.filter(t=>t.status==='done').length;
   const draggable = !editing ? 'draggable="true"' : '';

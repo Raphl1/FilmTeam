@@ -1,6 +1,7 @@
 import { state } from '../core/state.js';
 import { escapeHtml, getEquipmentChecked } from '../core/events.js';
 export default async function viewEquipment() {
+  if (!state.equipment) return '<p class="text-muted p-lg">Laden...</p>';
   const { categories } = state.equipment;
   const checked = getEquipmentChecked();
   const editing = state.editMode;

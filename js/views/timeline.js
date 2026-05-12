@@ -1,6 +1,7 @@
 import { state } from '../core/state.js';
 import { escapeHtml } from '../core/events.js';
 export default async function viewTimeline() {
+  if (!state.timeline) return '<p class="text-muted p-lg">Laden...</p>';
   const items = state.timeline;
   const editing = state.editMode;
   let currentPhase = '';
