@@ -69,6 +69,14 @@ document.addEventListener('click', async e => {
       localStorage.setItem('my_tasks_checked', JSON.stringify(checked));
       navigate(getRoute(), true); return;
     }
+    if (a === 'toggle-budget-settled') {
+      const settled = JSON.parse(localStorage.getItem('budget_settled') || '{}');
+      const idx = el.dataset.idx;
+      settled[idx] = !settled[idx];
+      if (!settled[idx]) delete settled[idx];
+      localStorage.setItem('budget_settled', JSON.stringify(settled));
+      navigate(getRoute(), true); return;
+    }
     if (a === 'filter-team') { state.teamFilter = el.dataset.filter; navigate(getRoute(), true); return; }
 
     // CRUD helpers
