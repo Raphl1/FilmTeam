@@ -1,7 +1,7 @@
 export const state = {
   config: null, locations: null, schedule: null, contacts: null,
   team: null, equipment: null, budget: null, timeline: null, kanban: null,
-  activeFilter: 'all', editMode: false, dirty: new Set(), saving: false, loaded: false,
+  activeFilter: 'all', teamFilter: 'all', editMode: false, dirty: new Set(), saving: false, loaded: false,
 };
 
 export function markDirty(file) {

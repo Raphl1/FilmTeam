@@ -60,6 +60,7 @@ document.addEventListener('click', async e => {
       markDirty('timeline'); navigate(getRoute(), true); return;
     }
     if (a === 'select-member') { localStorage.setItem('my_tasks_user', el.dataset.member); navigate(getRoute(), true); return; }
+    if (a === 'filter-team') { state.teamFilter = el.dataset.filter; navigate(getRoute(), true); return; }
 
     // CRUD helpers
     const crud = {
@@ -116,6 +117,7 @@ document.addEventListener('input', e => {
   else if (act==='budget-paidby') { state.budget.items[parseInt(el.dataset.idx)].paidBy=el.value; markDirty('budget'); }
   else if (act==='budget-status') { state.budget.items[parseInt(el.dataset.idx)].status=el.value; markDirty('budget'); }
   else if (act==='assign-role') { state.team.roles[parseInt(el.dataset.idx)].assigned=el.value; markDirty('team'); }
+  else if (act==='assign-filmrolle') { state.team.filmrollen[parseInt(el.dataset.idx)].assigned=el.value; markDirty('team'); }
   else if (act==='change-kanban-status') { state.kanban.tasks[parseInt(el.dataset.idx)].status=el.value; markDirty('kanban'); navigate(getRoute(),true); }
   else if (act==='kanban-owner') { state.kanban.tasks[parseInt(el.dataset.idx)].owner=el.value; markDirty('kanban'); }
   else if (act==='kanban-assignee') { state.kanban.tasks[parseInt(el.dataset.idx)].assignee=el.value; markDirty('kanban'); }
