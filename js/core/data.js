@@ -32,7 +32,9 @@ export async function fetchAllData(forceRefresh = false) {
       const cached = readCache(name);
       if (cached) return { name, data: cached };
     }
-    const data = await fetch(`data/${name}.json`).then(r => r.json());
+    const res = await fetch(`data/${name}.json`);
+    if (!res.ok) throw new Error(`${name}: HTTP ${res.status}`);
+    const data = await res.json();
     writeCache(name, data);
     return { name, data };
   }));

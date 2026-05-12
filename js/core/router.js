@@ -22,6 +22,7 @@ export function getRoute() {
 }
 
 export async function navigate(route, forceRerender = false) {
+  if (!state.loaded) return;
   const container = document.getElementById('view-container');
   if (!container) return;
 
