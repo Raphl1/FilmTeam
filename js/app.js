@@ -1,3 +1,4 @@
+import { onAuth, loginWithGoogle, logout, getCurrentUser } from './core/firebase.js';
 import { fetchAllData } from './core/data.js';
 import { state } from './core/state.js';
 import { renderShell } from './components/shell.js';
@@ -5,25 +6,46 @@ import { renderHeaderControls } from './components/header.js';
 import { navigate } from './core/router.js';
 import './core/events.js';
 
-async function init() {
-  // Auto-detect theme if none saved
+function showLoginScreen() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:24px;font-family:system-ui,sans-serif;padding:24px;text-align:center">
+      <div style="font-size:3rem">🎬</div>
+      <h1 style="font-size:1.5rem;font-weight:800;color:#e2e8f0;margin:0">FR<span style="color:#c77dff">(AI)</span>ME</h1>
+      <p style="color:#8892a4;font-size:.9rem;max-width:300px">Projektplanung für Night of the Graduates 2026</p>
+      <button id="google-login-btn" style="display:flex;align-items:center;gap:12px;padding:12px 24px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:#111827;color:#e2e8f0;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s ease">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Mit Google anmelden
+      </button>
+    </div>
+  `;
+  document.getElementById('google-login-btn')?.addEventListener('click', async () => {
+    const btn = document.getElementById('google-login-btn');
+    btn.textContent = 'Anmelden...';
+    btn.style.opacity = '0.6';
+    await loginWithGoogle();
+  });
+}
+
+async function startApp(user) {
+  const app = document.getElementById('app');
+  app.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;color:#8892a4;font-family:system-ui,sans-serif"><div style="font-size:2rem">🎬</div><div>Lade FR(AI)ME...</div></div>`;
+
+  // Auto-detect theme
   if (!localStorage.getItem('theme')) {
     const preferLight = window.matchMedia('(prefers-color-scheme: light)').matches;
     localStorage.setItem('theme', preferLight ? 'light' : 'dark');
   }
 
-  const app = document.getElementById('app');
-  app.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;color:#8892a4;font-family:system-ui,sans-serif"><div style="font-size:2rem">🎬</div><div>Lade FR(AI)ME...</div></div>`;
-
   try {
     await fetchAllData();
   } catch (err) {
     app.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;color:#f72585;font-family:system-ui,sans-serif;padding:24px;text-align:center"><div style="font-size:2rem">⚠️</div><div style="font-size:1.1rem;font-weight:700">Daten konnten nicht geladen werden</div><div style="color:#8892a4;font-size:.85rem;max-width:400px">${err.message}</div><button onclick="location.reload()" style="margin-top:16px;padding:8px 24px;border-radius:8px;border:1px solid #f72585;color:#f72585;background:transparent;cursor:pointer;font-size:.85rem">Neu laden</button></div>`;
-    console.error('FR(AI)ME init failed:', err);
     return;
   }
 
   state.loaded = true;
+  state.user = user;
   window.location.hash = '';
   const route = 'hub';
 
@@ -33,17 +55,21 @@ async function init() {
     await navigate(route);
   } catch (err) {
     app.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;color:#f72585;font-family:system-ui,sans-serif;padding:24px;text-align:center"><div style="font-size:2rem">⚠️</div><div style="font-size:1.1rem;font-weight:700">Rendering-Fehler</div><div style="color:#8892a4;font-size:.85rem;max-width:400px">${err.message}</div><button onclick="location.reload()" style="margin-top:16px;padding:8px 24px;border-radius:8px;border:1px solid #f72585;color:#f72585;background:transparent;cursor:pointer;font-size:.85rem">Neu laden</button></div>`;
-    console.error('FR(AI)ME render failed:', err);
   }
 }
+
+// Listen for auth state
+onAuth((user) => {
+  if (user) {
+    startApp(user);
+  } else {
+    showLoginScreen();
+  }
+});
 
 // Register Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(err => {
-      console.warn('SW registration failed:', err);
-    });
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
   });
 }
-
-init();

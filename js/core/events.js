@@ -31,6 +31,11 @@ document.addEventListener('click', async e => {
       return;
     }
     if (a === 'enter-edit')    { enterEditMode(); return; }
+    if (a === 'logout') {
+      const { logout } = await import('./firebase.js');
+      await logout();
+      return;
+    }
     if (a === 'force-refresh') {
       const { invalidateCache, fetchAllData } = await import('./data.js');
       invalidateCache();
