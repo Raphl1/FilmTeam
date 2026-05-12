@@ -29,11 +29,9 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // Network-first for API calls (GitHub API, etc.)
+  // Network-only for API calls (never cache auth responses)
   if (url.origin !== location.origin || event.request.method !== 'GET') {
-    event.respondWith(
-      fetch(event.request).catch(() => caches.match(event.request))
-    );
+    event.respondWith(fetch(event.request));
     return;
   }
 

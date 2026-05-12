@@ -1,5 +1,12 @@
 import { state } from '../core/state.js';
 import { escapeHtml } from '../core/events.js';
+
+const ALLOWED_MAP_HOSTS = ['www.google.com', 'maps.google.com', 'google.com'];
+function isSafeMapUrl(url) {
+  if (!url) return false;
+  try { return ALLOWED_MAP_HOSTS.includes(new URL(url).hostname); } catch { return false; }
+}
+
 export default async function viewLocations() {
   if (!state.locations) return '<p class="text-muted p-lg">Laden...</p>';
   const locations = state.locations;
@@ -24,8 +31,8 @@ export default async function viewLocations() {
         const realIdx = locations.indexOf(loc);
         const statusColor = loc.status === 'confirmed' ? 'border-green/30 bg-green/10 text-green' : loc.status === 'pending' ? 'border-gold/30 bg-gold/10 text-gold' : 'border-border bg-card2 text-muted';
         const statusLabel = loc.status === 'confirmed' ? 'Bestätigt' : loc.status === 'pending' ? 'Ausstehend' : 'Offen';
-        const mapEmbed = loc.mapEmbed ? `<div class="w-full h-[180px] overflow-hidden"><iframe src="${loc.mapEmbed}" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" class="w-full h-full border-none"></iframe></div>` : '';
-        const mapLink = loc.mapLink ? `<a href="${loc.mapLink}" target="_blank" rel="noopener" class="inline-flex items-center gap-xs text-sm text-violet font-semibold no-underline mt-sm hover:text-lilac transition-colors duration-base">🗺️ Google Maps</a>` : '';
+        const mapEmbed = loc.mapEmbed && isSafeMapUrl(loc.mapEmbed) ? `<div class="w-full h-[180px] overflow-hidden"><iframe src="${loc.mapEmbed}" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" class="w-full h-full border-none" sandbox="allow-scripts allow-same-origin"></iframe></div>` : '';
+        const mapLink = loc.mapLink && isSafeMapUrl(loc.mapLink) ? `<a href="${loc.mapLink}" target="_blank" rel="noopener" class="inline-flex items-center gap-xs text-sm text-violet font-semibold no-underline mt-sm hover:text-lilac transition-colors duration-base">🗺️ Google Maps</a>` : '';
         const deleteBtn = editing ? `<button class="absolute top-sm right-sm w-6 h-6 flex items-center justify-center rounded-full bg-accent/10 text-accent text-xs cursor-pointer border-none hover:bg-accent/20 z-10" data-action="delete-location" data-idx="${realIdx}" title="Löschen">✕</button>` : '';
         const statusBadge = editing
           ? `<span class="text-xs font-semibold px-[10px] py-[3px] rounded-full border ${statusColor} cursor-pointer" data-action="cycle-location-status" data-idx="${realIdx}">${statusLabel}</span>`
