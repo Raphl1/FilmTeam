@@ -11,7 +11,7 @@ export default async function viewMyTasks() {
   const tasks = state.kanban.tasks || [];
   const sel = localStorage.getItem('my_tasks_user') || '';
   const checked = getCheckedTasks();
-  const my = sel ? tasks.filter(t => (t.owner||'').toLowerCase()===sel.toLowerCase() || (t.assignee||'').toLowerCase().includes(sel.toLowerCase())) : [];
+  const my = sel ? tasks.filter(t => (t.owner||'').toLowerCase()===sel.toLowerCase() || (t.assignee||'').toLowerCase().includes(sel.toLowerCase())) : tasks;
   const sections = [['in-progress','In Arbeit','#6c3fc5'],['todo','Zu erledigen','#f72585'],['on-hold','Sonstiges','#f9c74f'],['done','Erledigt','#43aa8b']];
   const renderList = (list, label, color) => list.length === 0 ? '' : `
     <div class="flex flex-col gap-sm mb-lg">
@@ -41,7 +41,9 @@ export default async function viewMyTasks() {
       <div class="flex flex-wrap gap-sm">${sel ? `<button class="px-md py-sm rounded-full text-sm font-semibold border border-accent/30 text-accent cursor-pointer min-h-[44px] flex items-center transition-all duration-base hover:bg-accent/10" data-action="clear-member">✕ Filter zurücksetzen</button>` : ''}${members.map(m=>`<button class="px-md py-sm rounded-full text-sm font-semibold border border-border text-muted cursor-pointer min-h-[44px] flex items-center transition-all duration-base hover:border-violet/30 hover:text-violet" data-action="select-member" data-member="${escapeHtml(m.name)}" style="${sel===m.name?`background:${m.color}20;border-color:${m.color};color:${m.color}`:''}">${escapeHtml(m.name)}</button>`).join('')}</div>
     </div>
     ${!sel
-      ? `<div class="flex flex-col items-center justify-center py-2xl text-muted text-sm"><div class="text-3xl mb-sm"><i data-lucide="hand-pointer"></i></div><p>Wähle oben deinen Namen.</p></div>`
+      ? `<div class="flex items-center gap-md mb-lg p-sm"><span class="text-base font-bold text-txt">Alle Aufgaben</span><span class="text-xs font-semibold px-[10px] py-[3px] rounded-full border border-border bg-card2 text-muted">${my.length} Aufgabe${my.length!==1?'n':''}</span><span class="text-xs text-green font-semibold">${Object.keys(checked).filter(id => my.some(t => t.id === id) && checked[id]).length} abgehakt</span></div>
+         ${my.length===0?`<div class="flex flex-col items-center justify-center py-2xl text-muted text-sm"><div class="text-3xl mb-sm"><i data-lucide="check-circle-2"></i></div><p>Keine Aufgaben vorhanden.</p></div>`
+           :sections.map(([s,l,c])=>renderList(my.filter(t=>t.status===s),l,c)).join('')}`
       : `<div class="flex items-center gap-md mb-lg p-sm"><span class="text-base font-bold text-txt">${escapeHtml(sel)}</span><span class="text-xs font-semibold px-[10px] py-[3px] rounded-full border border-border bg-card2 text-muted">${my.length} Aufgabe${my.length!==1?'n':''}</span><span class="text-xs text-green font-semibold">${Object.keys(checked).filter(id => my.some(t => t.id === id) && checked[id]).length} abgehakt</span></div>
          ${my.length===0?`<div class="flex flex-col items-center justify-center py-2xl text-muted text-sm"><div class="text-3xl mb-sm"><i data-lucide="check-circle-2"></i></div><p>Keine Aufgaben — alles erledigt!</p></div>`
            :sections.map(([s,l,c])=>renderList(my.filter(t=>t.status===s),l,c)).join('')}`
