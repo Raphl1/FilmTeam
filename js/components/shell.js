@@ -7,7 +7,6 @@ const LUCIDE = {
 };
 
 const NAV_CLS = 'nav-item group flex items-center gap-sm px-md py-sm min-h-[42px] rounded-sm text-muted no-underline overflow-hidden whitespace-nowrap transition-all duration-base hover:text-txt hover:bg-border2';
-const NAV_ACTIVE = 'bg-purple/[.18] text-lilac';
 
 export function renderShell(route) {
   const app = document.getElementById('app');
@@ -20,16 +19,14 @@ export function renderShell(route) {
   document.body.className = theme;
 
   const navItems = navigation.map(item => {
-    const active = item.id === route;
-    return `<a href="#${item.id}" class="${NAV_CLS} ${active ? NAV_ACTIVE : ''}" data-route="${item.id}" data-tooltip="${item.label}">
+    return `<a href="#${item.id}" class="${NAV_CLS}" data-route="${item.id}" data-tooltip="${item.label}">
       <i data-lucide="${LUCIDE[item.id] || 'circle'}" class="w-5 h-5 shrink-0"></i>
       <span class="text-sm nav-label transition-opacity duration-medium">${item.label}</span>
     </a>`;
   }).join('');
 
   const bottomItems = navigation.map(item => {
-    const active = item.id === route;
-    return `<a href="#${item.id}" class="bottom-nav-item flex flex-col items-center justify-center gap-[2px] px-sm py-xs min-w-[56px] min-h-[52px] text-muted no-underline rounded-sm shrink-0 transition-all duration-base ${active ? 'text-lilac bg-purple/[.12]' : ''}" data-route="${item.id}">
+    return `<a href="#${item.id}" class="bottom-nav-item flex flex-col items-center justify-center gap-[2px] px-sm py-xs min-w-[56px] min-h-[52px] text-muted no-underline rounded-sm shrink-0 transition-all duration-base" data-route="${item.id}">
       <i data-lucide="${LUCIDE[item.id] || 'circle'}" class="w-[22px] h-[22px]"></i>
       <span class="text-[.6rem] font-semibold whitespace-nowrap">${item.label}</span>
     </a>`;
@@ -39,8 +36,10 @@ export function renderShell(route) {
     <div class="flex min-h-screen min-h-[100dvh]">
       <aside class="sidebar w-[220px] min-h-screen bg-card border-r border-border flex flex-col sticky top-0 h-screen overflow-y-auto overflow-x-hidden transition-[width] duration-medium shrink-0 z-50 max-md:hidden" id="sidebar">
         <div class="flex items-center gap-sm px-md py-md border-b border-border min-h-[60px] overflow-hidden">
-          <span class="text-[1.4rem] shrink-0">🎬</span>
-          <span class="text-base font-extrabold tracking-tight whitespace-nowrap transition-opacity duration-medium sidebar-logo-text">FR<span class="text-lilac">(AI)</span>ME</span>
+          <a href="#hub" class="flex items-center gap-sm no-underline">
+            <span class="text-[1.4rem] shrink-0">🎬</span>
+            <span class="text-base font-extrabold tracking-tight whitespace-nowrap transition-opacity duration-medium sidebar-logo-text text-txt hover:text-lilac">FR<span class="text-lilac">(AI)</span>ME</span>
+          </a>
         </div>
         <nav class="flex-1 flex flex-col gap-[2px] p-sm overflow-hidden" id="main-nav">${navItems}</nav>
         <button class="m-sm p-sm bg-transparent border border-border rounded-sm text-muted cursor-pointer flex items-center justify-center transition-all duration-base hover:bg-purple/[.08] hover:text-violet min-h-[36px] sidebar-toggle" id="sidebar-toggle" aria-label="Sidebar umschalten">
