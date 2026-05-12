@@ -3,61 +3,151 @@
     {
       "title": "Kamera",
       "items": [
-        { "name": "Hauptkamera (DSLR/Mirrorless 4K)", "owned": false, "checked": false },
-        { "name": "B-Cam / iPhone 12 Pro", "owned": true, "checked": false },
-        { "name": "Stativ", "owned": true, "checked": false },
-        { "name": "Gimbal / Stabilizer", "owned": false, "checked": false },
-        { "name": "Slider (für Kamerafahrten)", "owned": false, "checked": false }
+        {
+          "name": "Hauptkamera (DSLR/Mirrorless 4K)",
+          "owned": false,
+          "checked": false
+        },
+        {
+          "name": "B-Cam / iPhone 12 Pro",
+          "owned": true,
+          "checked": false
+        },
+        {
+          "name": "Stativ",
+          "owned": true,
+          "checked": false
+        },
+        {
+          "name": "Gimbal / Stabilizer",
+          "owned": false,
+          "checked": false
+        },
+        {
+          "name": "Slider (für Kamerafahrten)",
+          "owned": false,
+          "checked": false
+        }
       ]
     },
     {
       "title": "Objektive",
       "items": [
-        { "name": "Weitwinkel (16-35mm)", "owned": false, "checked": false },
-        { "name": "Standard (24-70mm)", "owned": false, "checked": false },
-        { "name": "Tele (70-200mm)", "owned": false, "checked": false },
-        { "name": "Festbrennweite 50mm f/1.8", "owned": false, "checked": false }
+        {
+          "name": "Weitwinkel (16-35mm)",
+          "owned": false,
+          "checked": false
+        },
+        {
+          "name": "Standard (24-70mm)",
+          "owned": false,
+          "checked": false
+        },
+        {
+          "name": "Tele (70-200mm)",
+          "owned": false,
+          "checked": false
+        },
+        {
+          "name": "Festbrennweite 50mm f/1.8",
+          "owned": false,
+          "checked": false
+        }
       ]
     },
     {
       "title": "Licht",
       "items": [
-        { "name": "LED-Panel (2x)", "owned": false, "checked": false },
-        { "name": "LED-Neonstreifen (für Base)", "owned": false, "checked": false },
-        { "name": "Spotlight (für Piano-Szene)", "owned": false, "checked": false },
-        { "name": "Reflektor", "owned": true, "checked": false },
-        { "name": "ND-Filter (für Outdoor)", "owned": false, "checked": false }
-      ]
-    },
-    {
-      "title": "Ton",
-      "items": [
-        { "name": "Richtmikrofon (Shotgun)", "owned": false, "checked": false },
-        { "name": "Funkstrecke (Lavalier)", "owned": false, "checked": false },
-        { "name": "Audio-Recorder (Zoom H4n o.ä.)", "owned": false, "checked": false },
-        { "name": "Windschutz", "owned": false, "checked": false },
-        { "name": "Kopfhörer (Monitoring)", "owned": true, "checked": false }
+        {
+          "name": "LED-Panel (2x)",
+          "owned": false,
+          "checked": false
+        },
+        {
+          "name": "LED-Neonstreifen (für Base)",
+          "owned": false,
+          "checked": false
+        },
+        {
+          "name": "Spotlight (für Piano-Szene)",
+          "owned": false,
+          "checked": false
+        },
+        {
+          "name": "Reflektor",
+          "owned": true,
+          "checked": false
+        },
+        {
+          "name": "ND-Filter (für Outdoor)",
+          "owned": false,
+          "checked": false
+        }
       ]
     },
     {
       "title": "Requisiten & Kostüm",
       "items": [
-        { "name": "Cowboy-Hüte (2x) + Holster", "owned": false, "checked": false },
-        { "name": "Retro-Outfits (Pulp Fiction)", "owned": false, "checked": false },
-        { "name": "BWL-Kostüm (Krawatte, Aktenordner)", "owned": true, "checked": false },
-        { "name": "Künstler-Requisiten (Pinsel, Leinwand)", "owned": true, "checked": false },
-        { "name": "Mundharmonika (Western)", "owned": false, "checked": false },
-        { "name": "Regen-Equipment (Gartensprenger?)", "owned": false, "checked": false }
+        {
+          "name": "Cowboy-Hüte (2x) + Holster",
+          "owned": false,
+          "checked": false
+        },
+        {
+          "name": "Retro-Outfits (Pulp Fiction)",
+          "owned": false,
+          "checked": false
+        },
+        {
+          "name": "BWL-Kostüm (Krawatte, Aktenordner)",
+          "owned": true,
+          "checked": false
+        },
+        {
+          "name": "Künstler-Requisiten (Pinsel, Leinwand)",
+          "owned": true,
+          "checked": false
+        },
+        {
+          "name": "Mundharmonika (Western)",
+          "owned": false,
+          "checked": false
+        },
+        {
+          "name": "Regen-Equipment (Gartensprenger?)",
+          "owned": false,
+          "checked": false
+        }
       ]
     },
     {
       "title": "Transport & Sonstiges",
       "items": [
-        { "name": "Auto (Equipment-Transport)", "owned": true, "checked": false },
-        { "name": "Speicherkarten (3x 128GB+)", "owned": true, "checked": false },
-        { "name": "Powerbank / Akkus (Ersatz)", "owned": true, "checked": false },
-        { "name": "Gaffer Tape + Klebeband", "owned": true, "checked": false },
-        { "name": "Laptop (für Monitoring/Backup)", "owned": true, "checked": false }
+        {
+          "name": "Auto (Equipment-Transport)",
+          "owned": true,
+          "checked": false
+        },
+        {
+          "name": "Speicherkarten (3x 128GB+)",
+          "owned": true,
+          "checked": false
+        },
+        {
+          "name": "Powerbank / Akkus (Ersatz)",
+          "owned": true,
+          "checked": false
+        },
+        {
+          "name": "Gaffer Tape + Klebeband",
+          "owned": true,
+          "checked": false
+        },
+        {
+          "name": "Laptop (für Monitoring/Backup)",
+          "owned": true,
+          "checked": false
+        }
       ]
     }
   ]
