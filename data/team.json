@@ -48,7 +48,7 @@
     { "id": "regie", "title": "Regie",           "icon": "🎬", "description": "Kreative Vision, Szenenarbeit, Blocking",    "assigned": "Dilara, Benicio, Salome, Emily" },
     { "id": "kai",   "title": "Kai (KI)",         "icon": "🤖", "description": "KI-Figur im Film — Darstellung und Performance", "assigned": "Jetmir, Quyen" },
     { "id": "till",  "title": "Till (Techniker)", "icon": "🔧", "description": "Techniker-Rolle im Film",                    "assigned": "Cosima, Jetmir" },
-    { "id": "ben",   "title": "Ben (Bwler)",      "icon": "🎳", "description": "Bowler-Rolle im Film",                      "assigned": "Niko, Jetmir" },
+    { "id": "ben",   "title": "Ben (BWLer)",      "icon": "💼", "description": "BWL-Student Rolle im Film",                    "assigned": "Niko, Jetmir" },
     { "id": "kate",  "title": "Kate (Kreative)",  "icon": "🎨", "description": "Kreative Figur im Film",                    "assigned": "Cosima, Runa, Lea" },
     { "id": "blaue", "title": "Blaue (Date)",     "icon": "💙", "description": "Date-Szene Rolle im Film",                  "assigned": "Cosima, Lea" }
   ]
