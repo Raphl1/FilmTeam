@@ -17,6 +17,7 @@ export default async function viewKanban() {
   const editing = state.editMode;
   const done = tasks.filter(t=>t.status==='done').length;
   const draggable = !editing ? 'draggable="true"' : '';
+  const checked = (() => { try { return JSON.parse(localStorage.getItem('my_tasks_checked')||'{}'); } catch { return {}; } })();
   return `
     <div class="flex items-center justify-between mb-lg flex-wrap gap-md">
       <h2 class="text-xl font-extrabold tracking-tight m-0">Board</h2>
@@ -43,10 +44,11 @@ export default async function viewKanban() {
               const of2 = editing ? `<input type="text" class="bg-bg border border-border rounded-sm px-sm py-xs text-xs text-txt w-full" value="${escapeHtml(task.owner||'')}" placeholder="Owner..." data-action="kanban-owner" data-idx="${ri}"/>` : (task.owner?`<span class="text-xs text-muted">${escapeHtml(task.owner)}</span>`:'');
               const af = editing ? `<input type="text" class="bg-bg border border-border rounded-sm px-sm py-xs text-xs text-txt w-full" value="${escapeHtml(task.assignee||'')}" placeholder="Zugewiesen..." data-action="kanban-assignee" data-idx="${ri}"/>` : '';
               const dlf = editing ? `<input type="date" class="bg-bg border border-border rounded-sm px-sm py-xs text-xs text-txt w-full" value="${task.deadline||''}" data-action="kanban-deadline" data-idx="${ri}"/>` : (task.deadline?`<span class="text-xs ${dlc}">📅 ${escapeHtml(task.deadline)}</span>`:'');
+              const checkedBadge = checked[task.id] ? `<span class="text-[9px] px-[6px] py-[1px] rounded-full bg-green/10 text-green border border-green/20 self-start">✓ abgehakt</span>` : '';
               return `<div class="kanban-card bg-card border border-border rounded-sm p-sm relative flex flex-col gap-xs transition-all duration-base hover:shadow-sm hover:border-purple/30 cursor-grab" ${draggable} data-task-idx="${ri}">
                 ${del}
                 <div class="flex items-center justify-between"><span class="text-[10px] font-mono text-muted uppercase">${task.id.toUpperCase()}</span>${editing?'':oa}</div>
-                <div class="text-sm font-bold text-txt leading-snug">${tf}</div>${df}
+                <div class="text-sm font-bold text-txt leading-snug">${tf}</div>${df}${checkedBadge}
                 ${editing?`<div class="flex flex-col gap-xs mt-sm border-t border-border pt-sm"><label class="text-[10px] text-muted uppercase font-semibold">Owner</label>${of2}<label class="text-[10px] text-muted uppercase font-semibold">Zugewiesen</label>${af}<label class="text-[10px] text-muted uppercase font-semibold">Deadline</label>${dlf}</div>`:`${at?`<div class="flex flex-wrap gap-xs mt-xs">${at}</div>`:''}<div class="flex items-center justify-between mt-xs">${of2}${dlf}</div>`}
                 ${ss}
               </div>`;

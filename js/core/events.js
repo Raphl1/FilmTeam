@@ -61,6 +61,14 @@ document.addEventListener('click', async e => {
     }
     if (a === 'select-member') { localStorage.setItem('my_tasks_user', el.dataset.member); navigate(getRoute(), true); return; }
     if (a === 'clear-member') { localStorage.removeItem('my_tasks_user'); navigate(getRoute(), true); return; }
+    if (a === 'toggle-task-check') {
+      const checked = JSON.parse(localStorage.getItem('my_tasks_checked') || '{}');
+      const id = el.dataset.taskId;
+      checked[id] = !checked[id];
+      if (!checked[id]) delete checked[id];
+      localStorage.setItem('my_tasks_checked', JSON.stringify(checked));
+      navigate(getRoute(), true); return;
+    }
     if (a === 'filter-team') { state.teamFilter = el.dataset.filter; navigate(getRoute(), true); return; }
 
     // CRUD helpers
