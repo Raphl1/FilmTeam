@@ -15,7 +15,7 @@ export default async function viewCalendar() {
       <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><span class="text-xs text-muted">Erster Drehtag</span><span class="text-base font-bold text-txt">17. Juni 2026</span></div>
       <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><span class="text-xs text-muted">Letzter Drehtag</span><span class="text-base font-bold text-txt">21. Juni 2026</span></div>
       <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><span class="text-xs text-muted">Kalenderwoche</span><span class="text-base font-bold text-txt">KW 25</span></div>
-      <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><span class="text-xs text-muted">Premiere</span><span class="text-base font-bold text-txt">Okt/Nov 2026</span></div>
+      <div class="bg-card border border-border rounded p-md flex flex-col gap-xs"><span class="text-xs text-muted">Premiere</span><span class="text-base font-bold text-gold">20. Nov 2026</span></div>
     </div>
     ${iframeSrc ? `<div class="w-full rounded overflow-hidden border border-border bg-card">
       <iframe src="${iframeSrc}" loading="lazy" class="w-full h-[600px] max-md:h-[450px] border-none" sandbox="allow-scripts allow-same-origin"></iframe>
