@@ -92,6 +92,20 @@
     "status": "upcoming"
   },
   {
+    "phase": "Production",
+    "title": "Letzter Drehtag",
+    "date": "15. Juli 2026",
+    "status": "upcoming",
+    "deadline": true
+  },
+  {
+    "phase": "Post-Production",
+    "title": "Abgabe Doku",
+    "date": "20. Juli 2026",
+    "status": "upcoming",
+    "deadline": true
+  },
+  {
     "phase": "Post-Production",
     "title": "Rohschnitt",
     "date": "Ende Juni – Juli",

@@ -1,6 +1,5 @@
 {
   "items": [
-    { "name": "test", "amount": 30, "paidBy": "Dilara", "status": "approved", "notes": "" },
     { "name": "Transport / Benzin", "amount": 0, "paidBy": "", "status": "open", "notes": "Fahrten zu Drehorten" },
     { "name": "Essen / Catering (5 Drehtage)", "amount": 0, "paidBy": "", "status": "open", "notes": "" },
     { "name": "Requisiten", "amount": 0, "paidBy": "", "status": "open", "notes": "" },

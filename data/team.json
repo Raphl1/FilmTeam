@@ -29,15 +29,15 @@
     { "id": "lea",       "name": "Lea",       "color": "#b5838d" }
   ],
   "roles": [
-    { "id": "skript",       "title": "Skript (Vor Dreh)",       "icon": "📝", "description": "Drehbuch, Storyboard, Dialogplanung",              "assigned": "Miri, Lisa",                          "status": "assigned" },
+    { "id": "skript",       "title": "Skript (Vor Dreh)",       "icon": "📝", "description": "Drehbuch, Storyboard, Dialogplanung",              "assigned": "Miriam, Lia",                          "status": "assigned" },
     { "id": "maske-pre",    "title": "Maske (Vor Dreh)",        "icon": "💄", "description": "Kostüm- und Make-up-Planung",                      "assigned": "Runa",                                "status": "assigned" },
-    { "id": "buehne-pre",   "title": "Bühnenbild (Vor Dreh)",   "icon": "🖼️", "description": "Set-Design, Requisiten planen",                    "assigned": "Quyen, Lisa",                         "status": "assigned" },
+    { "id": "buehne-pre",   "title": "Bühnenbild (Vor Dreh)",   "icon": "🖼️", "description": "Set-Design, Requisiten planen",                    "assigned": "Quyen, Lia",                         "status": "assigned" },
     { "id": "outfit",       "title": "Outfit (Vor Dreh)",       "icon": "👔", "description": "Kostüme und Styling organisieren",                 "assigned": "Runa",                                "status": "assigned" },
     { "id": "licht",        "title": "Lichttechnik (Dreh)",     "icon": "💡", "description": "Lichtsetup, LED-Panels, Neon-Look",                "assigned": "Luca, Nico",                          "status": "assigned" },
     { "id": "maske-dreh",   "title": "Maske (Dreh)",            "icon": "💄", "description": "Make-up und Styling am Set",                       "assigned": "Runa",                                "status": "assigned" },
     { "id": "director",     "title": "Director (Dreh)",         "icon": "🎬", "description": "Regie, Szenenarbeit, Blocking",                    "assigned": "Dilara",                              "status": "assigned" },
     { "id": "kamera",       "title": "Kamera (Dreh)",           "icon": "📷", "description": "Bildgestaltung, Kameraführung",                    "assigned": "Benicio, Raphael, Jetmir",            "status": "assigned" },
-    { "id": "buehne-dreh",  "title": "Bühnenbild (Dreh)",       "icon": "🖼️", "description": "Set-Dekoration, Requisiten am Set",                "assigned": "Quyen, Lisa",                         "status": "assigned" },
+    { "id": "buehne-dreh",  "title": "Bühnenbild (Dreh)",       "icon": "🖼️", "description": "Set-Dekoration, Requisiten am Set",                "assigned": "Quyen, Lia",                         "status": "assigned" },
     { "id": "grobschnitt",  "title": "Grobschnitt (Nach Dreh)", "icon": "✂️", "description": "Erster Rohschnitt des Materials",                   "assigned": "",                                    "status": "open" },
     { "id": "feinschnitt",  "title": "Feinschnitt (Nach Dreh)", "icon": "✂️", "description": "Feinschnitt, Color Grading, Übergänge",             "assigned": "",                                    "status": "open" },
     { "id": "animation",    "title": "Animation (Nach Dreh)",   "icon": "🎞️", "description": "Motion Graphics, Titel, Übergänge",                "assigned": "",                                    "status": "open" },
