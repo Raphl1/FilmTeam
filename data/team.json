@@ -29,14 +29,20 @@
     { "id": "lea",       "name": "Lea",       "color": "#b5838d" }
   ],
   "roles": [
-    { "id": "kamera",        "title": "Kamera",              "icon": "📷",  "description": "Bildgestaltung, Kameraführung, Einstellungen",         "assigned": "Raphael, Emily, Maxim, Alexa",                          "status": "assigned" },
-    { "id": "licht",         "title": "Licht",               "icon": "💡",  "description": "Lichtsetup, LED-Panels, Neon-Look, natürliches Licht", "assigned": "Luca, Raphael, Maxim, Emily, Niko",                     "status": "assigned" },
-    { "id": "schnitt",       "title": "Schnitt / Post",      "icon": "✂️",  "description": "Rohschnitt, Feinschnitt, Color Grading, VFX",           "assigned": "Tobi, Salome, Luca, Quyen, Miriam",                     "status": "assigned" },
-    { "id": "maske",         "title": "Maske",               "icon": "💄",  "description": "Make-up, Styling, Haare",                               "assigned": "Alesia, Miriam, Pauline, Esther, Elisa, Charlotte, Lia, Lea", "status": "assigned" },
-    { "id": "szenenbild",    "title": "Szenenbild",          "icon": "🖼️",  "description": "Set-Dekoration, Requisiten, Art Direction",             "assigned": "Pauline, Esther, Elisa, Miriam, Charlotte",             "status": "assigned" },
-    { "id": "bts",           "title": "Behind The Scenes",   "icon": "📹",  "description": "Making-of, Social Media Content, Dokumentation",        "assigned": "Elisa, Alexa, Raphael, Miriam, Lia, Tobi, Charlotte",  "status": "assigned" },
-    { "id": "nachbearbeitung","title": "Nachbearbeitung (KI)","icon": "🤖",  "description": "KI-gestützte Postproduktion, VFX, AI-Effekte",          "assigned": "Benicio, Runa",                                         "status": "assigned" },
-    { "id": "datensicherung","title": "Datensicherung",      "icon": "💾",  "description": "Backup, Dateimanagement, Archivierung",                 "assigned": "Luca, Emily",                                           "status": "assigned" }
+    { "id": "skript",       "title": "Skript (Vor Dreh)",       "icon": "📝", "description": "Drehbuch, Storyboard, Dialogplanung",              "assigned": "Miri, Lisa",                          "status": "assigned" },
+    { "id": "maske-pre",    "title": "Maske (Vor Dreh)",        "icon": "💄", "description": "Kostüm- und Make-up-Planung",                      "assigned": "Runa",                                "status": "assigned" },
+    { "id": "buehne-pre",   "title": "Bühnenbild (Vor Dreh)",   "icon": "🖼️", "description": "Set-Design, Requisiten planen",                    "assigned": "Quyen, Lisa",                         "status": "assigned" },
+    { "id": "outfit",       "title": "Outfit (Vor Dreh)",       "icon": "👔", "description": "Kostüme und Styling organisieren",                 "assigned": "Runa",                                "status": "assigned" },
+    { "id": "licht",        "title": "Lichttechnik (Dreh)",     "icon": "💡", "description": "Lichtsetup, LED-Panels, Neon-Look",                "assigned": "Luca, Nico",                          "status": "assigned" },
+    { "id": "maske-dreh",   "title": "Maske (Dreh)",            "icon": "💄", "description": "Make-up und Styling am Set",                       "assigned": "Runa",                                "status": "assigned" },
+    { "id": "director",     "title": "Director (Dreh)",         "icon": "🎬", "description": "Regie, Szenenarbeit, Blocking",                    "assigned": "Dilara",                              "status": "assigned" },
+    { "id": "kamera",       "title": "Kamera (Dreh)",           "icon": "📷", "description": "Bildgestaltung, Kameraführung",                    "assigned": "Benicio, Raphael, Jetmir",            "status": "assigned" },
+    { "id": "buehne-dreh",  "title": "Bühnenbild (Dreh)",       "icon": "🖼️", "description": "Set-Dekoration, Requisiten am Set",                "assigned": "Quyen, Lisa",                         "status": "assigned" },
+    { "id": "grobschnitt",  "title": "Grobschnitt (Nach Dreh)", "icon": "✂️", "description": "Erster Rohschnitt des Materials",                   "assigned": "",                                    "status": "open" },
+    { "id": "feinschnitt",  "title": "Feinschnitt (Nach Dreh)", "icon": "✂️", "description": "Feinschnitt, Color Grading, Übergänge",             "assigned": "",                                    "status": "open" },
+    { "id": "animation",    "title": "Animation (Nach Dreh)",   "icon": "🎞️", "description": "Motion Graphics, Titel, Übergänge",                "assigned": "",                                    "status": "open" },
+    { "id": "musik",        "title": "Musik (Nach Dreh)",       "icon": "🎵", "description": "Musikauswahl und -schnitt für Stummfilm",           "assigned": "",                                    "status": "open" },
+    { "id": "botb-anim",    "title": "BOTB animieren (Nach Dreh)", "icon": "🏆", "description": "30sek Best-of-the-Best Animation",              "assigned": "",                                    "status": "open" }
   ],
   "filmrollen": [
     { "id": "regie", "title": "Regie",           "icon": "🎬", "description": "Kreative Vision, Szenenarbeit, Blocking",    "assigned": "Dilara, Benicio, Salome, Emily" },

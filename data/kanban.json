@@ -50,7 +50,7 @@
     {
       "id": "t5",
       "title": "Charakterisierung",
-      "description": "",
+      "description": "Charakterbogen und jeweils Moodboards erstellen",
       "assignee": "Tobi, Miriam, Luca",
       "owner": "Raphael",
       "status": "in-progress",
@@ -60,7 +60,7 @@
     {
       "id": "t6",
       "title": "Storyboard erstellen",
-      "description": "",
+      "description": "Zeit-Spalte hinzufügen, Opener überarbeiten, Hauptfilm erstellen",
       "assignee": "Dilara, Quyen, Runa, Benicio, Yudong",
       "owner": "Luca",
       "status": "in-progress",
@@ -79,33 +79,113 @@
     },
     {
       "id": "t8",
-      "title": "Best of the Best: Einführung",
-      "description": "Welche Animation, KI einbauen, Musik auswählen",
-      "assignee": "?",
+      "title": "Best of the Best: Einführung, Abspann, Countdown",
+      "description": "Welche Animation, KI einbauen, Musik auswählen, was soll konkret passieren, Handlungsablauf. MPG23 ist in den Abspann getanzt, wie stellen wir die Szenen dar",
+      "assignee": "Miriam, Luca, Tobi, Lia, Raphael, Jetmir, Nico, Lea",
       "owner": "Quyen",
       "status": "todo",
       "deadline": "2026-05-12",
-      "day": 1
+      "day": null
     },
     {
       "id": "t9",
-      "title": "Abspann",
-      "description": "Was soll konkret passieren, Handlungsablauf. MPG23 ist in den Abspann getanzt.",
-      "assignee": "",
-      "owner": "Quyen",
+      "title": "Casting",
+      "description": "Erste Vorschläge in Excel Tabelle",
+      "assignee": "Alle",
+      "owner": "",
       "status": "todo",
-      "deadline": "",
-      "day": 5
+      "deadline": "2026-05-12",
+      "day": null
     },
     {
       "id": "t10",
-      "title": "Countdown",
-      "description": "Wie stellen wir die Szenen dar",
-      "assignee": "Alle",
-      "owner": "Benicio",
+      "title": "Location Floorboard",
+      "description": "Floorboard erstellen und Locations eventuell schon abfotografieren?",
+      "assignee": "Jetmir, Raphael",
+      "owner": "",
       "status": "todo",
       "deadline": "",
-      "day": 4
+      "day": null
+    },
+    {
+      "id": "t11",
+      "title": "Doku",
+      "description": "Themen erstellen und aufteilen",
+      "assignee": "Dilara, Lea",
+      "owner": "",
+      "status": "todo",
+      "deadline": "",
+      "day": null
+    },
+    {
+      "id": "t12",
+      "title": "Haftpflichtversicherung checken",
+      "description": "",
+      "assignee": "",
+      "owner": "",
+      "status": "todo",
+      "deadline": "",
+      "day": null
+    },
+    {
+      "id": "t13",
+      "title": "Location fotografieren & Lichtverhältnisse prüfen",
+      "description": "",
+      "assignee": "",
+      "owner": "",
+      "status": "todo",
+      "deadline": "",
+      "day": null
+    },
+    {
+      "id": "t14",
+      "title": "Color- und Moodboard für die Charaktere",
+      "description": "",
+      "assignee": "",
+      "owner": "",
+      "status": "todo",
+      "deadline": "",
+      "day": null
+    },
+    {
+      "id": "t15",
+      "title": "Punkte verteidigen vor Petri",
+      "description": "Konkretisierung und Konsens zwischen Petri und Ehringer",
+      "assignee": "",
+      "owner": "",
+      "status": "todo",
+      "deadline": "",
+      "day": null
+    },
+    {
+      "id": "t16",
+      "title": "Animation für Best-of-the-Best",
+      "description": "Musik die motiviert nach vorne zu laufen. Klassiker muss aber nicht sein, bisschen ungewohnt",
+      "assignee": "",
+      "owner": "",
+      "status": "todo",
+      "deadline": "",
+      "day": null
+    },
+    {
+      "id": "t17",
+      "title": "Personen für Grob- und Feinschnitt festlegen",
+      "description": "Schnitt und Editing muss gut sein",
+      "assignee": "",
+      "owner": "",
+      "status": "todo",
+      "deadline": "",
+      "day": null
+    },
+    {
+      "id": "t18",
+      "title": "30sek BOTB animieren",
+      "description": "Am Donnerstag mehr drauf eingehen was wir bei den 30sek BOTB animieren können",
+      "assignee": "",
+      "owner": "",
+      "status": "todo",
+      "deadline": "",
+      "day": null
     }
   ],
   "members": []
