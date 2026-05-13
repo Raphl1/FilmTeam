@@ -7,12 +7,12 @@ const LUCIDE = {
   'timeline':'clock','contacts':'phone','calendar':'calendar-days'
 };
 
-const NAV_CLS = 'nav-item group flex items-center gap-sm px-md py-sm min-h-[42px] rounded-sm text-muted no-underline overflow-hidden whitespace-nowrap transition-all duration-base hover:text-txt hover:bg-border2';
+const NAV_CLS = 'nav-item group relative flex items-center gap-sm px-md py-sm min-h-[44px] rounded-sm text-muted no-underline overflow-hidden whitespace-nowrap transition-all duration-base hover:text-txt hover:bg-violet/[.06]';
 
 export function renderShell(route) {
   const app = document.getElementById('app');
   if (!state.config) {
-    app.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#8892a4">Konfiguration fehlt</div>';
+    app.innerHTML = '<div class="flex items-center justify-center h-screen text-muted">Konfiguration fehlt</div>';
     return;
   }
   const { navigation, project } = state.config;
@@ -22,20 +22,21 @@ export function renderShell(route) {
 
   const navItems = navigation.map(item => {
     return `<a href="#${item.id}" class="${NAV_CLS}" data-route="${item.id}" data-tooltip="${item.label}">
-      <i data-lucide="${LUCIDE[item.id] || 'circle'}" class="w-5 h-5 shrink-0"></i>
-      <span class="text-sm nav-label transition-opacity duration-medium">${item.label}</span>
+      <span class="nav-active-bar absolute left-0 top-[20%] bottom-[20%] w-[3px] rounded-full bg-violet opacity-0 transition-opacity duration-base"></span>
+      <i data-lucide="${LUCIDE[item.id] || 'circle'}" class="w-5 h-5 shrink-0 transition-transform duration-base group-hover:scale-110"></i>
+      <span class="text-sm nav-label transition-all duration-medium">${item.label}</span>
     </a>`;
   }).join('');
 
   const bottomItems = navigation.map(item => {
-    return `<a href="#${item.id}" class="bottom-nav-item flex flex-col items-center justify-center gap-[2px] px-sm py-xs min-w-[56px] min-h-[52px] text-muted no-underline rounded-sm shrink-0 transition-all duration-base" data-route="${item.id}">
-      <i data-lucide="${LUCIDE[item.id] || 'circle'}" class="w-[22px] h-[22px]"></i>
+    return `<a href="#${item.id}" class="bottom-nav-item flex flex-col items-center justify-center gap-[2px] px-sm py-xs min-w-[56px] min-h-[56px] text-muted no-underline rounded-sm shrink-0 transition-all duration-base" data-route="${item.id}">
+      <i data-lucide="${LUCIDE[item.id] || 'circle'}" class="w-[24px] h-[24px] transition-transform duration-base"></i>
       <span class="text-[.6rem] font-semibold whitespace-nowrap">${item.label}</span>
     </a>`;
   }).join('');
 
   app.innerHTML = `
-    <div class="flex min-h-screen min-h-[100dvh]">
+    <div class="flex min-h-screen min-h-[100dvh] animate-fadeIn">
       <aside class="sidebar w-[220px] min-h-screen bg-card border-r border-border flex flex-col sticky top-0 h-screen overflow-y-auto overflow-x-hidden transition-[width] duration-medium shrink-0 z-50 max-md:hidden" id="sidebar">
         <div class="flex items-center gap-sm px-md py-md border-b border-border min-h-[60px] overflow-hidden">
           <a href="#hub" class="flex items-center gap-sm no-underline">
@@ -44,12 +45,12 @@ export function renderShell(route) {
           </a>
         </div>
         <nav class="flex-1 flex flex-col gap-[2px] p-sm overflow-hidden" id="main-nav">${navItems}</nav>
-        <button class="m-sm p-sm bg-transparent border border-border rounded-sm text-muted cursor-pointer flex items-center justify-center transition-all duration-base hover:bg-purple/[.08] hover:text-violet min-h-[36px] sidebar-toggle" id="sidebar-toggle" aria-label="Sidebar umschalten">
+        <button class="m-sm p-sm bg-transparent border border-border rounded-sm text-muted cursor-pointer flex items-center justify-center transition-all duration-base hover:bg-violet/[.08] hover:text-violet min-h-[36px] sidebar-toggle" id="sidebar-toggle" aria-label="Sidebar umschalten">
           <i data-lucide="chevrons-left"></i>
         </button>
       </aside>
       <div class="flex-1 min-w-0 flex flex-col">
-        <header class="border-b border-border bg-card backdrop-blur-md sticky top-0 z-40" id="site-header">
+        <header class="header-glow bg-card backdrop-blur-md sticky top-0 z-40" id="site-header">
           <div class="flex items-center justify-between px-lg py-md max-w-main mx-auto w-full">
             <div>
               <div class="text-xs font-semibold uppercase tracking-wider text-muted mb-1">${project.team}</div>
@@ -60,8 +61,8 @@ export function renderShell(route) {
           </div>
           <div class="px-lg pb-sm max-w-main mx-auto w-full max-md:hidden">${renderSearch()}</div>
         </header>
-        <nav class="hidden max-md:flex fixed bottom-0 left-0 right-0 bg-card border-t border-border px-xs z-[200] overflow-x-auto" style="-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:max(4px,env(safe-area-inset-bottom))" id="bottom-nav">${bottomItems}</nav>
-        <main class="flex-1 max-w-main px-lg py-xl pb-2xl max-md:px-md max-md:pb-[calc(24px+64px+env(safe-area-inset-bottom))]">
+        <nav class="hidden max-md:flex fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border px-xs z-[200] overflow-x-auto bottom-nav-bar" style="-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:max(4px,env(safe-area-inset-bottom))" id="bottom-nav">${bottomItems}</nav>
+        <main class="flex-1 max-w-main px-lg py-xl pb-2xl max-md:px-md max-md:pb-[calc(24px+72px+env(safe-area-inset-bottom))]">
           <div class="view-container" id="view-container"></div>
         </main>
       </div>

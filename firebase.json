@@ -1,0 +1,21 @@
+{
+  "hosting": {
+    "site": "fraime",
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/node_modules/**",
+      "src/**",
+      "tailwind.config.js",
+      "package.json",
+      "package-lock.json",
+      ".gitignore"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
