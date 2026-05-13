@@ -1,9 +1,11 @@
-import { onAuth, loginWithGoogle, loginWithEmail, loginWithPhone, logout, getCurrentUser } from './core/firebase.js';
+import { onAuth, loginWithGoogle, loginWithEmail, loginWithPhone, logout } from './core/firebase.js';
 import { fetchAllData } from './core/data.js';
 import { state } from './core/state.js';
 import { renderShell } from './components/shell.js';
 import { renderHeaderControls } from './components/header.js';
-import { navigate } from './core/router.js';
+import { navigate, getRoute } from './core/router.js';
+import { startListeners, stopListeners } from './core/realtime.js';
+import { initPullToRefresh } from './components/pull-refresh.js';
 import './core/events.js';
 
 function showLoginScreen() {
@@ -134,15 +136,20 @@ async function startApp(user) {
     return;
   }
 
+  startListeners();
+
   state.loaded = true;
   state.user = user;
-  window.location.hash = '';
-  const route = 'hub';
+  const route = getRoute() || 'hub';
 
   try {
     renderShell(route);
     renderHeaderControls();
     await navigate(route);
+    initPullToRefresh(async () => {
+      await fetchAllData();
+      await navigate(getRoute(), true);
+    });
   } catch (err) {
     app.innerHTML = `<div class="flex items-center justify-center h-screen flex-col gap-md text-accent font-sans p-lg text-center animate-fadeIn"><div class="text-2xl">⚠️</div><div class="text-md font-bold">Rendering-Fehler</div><div class="text-muted text-sm max-w-[400px]">${err.message}</div><button onclick="location.reload()" class="mt-md px-lg py-sm rounded-sm border border-accent text-accent bg-transparent cursor-pointer text-sm hover:bg-accent/10 transition-all duration-base">Neu laden</button></div>`;
   }
@@ -152,6 +159,7 @@ onAuth((user) => {
   if (user) {
     startApp(user);
   } else {
+    stopListeners();
     showLoginScreen();
   }
 });
