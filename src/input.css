@@ -38,13 +38,13 @@
     --c-violet:  #7c4dff;
     --c-lilac:   #5e35b1;
     --c-accent:  #e91e63;
-    --c-gold:    #f59e0b;
+    --c-gold:    #ca8a04;
     --c-green:   #10b981;
     --c-blue:    #2563eb;
     --c-border:  rgba(0,0,0,.08);
     --c-border2: rgba(0,0,0,.12);
     --c-shadow:  rgba(0,0,0,.1);
-    --c-focus:   rgba(108,63,197,.3);
+    --c-focus:   rgba(108,63,197,.4);
   }
 
   body {
@@ -58,7 +58,7 @@
 
   :focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px var(--c-focus);
+    box-shadow: 0 0 0 3px var(--c-focus), 0 0 0 1px var(--c-violet);
     @apply rounded-xs;
   }
 
@@ -87,6 +87,7 @@
   .toast-success { background: rgba(67,170,139,.92); @apply text-white; box-shadow: 0 4px 20px rgba(67,170,139,.3); }
   .toast-error   { background: rgba(247,37,133,.92); @apply text-white; box-shadow: 0 4px 20px rgba(247,37,133,.3); }
   .toast-info    { background: rgba(108,63,197,.92); @apply text-white; box-shadow: 0 4px 20px rgba(108,63,197,.3); }
+  .toast-warning { background: rgba(202,138,4,.92); @apply text-white; box-shadow: 0 4px 20px rgba(202,138,4,.3); }
 
   /* ── Kanban DnD states ── */
   .kanban-card[draggable="true"] { cursor: grab; }
@@ -156,12 +157,53 @@
     z-index: 200; pointer-events: none;
   }
 
-  /* ── Bottom nav scrollbar hide ── */
+  /* ── Bottom nav (no scroll, justified) ── */
   #bottom-nav::-webkit-scrollbar { display: none; }
+  #bottom-nav { overflow: visible; }
+
+  /* ── Bottom Sheet ── */
+  .bottom-sheet-backdrop {
+    @apply fixed inset-0 z-[250];
+    background: rgba(0,0,0,0);
+    transition: background 250ms ease;
+  }
+  .bottom-sheet-backdrop.show {
+    background: rgba(0,0,0,.5);
+  }
+  .bottom-sheet {
+    @apply fixed left-0 right-0 bottom-0 z-[300] bg-card rounded-t-[16px] max-h-[70vh] overflow-y-auto;
+    transform: translateY(100%);
+    transition: transform 250ms cubic-bezier(.32,.72,0,1);
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+    box-shadow: 0 -4px 32px rgba(0,0,0,.3);
+  }
+  .bottom-sheet.show {
+    transform: translateY(0);
+  }
+  .bottom-sheet.dismiss {
+    transform: translateY(100%);
+    transition: transform 200ms ease-in;
+  }
+  .bottom-sheet-handle {
+    @apply flex justify-center py-sm;
+  }
+  .bottom-sheet-handle span {
+    @apply block w-[36px] h-[4px] rounded-full;
+    background: var(--c-border2);
+  }
+  .bottom-sheet-title {
+    @apply text-xs font-bold uppercase tracking-wider text-muted px-lg pb-sm;
+  }
+  .bottom-sheet-content {
+    @apply flex flex-col gap-[2px] px-sm pb-md;
+  }
+  .bottom-sheet-nav-item:active {
+    background: rgba(108,63,197,.12) !important;
+  }
 
   /* ── Micro-interactions ── */
   button, [data-action], .nav-item, .bottom-nav-item {
-    transition: all 200ms ease;
+    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, background 200ms ease, color 200ms ease, opacity 200ms ease;
   }
   button:active, [data-action]:active {
     transform: scale(0.96);
@@ -180,13 +222,6 @@
     border-color: rgba(108,63,197,.3);
   }
 
-  /* ── Focus ring (violet glow) ── */
-  :focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px var(--c-focus);
-    border-radius: 4px;
-  }
-
   /* ── Loading spinner ── */
   .spinner {
     width: 18px; height: 18px;
@@ -199,16 +234,30 @@
 
   /* ── Mobile improvements ── */
   @media (max-width: 768px) {
-    .bottom-nav-item { min-height: 56px; min-width: 60px; }
-    .bottom-nav-item svg { width: 24px; height: 24px; }
+    .bottom-nav-item { min-height: 56px; min-width: 56px; }
+    .bottom-nav-item svg { width: 22px; height: 22px; }
     main { scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+
+    /* Compact header on mobile */
+    #site-header {
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+    #site-header h1 {
+      font-size: 1rem;
+      line-height: 1.2;
+    }
   }
 
   /* ── Print ── */
   @media print {
     body { @apply bg-white text-gray-900; font-size: 12pt; }
     .sidebar, .bottom-nav, .header-actions, .toast, .modal-overlay,
-    [data-action], .print-hidden, #site-header, #bottom-nav { @apply hidden; }
+    .bottom-sheet, .bottom-sheet-backdrop,
+    button[data-action="enter-edit"], button[data-action="save-changes"],
+    button[data-action="cancel-edit"], button[data-action="force-refresh"],
+    button[data-action="toggle-theme"], button[data-action="logout"],
+    .print-hidden, #site-header, #bottom-nav { @apply hidden; }
     main { padding: 0 !important; max-width: 100% !important; }
     .schedule-print-grid { display: block !important; }
     .schedule-print-grid > div {
@@ -218,10 +267,6 @@
       box-shadow: none !important;
       transform: none !important;
       width: 100% !important;
-    }
-    .schedule-print-grid > div:hover {
-      transform: none !important;
-      box-shadow: none !important;
     }
     #view-container { width: 100% !important; }
   }

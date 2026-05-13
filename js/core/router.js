@@ -50,6 +50,10 @@ export async function navigate(route, forceRerender = false) {
     cache['kanban'].initKanbanDragAndDrop();
   }
 
+  if (route === 'my-tasks') {
+    cache['my-tasks'].initMyTasksSwipe();
+  }
+
   if (window.lucide) window.lucide.createIcons();
 }
 

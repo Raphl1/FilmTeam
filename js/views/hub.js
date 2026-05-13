@@ -1,46 +1,154 @@
 import { state } from '../core/state.js';
 import { escapeHtml, getEquipmentChecked } from '../core/events.js';
 
-const ICONS = { 'locations':'map-pin','schedule':'calendar','team':'users','equipment':'camera','budget':'wallet','timeline':'clock','contacts':'phone','calendar':'calendar-days','kanban':'kanban','my-tasks':'user' };
-const DESCS = { 'locations':'15 Locations mit Maps, Referenzen und Status.','schedule':'5-Tage Drehplan mit Szenen und Konflikten.','team':'Rollen und offene Positionen im Überblick.','equipment':'Checkliste für Kamera, Licht, Ton & Props.','budget':'Min/Max Kalkulation aller Kostenpunkte.','timeline':'Meilensteine bis zur Premiere.','contacts':'Ansprechpartner & Genehmigungsstatus.','calendar':'Google Calendar mit allen Drehterminen.','kanban':'Aufgaben-Board für das Team.','my-tasks':'Deine persönlichen Aufgaben.' };
+// Shooting days mapping (17-21 June 2026)
+const SHOOT_DAYS = [
+  { day: 1, date: '2026-06-17', title: 'WG & Treppenhaus', locations: ['WG—Flur & Eingang', 'WG—Zimmer BWL-Student', 'WG—Atelier Kreative', 'Treppenhaus & Sicherungskeller'], time: '10:00–20:00' },
+  { day: 2, date: '2026-06-18', title: 'Techniker-Base', locations: ['Techniker-Keller/Base'], time: '14:00–20:00' },
+  { day: 3, date: '2026-06-19', title: 'Gastronomie', locations: ['Restaurant/Café (Date)', 'Café-Terrasse'], time: '15:00–21:00' },
+  { day: 4, date: '2026-06-20', title: 'Außen-Countdown', locations: ['Parkbank', 'Treppe (Rocky)', 'Western-Kulisse', 'Regen-Außenbereich', 'Sonnenuntergang'], time: '08:00–Sunset' },
+  { day: 5, date: '2026-06-21', title: 'Spezial-Setups', locations: ['Tanzfläche', 'Bar/Kneipe', 'Piano-Raum'], time: '16:00–22:00' }
+];
 
-function getCountdownBanner() {
-  const shootDate = new Date('2026-06-17T00:00:00');
+function getShootContext() {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const diff = Math.ceil((shootDate - today) / (1000 * 60 * 60 * 24));
+  const shootStart = new Date('2026-06-17');
+  const shootEnd = new Date('2026-06-21');
+  const diff = Math.ceil((shootStart - today) / (1000 * 60 * 60 * 24));
 
-  let text, subClass;
-  if (diff > 1) {
-    text = `Noch <strong class="text-violet">${diff} Tage</strong> bis zum ersten Drehtag (17. Juni 2026)`;
-    subClass = 'text-txt';
-  } else if (diff === 1) {
-    text = `<strong class="text-accent">Morgen</strong> ist der erste Drehtag!`;
-    subClass = 'text-accent';
-  } else if (diff === 0) {
-    text = `<strong class="text-green">Heute</strong> ist der erste Drehtag!`;
-    subClass = 'text-green';
-  } else if (diff > -5) {
-    text = `<strong class="text-green">Dreh läuft!</strong> Tag ${Math.abs(diff) + 1} von 5`;
-    subClass = 'text-green';
+  // Find today's shoot day
+  const todayStr = today.toISOString().split('T')[0];
+  const currentShootDay = SHOOT_DAYS.find(d => d.date === todayStr);
+
+  if (currentShootDay) {
+    return { phase: 'shooting', diff: 0, shootDay: currentShootDay };
+  } else if (diff > 0) {
+    return { phase: 'pre', diff };
+  } else if (today > shootEnd) {
+    const postDiff = Math.ceil((today - shootEnd) / (1000 * 60 * 60 * 24));
+    return { phase: 'post', diff: postDiff };
   } else {
-    text = `<strong class="text-muted">Dreh abgeschlossen</strong>`;
-    subClass = 'text-muted';
+    // Between shoot days (weekend etc.)
+    return { phase: 'shooting-break', diff: 0 };
   }
-
-  return `
-    <div class="flex items-center gap-md p-md bg-card border border-border rounded mb-lg animate-fadeIn">
-      <span class="text-2xl">🎬</span>
-      <div class="flex flex-col gap-xs">
-        <span class="${subClass} text-base">${text}</span>
-        <span class="text-sm text-muted">Stummfilm · 5 Drehtage · 15 Locations · Mannheim & Weinheim</span>
-        <span class="text-xs text-muted">Premiere: <strong class="text-gold">20. November 2026</strong> — Night of the Graduates</span>
-      </div>
-    </div>
-  `;
 }
 
-function getDeadlineWarnings() {
+function renderContextBanner(ctx) {
+  if (ctx.phase === 'shooting' && ctx.shootDay) {
+    const sd = ctx.shootDay;
+    return `
+      <div class="bg-green/10 border border-green/30 rounded-sm p-lg mb-lg animate-fadeIn">
+        <div class="flex items-center gap-sm mb-sm">
+          <span class="text-2xl">🎬</span>
+          <span class="text-lg font-extrabold text-green">Drehtag ${sd.day} von 5</span>
+        </div>
+        <div class="text-xl font-bold text-txt mb-xs">${escapeHtml(sd.title)}</div>
+        <div class="flex items-center gap-sm text-sm text-muted">
+          <i data-lucide="clock" class="w-4 h-4"></i>
+          <span>${escapeHtml(sd.time)}</span>
+        </div>
+      </div>`;
+  }
+  if (ctx.phase === 'pre') {
+    const urgency = ctx.diff <= 7 ? 'text-accent' : ctx.diff <= 14 ? 'text-gold' : 'text-violet';
+    return `
+      <div class="bg-card border border-border rounded-sm p-lg mb-lg animate-fadeIn">
+        <div class="flex items-center gap-sm mb-xs">
+          <span class="text-2xl">🎬</span>
+          <span class="text-base ${urgency} font-bold">Noch ${ctx.diff} Tag${ctx.diff !== 1 ? 'e' : ''} bis zum Dreh</span>
+        </div>
+        <span class="text-sm text-muted">Erster Drehtag: 17. Juni 2026 · Premiere: 20. November 2026</span>
+      </div>`;
+  }
+  if (ctx.phase === 'post') {
+    return `
+      <div class="bg-card border border-border rounded-sm p-lg mb-lg animate-fadeIn">
+        <div class="flex items-center gap-sm">
+          <span class="text-2xl">🎞️</span>
+          <span class="text-base text-muted font-bold">Post-Production</span>
+        </div>
+        <span class="text-sm text-muted mt-xs block">Dreh abgeschlossen · Premiere: 20. November 2026</span>
+      </div>`;
+  }
+  return '';
+}
+
+function renderTodayLocation(ctx) {
+  if (ctx.phase !== 'shooting' || !ctx.shootDay) return '';
+  const sd = ctx.shootDay;
+  const locationItems = sd.locations.map(loc => {
+    const match = state.locations?.find(l => l.name && l.name.includes(loc.split('—')[0]));
+    const concrete = match?.concrete ? escapeHtml(match.concrete) : '';
+    return `<div class="flex items-center gap-sm py-sm border-b border-border last:border-0">
+      <i data-lucide="map-pin" class="w-4 h-4 text-violet shrink-0"></i>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-medium text-txt truncate">${escapeHtml(loc)}</div>
+        ${concrete ? `<div class="text-xs text-muted truncate">${concrete}</div>` : ''}
+      </div>
+      ${match?.mapUrl ? `<a href="${escapeHtml(match.mapUrl)}" target="_blank" rel="noopener" class="shrink-0 p-xs rounded-sm bg-violet/10 text-violet hover:bg-violet/20 transition-all" aria-label="Navigation öffnen"><i data-lucide="navigation" class="w-4 h-4"></i></a>` : ''}
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="bg-card border border-border rounded-sm p-lg mb-lg">
+      <div class="flex items-center gap-sm mb-md">
+        <i data-lucide="map-pin" class="w-5 h-5 text-violet"></i>
+        <h3 class="text-base font-bold text-txt">Heutige Locations</h3>
+      </div>
+      ${locationItems}
+    </div>`;
+}
+
+function renderMyTasks() {
+  if (!state.kanban || !state.kanban.tasks) return '';
+  const user = state.user?.displayName || state.user?.email || '';
+  const myTasks = state.kanban.tasks.filter(t =>
+    t.status !== 'done' && (
+      (t.owner && t.owner.toLowerCase().includes(user.toLowerCase())) ||
+      (t.assignees && t.assignees.some(a => a.toLowerCase().includes(user.toLowerCase())))
+    )
+  ).slice(0, 5);
+
+  // Fallback: show urgent tasks if no personal tasks
+  const tasks = myTasks.length > 0 ? myTasks : state.kanban.tasks
+    .filter(t => t.status !== 'done')
+    .sort((a, b) => {
+      if (a.deadline && b.deadline) return new Date(a.deadline) - new Date(b.deadline);
+      if (a.deadline) return -1;
+      return 1;
+    })
+    .slice(0, 5);
+
+  if (tasks.length === 0) return '';
+
+  const label = myTasks.length > 0 ? 'Meine Aufgaben' : 'Nächste Aufgaben';
+  const taskItems = tasks.map(t => {
+    const isDone = t.status === 'done';
+    const deadlineBadge = t.deadline ? `<span class="text-[10px] text-muted ml-auto shrink-0">${escapeHtml(t.deadline)}</span>` : '';
+    return `<div class="flex items-center gap-sm py-sm border-b border-border last:border-0">
+      <input type="checkbox" ${isDone ? 'checked' : ''} data-action="toggle-task-check" data-task-id="${escapeHtml(t.id)}" class="w-5 h-5 shrink-0 accent-violet cursor-pointer">
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-medium text-txt truncate ${isDone ? 'line-through opacity-50' : ''}">${escapeHtml(t.title)}</div>
+      </div>
+      ${deadlineBadge}
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="bg-card border border-border rounded-sm p-lg mb-lg">
+      <div class="flex items-center justify-between mb-md">
+        <div class="flex items-center gap-sm">
+          <i data-lucide="check-square" class="w-5 h-5 text-violet"></i>
+          <h3 class="text-base font-bold text-txt">${label}</h3>
+        </div>
+        <a href="#my-tasks" class="text-xs text-violet hover:text-lilac no-underline">Alle →</a>
+      </div>
+      ${taskItems}
+    </div>`;
+}
+
+function renderDeadlineWarnings() {
   if (!state.kanban || !state.kanban.tasks) return '';
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -50,57 +158,121 @@ function getDeadlineWarnings() {
     if (!t.deadline || t.status === 'done') return false;
     const dl = new Date(t.deadline);
     return dl <= threeDays;
-  }).map(t => {
-    const dl = new Date(t.deadline);
-    const isOverdue = dl < today;
-    const colorCls = isOverdue ? 'border-accent/40 bg-accent/5 text-accent' : 'border-gold/40 bg-gold/5 text-gold';
-    const label = isOverdue ? 'Überfällig' : 'Bald fällig';
-    return `<div class="flex items-center gap-sm p-sm rounded-sm border ${colorCls} text-sm">
-      <span class="font-bold">${label}:</span>
-      <span class="text-txt font-medium">${escapeHtml(t.title)}</span>
-      <span class="ml-auto text-xs opacity-80">${escapeHtml(t.deadline)}</span>
-    </div>`;
-  });
+  }).sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
 
   if (warnings.length === 0) return '';
-  return `<div class="flex flex-col gap-sm mb-lg animate-fadeIn">${warnings.join('')}</div>`;
+
+  const items = warnings.slice(0, 3).map(t => {
+    const dl = new Date(t.deadline);
+    const isOverdue = dl < today;
+    const cls = isOverdue ? 'text-accent' : 'text-gold';
+    const icon = isOverdue ? 'alert-circle' : 'alert-triangle';
+    return `<div class="flex items-center gap-sm py-xs">
+      <i data-lucide="${icon}" class="w-4 h-4 ${cls} shrink-0"></i>
+      <span class="text-sm text-txt truncate flex-1">${escapeHtml(t.title)}</span>
+      <span class="text-[10px] ${cls} shrink-0">${escapeHtml(t.deadline)}</span>
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="bg-accent/5 border border-accent/20 rounded-sm p-md mb-lg animate-fadeIn">
+      <div class="text-xs font-bold uppercase tracking-wider text-accent mb-sm">Achtung — Deadlines</div>
+      ${items}
+    </div>`;
 }
 
-function getProgressForCard(id) {
-  if (id === 'locations' && state.locations) {
+function renderQuickActions() {
+  return `
+    <div class="grid grid-cols-2 gap-sm mb-lg">
+      <a href="#locations" class="flex items-center gap-sm p-md bg-card border border-border rounded-sm no-underline hover:border-violet/30 hover:bg-violet/5 transition-all">
+        <i data-lucide="map-pin" class="w-5 h-5 text-violet"></i>
+        <span class="text-sm font-medium text-txt">Drehorte</span>
+      </a>
+      <a href="#schedule" class="flex items-center gap-sm p-md bg-card border border-border rounded-sm no-underline hover:border-violet/30 hover:bg-violet/5 transition-all">
+        <i data-lucide="calendar" class="w-5 h-5 text-violet"></i>
+        <span class="text-sm font-medium text-txt">Drehplan</span>
+      </a>
+      <a href="#kanban" class="flex items-center gap-sm p-md bg-card border border-border rounded-sm no-underline hover:border-violet/30 hover:bg-violet/5 transition-all">
+        <i data-lucide="kanban" class="w-5 h-5 text-violet"></i>
+        <span class="text-sm font-medium text-txt">Kanban</span>
+      </a>
+      <a href="#contacts" class="flex items-center gap-sm p-md bg-card border border-border rounded-sm no-underline hover:border-violet/30 hover:bg-violet/5 transition-all">
+        <i data-lucide="phone" class="w-5 h-5 text-violet"></i>
+        <span class="text-sm font-medium text-txt">Kontakte</span>
+      </a>
+    </div>`;
+}
+
+function renderProgress() {
+  const sections = [];
+
+  if (state.locations) {
     const confirmed = state.locations.filter(l => l.status === 'confirmed').length;
-    return `<span class="text-[10px] text-muted mt-auto pt-sm">${confirmed}/${state.locations.length} bestätigt</span>`;
+    const total = state.locations.length;
+    const pct = Math.round((confirmed / total) * 100);
+    sections.push({ label: 'Locations bestätigt', value: `${confirmed}/${total}`, pct, color: 'bg-violet' });
   }
-  if (id === 'timeline' && state.timeline) {
-    const done = state.timeline.filter(t => t.status === 'done').length;
-    return `<span class="text-[10px] text-muted mt-auto pt-sm">${done}/${state.timeline.length} erledigt</span>`;
-  }
-  if (id === 'kanban' && state.kanban && state.kanban.tasks) {
+  if (state.kanban && state.kanban.tasks) {
     const done = state.kanban.tasks.filter(t => t.status === 'done').length;
-    return `<span class="text-[10px] text-muted mt-auto pt-sm">${done}/${state.kanban.tasks.length} done</span>`;
+    const total = state.kanban.tasks.length;
+    const pct = Math.round((done / total) * 100);
+    sections.push({ label: 'Tasks erledigt', value: `${done}/${total}`, pct, color: 'bg-green' });
   }
-  if (id === 'equipment' && state.equipment) {
+  if (state.equipment) {
     const checked = getEquipmentChecked();
     const total = state.equipment.categories.reduce((sum, cat) => sum + cat.items.length, 0);
     const checkedCount = Object.values(checked).filter(Boolean).length;
-    return `<span class="text-[10px] text-muted mt-auto pt-sm">${checkedCount}/${total} abgehakt</span>`;
+    const pct = total > 0 ? Math.round((checkedCount / total) * 100) : 0;
+    sections.push({ label: 'Equipment bereit', value: `${checkedCount}/${total}`, pct, color: 'bg-gold' });
   }
-  return '';
+
+  if (sections.length === 0) return '';
+
+  const bars = sections.map(s => `
+    <div class="flex flex-col gap-xs">
+      <div class="flex items-center justify-between">
+        <span class="text-xs text-muted">${s.label}</span>
+        <span class="text-xs font-bold text-txt">${s.value}</span>
+      </div>
+      <div class="h-[6px] bg-border rounded-full overflow-hidden">
+        <div class="${s.color} h-full rounded-full transition-all duration-medium" style="width:${s.pct}%"></div>
+      </div>
+    </div>`).join('');
+
+  return `
+    <div class="bg-card border border-border rounded-sm p-lg mb-lg">
+      <div class="flex items-center gap-sm mb-md">
+        <i data-lucide="bar-chart-2" class="w-5 h-5 text-violet"></i>
+        <h3 class="text-base font-bold text-txt">Fortschritt</h3>
+      </div>
+      <div class="flex flex-col gap-md">${bars}</div>
+    </div>`;
+}
+
+function renderExternalLinks() {
+  return `
+    <div class="flex gap-sm flex-wrap">
+      <a href="https://drive.google.com/drive/folders/1s1rMK-EZMx79g7yWUCoXA_Otdb4crZLi?usp=sharing" target="_blank" rel="noopener" class="flex items-center gap-xs px-md py-sm bg-card border border-border rounded-sm text-sm text-txt no-underline hover:border-violet/30 transition-all">
+        <i data-lucide="hard-drive" class="w-4 h-4 text-violet"></i> Drive
+      </a>
+      <a href="https://www.figma.com/board/TNmHCPlbfxyyKoEUt2qCqw/Night-Of-The-Graduates?node-id=705-4805&t=cW4KQevFJlEVlGRa-1" target="_blank" rel="noopener" class="flex items-center gap-xs px-md py-sm bg-card border border-border rounded-sm text-sm text-txt no-underline hover:border-violet/30 transition-all">
+        <i data-lucide="figma" class="w-4 h-4 text-violet"></i> Figma
+      </a>
+    </div>`;
 }
 
 export default async function viewHub() {
   if (!state.config) return '<p class="text-muted p-lg">Laden...</p>';
-  const { stats, navigation } = state.config;
-  const links = navigation.filter(n => n.id !== 'hub');
+
+  const ctx = getShootContext();
+
   return `
-    ${getCountdownBanner()}
-    ${getDeadlineWarnings()}
-    <div class="grid grid-cols-2 xs:grid-cols-4 gap-md mb-lg">${stats.map(s=>`<div class="bg-card border border-border rounded p-md text-center"><div class="text-xl font-extrabold text-violet">${escapeHtml(String(s.value))}</div><div class="text-xs text-muted mt-xs">${escapeHtml(s.label)}</div></div>`).join('')}</div>
-    <h2 class="text-xl font-extrabold tracking-tight mb-lg">Schnellzugriff</h2>
-    <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-md">
-      <a href="https://drive.google.com/drive/folders/1s1rMK-EZMx79g7yWUCoXA_Otdb4crZLi?usp=sharing" target="_blank" rel="noopener" class="bg-card border border-border rounded p-lg flex flex-col gap-sm no-underline transition-all duration-base hover:-translate-y-0.5 hover:shadow-md hover:border-purple/30"><i data-lucide="hard-drive" class="w-5 h-5 text-violet"></i><div class="text-base font-bold text-txt">Google Drive</div><div class="text-sm text-muted leading-snug">Gemeinsamer Ordner mit allen Dateien.</div></a>
-      <a href="https://www.figma.com/board/TNmHCPlbfxyyKoEUt2qCqw/Night-Of-The-Graduates?node-id=705-4805&t=cW4KQevFJlEVlGRa-1" target="_blank" rel="noopener" class="bg-card border border-border rounded p-lg flex flex-col gap-sm no-underline transition-all duration-base hover:-translate-y-0.5 hover:shadow-md hover:border-purple/30"><i data-lucide="figma" class="w-5 h-5 text-violet"></i><div class="text-base font-bold text-txt">Figma Board</div><div class="text-sm text-muted leading-snug">Moodboard & Konzept-Übersicht.</div></a>
-      ${links.map(item=>`<a href="#${encodeURIComponent(item.id)}" class="bg-card border border-border rounded p-lg flex flex-col gap-sm no-underline transition-all duration-base hover:-translate-y-0.5 hover:shadow-md hover:border-purple/30"><i data-lucide="${ICONS[item.id]||'circle'}" class="w-5 h-5 text-violet"></i><div class="text-base font-bold text-txt">${escapeHtml(item.label)}</div><div class="text-sm text-muted leading-snug">${DESCS[item.id]||''}</div>${getProgressForCard(item.id)}</a>`).join('')}
-    </div>
+    ${renderContextBanner(ctx)}
+    ${renderDeadlineWarnings()}
+    ${renderTodayLocation(ctx)}
+    ${renderMyTasks()}
+    ${renderQuickActions()}
+    ${renderProgress()}
+    ${renderExternalLinks()}
   `;
 }
