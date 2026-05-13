@@ -8,10 +8,12 @@ export function updateNav(route) {
       el.classList.remove('text-muted');
       el.classList.add('text-lilac');
       el.style.background = 'rgba(108,63,197,.18)';
+      el.setAttribute('aria-current', 'page');
     } else {
       el.classList.add('text-muted');
       el.classList.remove('text-lilac');
       el.style.background = '';
+      el.removeAttribute('aria-current');
     }
   });
 
@@ -23,10 +25,12 @@ export function updateNav(route) {
       el.classList.remove('text-muted');
       el.classList.add('text-lilac');
       el.style.background = 'rgba(108,63,197,.12)';
+      el.setAttribute('aria-current', 'page');
     } else {
       el.classList.add('text-muted');
       el.classList.remove('text-lilac');
       el.style.background = '';
+      el.removeAttribute('aria-current');
     }
   });
 

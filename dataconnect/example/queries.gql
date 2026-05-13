@@ -1,0 +1,59 @@
+query ListProjectsOwnedByUser @auth(level: USER, insecureReason: "This query filters projects by the authenticated user's ID, making it safe for all logged in users.") {
+  projects(where: { ownerId: { eq_expr: "auth.uid" } }) {
+    id
+    title
+    description
+    status
+    createdAt
+  }
+}
+
+mutation CreateNewProject($title: String!, $description: String!) @auth(level: USER) {
+  project_insert(
+    data: {
+      title: $title
+      description: $description
+      ownerId_expr: "auth.uid"
+      createdAt_expr: "request.time"
+      status: "Planning"
+    }
+  ) {
+    id
+  }
+}
+
+query GetProjectDetails($projectId: UUID!) @auth(level: USER, insecureReason: "This query retrieves details for a specific project. Access control should be handled by backend rules if a user is not the owner.") {
+  project(id: $projectId) {
+    id
+    title
+    description
+    status
+    startDate
+    endDate
+    owner {
+      displayName
+      email
+    }
+    resources_on_project {
+      name
+      type
+      url
+    }
+    tasks_on_project {
+      title
+      status
+      dueDate
+    }
+  }
+}
+
+mutation UpdateProjectStatus($projectId: UUID!, $newStatus: String!) @auth(level: USER) {
+  project_update(
+    key: { id: $projectId }
+    data: {
+      status: $newStatus
+    }
+  ) {
+    id
+  }
+}

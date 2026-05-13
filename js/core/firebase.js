@@ -70,3 +70,5 @@ export async function loginWithPhone(phoneNumber, containerEl) {
 export async function logout() {
   await signOut(auth);
 }
+
+export { app, auth };

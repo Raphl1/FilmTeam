@@ -6,6 +6,9 @@ import { renderHeaderControls } from './components/header.js';
 import { navigate, getRoute } from './core/router.js';
 import { startListeners, stopListeners } from './core/realtime.js';
 import { initPullToRefresh } from './components/pull-refresh.js';
+import { initAnalytics, trackView, trackError } from './core/analytics.js';
+import { maybePromptFeedback } from './components/feedback.js';
+import { maybePromptSUS } from './components/sus.js';
 import './core/events.js';
 
 function showLoginScreen() {
@@ -34,8 +37,8 @@ function showLoginScreen() {
         </div>
 
         <div class="flex flex-col gap-sm w-full">
-          <input id="email-input" type="email" placeholder="E-Mail" class="login-input w-full px-md py-[11px] rounded-sm border border-border2 bg-card text-txt text-sm outline-none transition-all duration-base focus:border-violet/60 focus:shadow-focus">
-          <input id="password-input" type="password" placeholder="Passwort (min. 6 Zeichen)" class="login-input w-full px-md py-[11px] rounded-sm border border-border2 bg-card text-txt text-sm outline-none transition-all duration-base focus:border-violet/60 focus:shadow-focus">
+          <input id="email-input" type="email" autocomplete="email" placeholder="E-Mail" aria-label="E-Mail-Adresse" class="login-input w-full px-md py-[11px] rounded-sm border border-border2 bg-card text-txt text-sm outline-none transition-all duration-base focus:border-violet/60 focus:shadow-focus">
+          <input id="password-input" type="password" autocomplete="current-password" placeholder="Passwort (min. 6 Zeichen)" aria-label="Passwort, mindestens 6 Zeichen" class="login-input w-full px-md py-[11px] rounded-sm border border-border2 bg-card text-txt text-sm outline-none transition-all duration-base focus:border-violet/60 focus:shadow-focus">
           <button id="email-login-btn" class="w-full px-lg py-[11px] rounded-sm border-none bg-purple text-white text-sm font-semibold cursor-pointer transition-all duration-base hover:brightness-110 hover:shadow-md active:scale-[.97]">Mit E-Mail anmelden</button>
         </div>
 
@@ -46,9 +49,9 @@ function showLoginScreen() {
         </div>
 
         <div class="flex flex-col gap-sm w-full">
-          <input id="phone-input" type="tel" placeholder="+49 170 1234567" class="login-input w-full px-md py-[11px] rounded-sm border border-border2 bg-card text-txt text-sm outline-none transition-all duration-base focus:border-violet/60 focus:shadow-focus">
+          <input id="phone-input" type="tel" autocomplete="tel" placeholder="+49 170 1234567" aria-label="Telefonnummer im internationalen Format" class="login-input w-full px-md py-[11px] rounded-sm border border-border2 bg-card text-txt text-sm outline-none transition-all duration-base focus:border-violet/60 focus:shadow-focus">
           <button id="phone-login-btn" class="w-full px-lg py-[11px] rounded-sm border border-border2 bg-transparent text-txt text-sm font-semibold cursor-pointer transition-all duration-base hover:border-violet/40 hover:bg-card2 active:scale-[.97]">SMS-Code senden</button>
-          <input id="sms-code-input" type="text" placeholder="SMS-Code eingeben" class="login-input hidden w-full px-md py-[11px] rounded-sm border border-border2 bg-card text-txt text-sm outline-none transition-all duration-base focus:border-violet/60 focus:shadow-focus">
+          <input id="sms-code-input" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="SMS-Code eingeben" aria-label="SMS-Bestätigungscode" class="login-input hidden w-full px-md py-[11px] rounded-sm border border-border2 bg-card text-txt text-sm outline-none transition-all duration-base focus:border-violet/60 focus:shadow-focus">
           <button id="verify-code-btn" class="hidden w-full px-lg py-[11px] rounded-sm border-none bg-green text-white text-sm font-semibold cursor-pointer transition-all duration-base hover:brightness-110 hover:shadow-md active:scale-[.97]">Code bestätigen</button>
         </div>
 
@@ -136,6 +139,29 @@ async function startApp(user) {
     return;
   }
 
+  // One-time migration: localStorage permit_status → state.contacts.permits[].status (Firebase)
+  // Runs only if migration flag is missing AND we have unsaved local statuses.
+  try {
+    if (!localStorage.getItem('fraime_permit_migrated_v1') && state.contacts?.permits) {
+      const local = JSON.parse(localStorage.getItem('permit_status') || '{}');
+      let touched = false;
+      Object.keys(local).forEach(k => {
+        const m = k.match(/^permit_(\d+)$/);
+        if (!m) return;
+        const idx = parseInt(m[1], 10);
+        if (state.contacts.permits[idx] && local[k]) {
+          state.contacts.permits[idx].status = local[k];
+          touched = true;
+        }
+      });
+      if (touched) {
+        const { saveData } = await import('./core/data.js');
+        await saveData('contacts', state.contacts);
+      }
+      localStorage.setItem('fraime_permit_migrated_v1', '1');
+    }
+  } catch { /* ignore migration failures */ }
+
   startListeners();
 
   state.loaded = true;
@@ -150,7 +176,26 @@ async function startApp(user) {
       await fetchAllData();
       await navigate(getRoute(), true);
     });
+
+    // Phase 4: Analytics + Evaluation prompts (post-render so they don't block UI)
+    initAnalytics();
+    trackView(route);
+    maybePromptFeedback();
+    maybePromptSUS();
+
+    // Auto-refresh the Hub when the day changes (e.g. shoot phase transition).
+    // Cheap: just compares ISO date once per minute and re-renders only if needed.
+    const { todayISO } = await import('./core/derive.js');
+    let lastDay = todayISO();
+    setInterval(() => {
+      const now = todayISO();
+      if (now !== lastDay) {
+        lastDay = now;
+        if (getRoute() === 'hub') navigate('hub', true);
+      }
+    }, 60_000);
   } catch (err) {
+    trackError(err, 'startApp.render');
     app.innerHTML = `<div class="flex items-center justify-center h-screen flex-col gap-md text-accent font-sans p-lg text-center animate-fadeIn"><div class="text-2xl">⚠️</div><div class="text-md font-bold">Rendering-Fehler</div><div class="text-muted text-sm max-w-[400px]">${err.message}</div><button onclick="location.reload()" class="mt-md px-lg py-sm rounded-sm border border-accent text-accent bg-transparent cursor-pointer text-sm hover:bg-accent/10 transition-all duration-base">Neu laden</button></div>`;
   }
 }

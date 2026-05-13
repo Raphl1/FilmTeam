@@ -1,0 +1,61 @@
+mutation CreateSeedData @transaction @auth(level: PUBLIC, insecureReason: "This is a seed data mutation, safe to expose for initial setup.") {
+  user_insertMany(data: [
+    {
+      id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      displayName: "Alice Smith",
+      email: "alice.smith@example.com",
+      createdAt: "2023-01-01T10:00:00Z",
+      bio: "Software Engineer with a passion for open source."
+    },
+    {
+      id: "b1cde2f0-1234-5678-90ab-cdef12345678",
+      displayName: "Bob Johnson",
+      email: "bob.johnson@example.com",
+      createdAt: "2023-01-05T11:30:00Z",
+      photoUrl: "https://example.com/bob.jpg"
+    }
+  ])
+  project_insertMany(data: [
+    {
+      id: "c2d3e4f5-6789-abcd-ef01-234567890abc",
+      title: "Project Alpha",
+      description: "Develop a new mobile application.",
+      createdAt: "2023-01-10T09:00:00Z",
+      ownerId: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      startDate: "2023-01-15",
+      status: "In Progress"
+    },
+    {
+      id: "d3e4f5a6-7890-bcde-f012-345678901def",
+      title: "Project Beta",
+      description: "Website redesign for a client.",
+      createdAt: "2023-01-12T14:00:00Z",
+      ownerId: "b1cde2f0-1234-5678-90ab-cdef12345678",
+      startDate: "2023-01-20",
+      endDate: "2023-03-31",
+      status: "Planned"
+    }
+  ])
+  task_insertMany(data: [
+    {
+      id: "e4f5a6b7-8901-cdef-0123-456789012345",
+      title: "Design UI mockups",
+      description: "Create initial wireframes and UI designs.",
+      createdAt: "2023-01-16T10:00:00Z",
+      projectId: "c2d3e4f5-6789-abcd-ef01-234567890abc",
+      status: "Pending",
+      assignedToId: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      dueDate: "2023-01-25"
+    },
+    {
+      id: "f5a6b7c8-9012-def0-1234-567890123456",
+      title: "Backend API development",
+      description: "Implement REST API for user authentication.",
+      createdAt: "2023-01-21T13:00:00Z",
+      projectId: "d3e4f5a6-7890-bcde-f012-345678901def",
+      status: "In Progress",
+      assignedToId: "b1cde2f0-1234-5678-90ab-cdef12345678",
+      dueDate: "2023-02-15"
+    }
+  ])
+}

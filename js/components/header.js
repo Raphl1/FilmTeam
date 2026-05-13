@@ -1,8 +1,10 @@
 import { state } from '../core/state.js';
-import { openMobileSearch } from './search.js';
+import { renderSaveFab } from './save-fab.js';
 
 export function renderHeaderControls() {
   const actions = document.getElementById('header-actions');
+  // Always update the floating Save-FAB whenever header state changes
+  try { renderSaveFab(); } catch { /* ignore */ }
   if (!actions) return;
   const theme = localStorage.getItem('theme') || 'dark';
   const header = document.getElementById('site-header');
@@ -36,13 +38,13 @@ export function renderHeaderControls() {
       actions.appendChild(nameSpan);
     }
 
-    // Mobile search button
+    // Mobile search button — delegated via data-action to avoid listener leak on rerender
     const searchBtn = document.createElement('button');
     searchBtn.className = 'w-9 h-9 rounded-sm flex items-center justify-center border border-border text-muted hover:bg-violet/10 hover:text-violet hover:border-violet/30 cursor-pointer bg-transparent hidden max-md:flex';
     searchBtn.id = 'mobile-search-btn';
+    searchBtn.dataset.action = 'open-mobile-search';
     searchBtn.setAttribute('aria-label', 'Suche öffnen');
     searchBtn.innerHTML = '<i data-lucide="search" class="w-[18px] h-[18px]"></i>';
-    searchBtn.addEventListener('click', openMobileSearch);
     actions.appendChild(searchBtn);
 
     // Edit button

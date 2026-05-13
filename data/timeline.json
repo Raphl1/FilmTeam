@@ -21,13 +21,13 @@
     "phase": "Pre-Production",
     "title": "Location Scouting & Übersicht",
     "date": "März–Mai 2026",
-    "status": "done"
+    "status": "active"
   },
   {
     "phase": "Pre-Production",
     "title": "Casting & Team-Zuweisung",
     "date": "April–Mai 2026",
-    "status": "done"
+    "status": "active"
   },
   {
     "phase": "Pre-Production",
@@ -55,40 +55,92 @@
     "date": "16. Juni 2026",
     "status": "upcoming"
   },
+
+  {
+    "phase": "Stakeholder-Reviews",
+    "title": "Ehringer · Brainstorm Best-of-the-Best & Casting (gesamter Kurs)",
+    "date": "Di, 12. Mai 2026",
+    "status": "done"
+  },
+  {
+    "phase": "Stakeholder-Reviews",
+    "title": "Petri · Opener mit Feedback überarbeiten · Hauptfilm Storyboard · Zeit-Spalte · Countdown / Abspann / Best-of-the-Best Entwürfe",
+    "date": "Do, 14. Mai 2026",
+    "status": "done"
+  },
+  {
+    "phase": "Stakeholder-Reviews",
+    "title": "Ehringer · Floorline / Floorboard erstellen",
+    "date": "Di, 19. Mai 2026",
+    "status": "active"
+  },
+  {
+    "phase": "Stakeholder-Reviews",
+    "title": "Petri · Floorline / Floorboard · Casting vorstellen",
+    "date": "Do, 21. Mai 2026",
+    "status": "upcoming"
+  },
+  {
+    "phase": "Stakeholder-Reviews",
+    "title": "Ehringer · Vorstellung Stakeholder",
+    "date": "Di, 26. Mai 2026",
+    "status": "upcoming"
+  },
+  {
+    "phase": "Stakeholder-Reviews",
+    "title": "Petri · Auflösung und Auswahl der Teams",
+    "date": "Do, 28. Mai 2026",
+    "status": "upcoming",
+    "deadline": true
+  },
+  {
+    "phase": "Stakeholder-Reviews",
+    "title": "Ehringer · Themen offen",
+    "date": "Di, 2. Juni 2026",
+    "status": "upcoming"
+  },
+  {
+    "phase": "Stakeholder-Reviews",
+    "title": "Petri · Casting",
+    "date": "Do, 4. Juni 2026",
+    "status": "upcoming"
+  },
+  {
+    "phase": "Stakeholder-Reviews",
+    "title": "Ehringer · Themen offen",
+    "date": "Di, 9. Juni 2026",
+    "status": "upcoming"
+  },
+  {
+    "phase": "Stakeholder-Reviews",
+    "title": "Petri · Themen offen",
+    "date": "Do, 11. Juni 2026",
+    "status": "upcoming"
+  },
+  {
+    "phase": "Stakeholder-Reviews",
+    "title": "Ehringer · Themen offen",
+    "date": "Di, 16. Juni 2026",
+    "status": "upcoming"
+  },
+  {
+    "phase": "Stakeholder-Reviews",
+    "title": "Petri · Voraussichtlich erster Drehtag",
+    "date": "Do, 18. Juni 2026",
+    "status": "upcoming"
+  },
+
   {
     "phase": "Production",
     "title": "Drehtag 1 — WG & Treppenhaus",
     "date": "17. Juni 2026",
-    "status": "upcoming"
+    "status": "upcoming",
+    "deadline": true
   },
   {
     "phase": "Production",
-    "title": "Drehtag 2 — Techniker-Base",
-    "date": "TBD",
-    "status": "upcoming"
-  },
-  {
-    "phase": "Production",
-    "title": "Drehtag 3 — Gastronomie",
-    "date": "TBD",
-    "status": "upcoming"
-  },
-  {
-    "phase": "Production",
-    "title": "Drehtag 4 — Außen-Countdown",
-    "date": "TBD",
-    "status": "upcoming"
-  },
-  {
-    "phase": "Production",
-    "title": "Drehtag 5 — Spezial-Setups",
-    "date": "TBD",
-    "status": "upcoming"
-  },
-  {
-    "phase": "Production",
-    "title": "Daten-Backup & Sichtung",
-    "date": "TBD",
+    "title": "Drehtage 2 – 5 (Termine offen)",
+    "date": "TBD · zwischen 17.06. und 15.07.",
     "status": "upcoming"
   },
   {
@@ -108,25 +160,25 @@
   {
     "phase": "Post-Production",
     "title": "Rohschnitt",
-    "date": "Ende Juni – Juli",
+    "date": "Juli 2026",
     "status": "upcoming"
   },
   {
     "phase": "Post-Production",
     "title": "Feinschnitt & Color Grading",
-    "date": "Juli – August",
+    "date": "Juli – August 2026",
     "status": "upcoming"
   },
   {
     "phase": "Post-Production",
     "title": "KI-Postproduktion & VFX",
-    "date": "August",
+    "date": "August 2026",
     "status": "upcoming"
   },
   {
     "phase": "Post-Production",
     "title": "Master & Finaler Export",
-    "date": "September",
+    "date": "September 2026",
     "status": "upcoming"
   },
   {

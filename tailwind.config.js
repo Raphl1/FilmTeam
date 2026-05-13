@@ -9,7 +9,7 @@ module.exports = {
     screens: {
       'xs': '480px',
       'sm': '640px',
-      'md': '769px',
+      'md': '768px',
       'lg': '1024px',
       'xl': '1280px',
     },
@@ -24,8 +24,8 @@ module.exports = {
         muted:   'var(--c-muted)',
         border:  'var(--c-border)',
         border2: 'var(--c-border2)',
-        purple:  { DEFAULT: '#6c3fc5' },
         violet:  'var(--c-violet)',
+        purple:  'var(--c-violet)',
         lilac:   'var(--c-lilac)',
         accent:  'var(--c-accent)',
         gold:    'var(--c-gold)',

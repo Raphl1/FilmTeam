@@ -35,6 +35,13 @@ export async function fetchAllData() {
 }
 
 async function directSave(name, data) {
+  // Mark this as our own write so the realtime listener doesn't treat
+  // the echoing snapshot as an external change. Imported lazily to avoid
+  // circular dependency between data.js ↔ realtime.js.
+  try {
+    const { markOwnWrite } = await import('./realtime.js');
+    markOwnWrite(name);
+  } catch { /* realtime not loaded yet — ignore */ }
   await set(ref(db, name), data);
   return { ok: true };
 }

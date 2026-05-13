@@ -3,7 +3,6 @@ import { navigate, getRoute } from './router.js';
 import { enterEditMode, cancelEditMode } from './editmode.js';
 import { saveAllDirty } from './github.js';
 import { showToast } from '../components/toast.js';
-import { closeTokenModal, handleSaveToken } from '../components/modal.js';
 
 // ── Shared utilities exported for views ─────────────────────────────────────
 export const generateId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
@@ -15,6 +14,9 @@ export const setPermitStatus = d => localStorage.setItem('permit_status', JSON.s
 export const getPermitLabel = s => ({'not-asked':'Nicht angefragt','not-booked':'Nicht gebucht','pending':'Ausstehend','approved':'Genehmigt','declined':'Abgelehnt'})[s] || s;
 export const cyclePermitStatus = s => { const c=['not-asked','pending','approved','declined']; return c[(c.indexOf(s)+1)%c.length]; };
 export function formatDate(ds) { if (!ds || ds === 'TBD') return 'TBD'; const d=new Date(ds); if (isNaN(d)) return ds; return `${['So','Mo','Di','Mi','Do','Fr','Sa'][d.getDay()]}, ${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`; }
+export function emptyState(icon, title, subtitle = '') {
+  return `<div class="flex flex-col items-center justify-center py-2xl text-muted text-sm animate-fadeIn"><i data-lucide="${icon}" class="w-10 h-10 mb-md opacity-50"></i><p class="font-semibold text-base mb-xs">${escapeHtml(title)}</p>${subtitle ? `<p class="text-xs">${escapeHtml(subtitle)}</p>` : ''}</div>`;
+}
 
 // ── Click delegation ─────────────────────────────────────────────────────────
 document.addEventListener('click', async e => {
@@ -31,24 +33,36 @@ document.addEventListener('click', async e => {
       return;
     }
     if (a === 'enter-edit')    { enterEditMode(); return; }
+    if (a === 'open-feedback') {
+      const { openFeedback } = await import('../components/feedback.js');
+      openFeedback();
+      return;
+    }
+    if (a === 'open-mobile-search') {
+      const { openMobileSearch } = await import('../components/search.js');
+      openMobileSearch();
+      return;
+    }
+    if (a === 'open-sus') {
+      const { openSUS } = await import('../components/sus.js');
+      openSUS();
+      return;
+    }
     if (a === 'logout') {
       const { logout } = await import('./firebase.js');
       await logout();
       return;
     }
     if (a === 'force-refresh') {
-      const { invalidateCache, fetchAllData } = await import('./data.js');
-      invalidateCache();
+      const { fetchAllData } = await import('./data.js');
       if ('caches' in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); }
-      await fetchAllData(true);
+      await fetchAllData();
       showToast('Daten neu geladen', 'success');
       navigate(getRoute(), true);
       return;
     }
     if (a === 'save-changes')  { saveAllDirty(); return; }
     if (a === 'cancel-edit')   { cancelEditMode(); return; }
-    if (a === 'close-modal')   { closeTokenModal(); return; }
-    if (a === 'save-token')    { handleSaveToken(); return; }
 
     if (a === 'toggle-equipment') {
       const checked = getEquipmentChecked();
@@ -56,10 +70,15 @@ document.addEventListener('click', async e => {
       setEquipmentChecked(checked); navigate(getRoute(), true); return;
     }
     if (a === 'cycle-permit') {
-      const statuses = getPermitStatus();
-      const idx = el.dataset.permitIdx;
-      statuses[`permit_${idx}`] = cyclePermitStatus(statuses[`permit_${idx}`] || state.contacts.permits[idx].status);
-      setPermitStatus(statuses); navigate(getRoute(), true); return;
+      // Persist permit status to Firebase so the whole team sees the same state.
+      const idx = parseInt(el.dataset.permitIdx, 10);
+      const permits = state.contacts?.permits || [];
+      if (permits[idx]) {
+        permits[idx].status = cyclePermitStatus(permits[idx].status || 'not-asked');
+        markDirty('contacts');
+        navigate(getRoute(), true);
+      }
+      return;
     }
     if (a === 'cycle-location-status') {
       const loc = state.locations[parseInt(el.dataset.idx)];
@@ -81,6 +100,8 @@ document.addEventListener('click', async e => {
       checked[id] = !checked[id];
       if (!checked[id]) delete checked[id];
       localStorage.setItem('my_tasks_checked', JSON.stringify(checked));
+      const task = state.kanban?.tasks?.find(t => t.id === id);
+      if (task) { task.status = checked[id] ? 'done' : 'todo'; markDirty('kanban'); }
       navigate(getRoute(), true); return;
     }
     if (a === 'toggle-budget-settled') {
@@ -108,7 +129,7 @@ document.addEventListener('click', async e => {
       'delete-budget': () => { if (!confirm('Löschen?')) return false; state.budget.items.splice(parseInt(el.dataset.idx),1); markDirty('budget'); },
       'add-timeline': () => { state.timeline.push({phase:'Post-Production',title:'Neuer Meilenstein',date:'TBD',status:'upcoming'}); markDirty('timeline'); },
       'delete-timeline': () => { if (!confirm('Löschen?')) return false; state.timeline.splice(parseInt(el.dataset.idx),1); markDirty('timeline'); },
-      'add-contact': () => { state.contacts.contacts.push({id:generateId(),name:'Neuer Kontakt',role:'',category:'city',phone:'',email:'',address:'',note:''}); markDirty('contacts'); },
+      'add-contact': () => { state.contacts.contacts.push({id:generateId(),name:'Neuer Kontakt',role:'',category:'city',phone:'',email:'',address:'',instagram:'',website:'',note:''}); markDirty('contacts'); },
       'delete-contact': () => { if (!confirm('Löschen?')) return false; state.contacts.contacts.splice(parseInt(el.dataset.idx),1); markDirty('contacts'); },
       'add-kanban-task': () => { state.kanban.tasks.push({id:generateId(),title:'Neue Aufgabe',description:'',assignee:'',owner:'',status:el.dataset.status,deadline:''}); markDirty('kanban'); },
       'delete-kanban-task': () => { if (!confirm('Löschen?')) return false; state.kanban.tasks.splice(parseInt(el.dataset.idx),1); markDirty('kanban'); },
@@ -118,7 +139,17 @@ document.addEventListener('click', async e => {
   }
 
   const fb = e.target.closest('[data-filter]');
-  if (fb) { e.preventDefault(); state.activeFilter = fb.dataset.filter; navigate(getRoute(), true); }
+  if (fb) { e.preventDefault(); state.activeFilter = fb.dataset.filter; navigate(getRoute(), true); return; }
+
+  // Locations-View tab switcher
+  const tabBtn = e.target.closest('[data-locations-tab]');
+  if (tabBtn) {
+    e.preventDefault();
+    localStorage.setItem('locations_active_tab', tabBtn.dataset.locationsTab);
+    state.activeFilter = 'all';
+    navigate('locations', true);
+    return;
+  }
 });
 
 // ── Input delegation ─────────────────────────────────────────────────────────
@@ -171,14 +202,8 @@ document.addEventListener('input', e => {
 
 // ── Keyboard shortcuts ────────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
-  if (e.key==='Escape') {
-    if (document.getElementById('token-modal')) { closeTokenModal(); return; }
-    if (state.editMode) cancelEditMode();
-  }
+  if (e.key==='Escape' && state.editMode) cancelEditMode();
   if ((e.ctrlKey||e.metaKey) && e.key==='s') { e.preventDefault(); if (state.editMode) saveAllDirty(); }
-});
-document.addEventListener('keypress', e => {
-  if (e.key==='Enter' && e.target.id==='token-input') { e.preventDefault(); handleSaveToken(); }
 });
 
 // ── Close search results on outside click ────────────────────────────────────

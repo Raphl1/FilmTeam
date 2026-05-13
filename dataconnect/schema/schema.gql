@@ -1,0 +1,53 @@
+type User @table {
+  displayName: String!
+  email: String!
+  createdAt: Timestamp!
+  photoUrl: String
+  bio: String
+}
+
+type Project @table {
+  title: String!
+  description: String!
+  createdAt: Timestamp!
+  owner: User!
+  startDate: Date
+  endDate: Date
+  status: String
+}
+
+type ProjectMember @table(key: ["user", "project"]) {
+  user: User!
+  project: Project!
+  role: String!
+  joinedAt: Timestamp!
+}
+
+type Task @table {
+  title: String!
+  description: String!
+  project: Project!
+  status: String!
+  createdAt: Timestamp!
+  dueDate: Date
+  assignedTo: User
+}
+
+type Shot @table {
+  sceneNumber: Int!
+  description: String!
+  project: Project!
+  createdAt: Timestamp!
+  cameraAngle: String
+  shotType: String
+  duration: Int
+}
+
+type Resource @table {
+  name: String!
+  type: String!
+  url: String!
+  project: Project!
+  createdAt: Timestamp!
+  description: String
+}

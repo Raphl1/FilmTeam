@@ -19,8 +19,8 @@ export default async function viewSchedule() {
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md schedule-print-grid">
       ${days.map((day, idx) => {
-        const locNames = day.locations.map(id => {
-          const loc = state.locations.find(l => l.id === id);
+        const locNames = (day.locations || []).map(id => {
+          const loc = (state.locations || []).find(l => l.id === id);
           return loc ? loc.name : `#${id}`;
         });
         const deleteBtn = editing ? `<button class="absolute top-sm right-sm w-6 h-6 flex items-center justify-center rounded-full bg-accent/10 text-accent text-xs cursor-pointer border-none hover:bg-accent/20" data-action="delete-schedule" data-idx="${idx}" title="Löschen">✕</button>` : '';
@@ -55,7 +55,7 @@ export default async function viewSchedule() {
     ${editing ? `<button class="mt-md px-lg py-sm rounded-full text-sm font-semibold border border-dashed border-border text-muted cursor-pointer hover:border-violet hover:text-violet transition-all duration-base" data-action="add-schedule">+ Drehtag hinzufügen</button>` : ''}
     <h3 class="text-md font-bold text-txt mt-2xl mb-md">📆 Google Kalender</h3>
     <div class="w-full rounded overflow-hidden border border-border bg-card">
-      ${safeCalUrl ? `<iframe src="${safeCalUrl}" loading="lazy" class="w-full h-[500px] max-md:h-[350px] border-none" sandbox="allow-scripts allow-same-origin"></iframe>` : ''}
+      ${safeCalUrl ? `<iframe src="${safeCalUrl}" loading="lazy" class="w-full h-[500px] max-md:h-[350px] border-none" sandbox="allow-scripts allow-same-origin"></iframe>` : `<div class="p-lg text-center text-muted text-sm">📅 Kalender-Embed nicht verfügbar</div>`}
     </div>
   `;
 }

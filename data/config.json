@@ -14,13 +14,12 @@
     { "id": "hub", "label": "Hub", "icon": "grid" },
     { "id": "my-tasks", "label": "Meine Aufgaben", "icon": "user" },
     { "id": "kanban", "label": "Kanban", "icon": "kanban" },
-    { "id": "locations", "label": "Drehorte", "icon": "map-pin" },
+    { "id": "locations", "label": "Drehorte & Kontakte", "icon": "map-pin" },
     { "id": "schedule", "label": "Drehplan", "icon": "calendar" },
     { "id": "team", "label": "Team", "icon": "users" },
     { "id": "equipment", "label": "Equipment", "icon": "camera" },
     { "id": "budget", "label": "Budget", "icon": "wallet" },
     { "id": "timeline", "label": "Timeline", "icon": "clock" },
-    { "id": "contacts", "label": "Kontakte", "icon": "phone" },
     { "id": "calendar", "label": "Kalender", "icon": "calendar-days" }
   ],
   "stats": [

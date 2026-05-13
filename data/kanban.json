@@ -2,191 +2,159 @@
   "columns": [
     { "id": "todo", "label": "To Do", "color": "#f72585" },
     { "id": "in-progress", "label": "In Progress", "color": "#6c3fc5" },
-    { "id": "review", "label": "Under Review", "color": "#f9c74f" },
-    { "id": "done", "label": "Done", "color": "#43aa8b" },
-    { "id": "on-hold", "label": "On Hold", "color": "#8892a4" }
+    { "id": "on-hold", "label": "On Hold", "color": "#f9c74f" },
+    { "id": "done", "label": "Done", "color": "#43aa8b" }
   ],
   "tasks": [
     {
-      "id": "t1",
+      "id": "k01",
       "title": "Kanban-Board erstellen",
       "description": "Kanban-Board übernehmen",
       "assignee": "Yudong",
-      "owner": "Jetmir",
+      "owner": "",
       "status": "done",
-      "deadline": "2026-04-28",
-      "day": null
+      "deadline": "2026-04-28"
     },
     {
-      "id": "t2",
+      "id": "k02",
       "title": "Kurzfristige und langfristige Ziele",
       "description": "Aufgeschrieben welche Ziele wir verfolgen",
       "assignee": "Miriam",
-      "owner": "Jetmir",
+      "owner": "",
       "status": "done",
-      "deadline": "2026-04-28",
-      "day": null
+      "deadline": "2026-04-28"
     },
     {
-      "id": "t3",
+      "id": "k03",
       "title": "Rolle im Film überlegen",
       "description": "Sich überlegen, ob und welche Rolle man spielen will",
       "assignee": "Alle",
-      "owner": "Lia",
+      "owner": "",
       "status": "on-hold",
-      "deadline": "2026-04-29",
-      "day": null
+      "deadline": "2026-04-29"
     },
     {
-      "id": "t4",
+      "id": "k04",
       "title": "Location auswählen",
-      "description": "Finale Locations klären",
+      "description": "finale locations klären",
       "assignee": "Raphael, Jetmir",
-      "owner": "Runa",
-      "status": "done",
-      "deadline": "2026-05-07",
-      "day": null
+      "owner": "",
+      "status": "in-progress",
+      "deadline": "2026-05-07"
     },
     {
-      "id": "t5",
+      "id": "k05",
       "title": "Charakterisierung",
       "description": "Charakterbogen und jeweils Moodboards erstellen",
       "assignee": "Tobi, Miriam, Luca",
-      "owner": "Raphael",
+      "owner": "",
       "status": "in-progress",
-      "deadline": "2026-05-07",
-      "day": null
+      "deadline": "2026-05-07"
     },
     {
-      "id": "t6",
+      "id": "k06",
       "title": "Storyboard erstellen",
       "description": "Zeit-Spalte hinzufügen, Opener überarbeiten, Hauptfilm erstellen",
       "assignee": "Dilara, Quyen, Runa, Benicio, Yudong",
-      "owner": "Luca",
+      "owner": "",
       "status": "in-progress",
-      "deadline": "2026-05-07",
-      "day": null
+      "deadline": "2026-05-07"
     },
     {
-      "id": "t7",
-      "title": "Ziele, Zeitplan, Meilensteine",
+      "id": "k07",
+      "title": "Zielen, Zeitplan, Meilenstein",
       "description": "Festlegen und präsentieren",
       "assignee": "Alle",
-      "owner": "Miriam",
+      "owner": "",
       "status": "in-progress",
-      "deadline": "2026-05-05",
-      "day": null
+      "deadline": "2026-05-05"
     },
     {
-      "id": "t8",
+      "id": "k08",
       "title": "Best of the Best: Einführung, Abspann, Countdown",
-      "description": "Welche Animation, KI einbauen, Musik auswählen, was soll konkret passieren, Handlungsablauf. MPG23 ist in den Abspann getanzt, wie stellen wir die Szenen dar",
+      "description": "Welche Animation, KI einbauen, Musik auswählen, was soll konkret passieren, Handlungsablauf. MPG 23 ist in den Abspann getanzt, wie stellen wir die Szenen dar",
       "assignee": "Miriam, Luca, Tobi, Lia, Raphael, Jetmir, Nico, Lea",
-      "owner": "Quyen",
+      "owner": "",
       "status": "todo",
-      "deadline": "2026-05-12",
-      "day": null
+      "deadline": "2026-05-12"
     },
     {
-      "id": "t9",
+      "id": "k09",
       "title": "Casting",
       "description": "Erste Vorschläge in Excel Tabelle",
       "assignee": "Alle",
       "owner": "",
       "status": "todo",
-      "deadline": "2026-05-12",
-      "day": null
+      "deadline": "2026-05-12"
     },
     {
-      "id": "t10",
-      "title": "Location Floorboard",
-      "description": "Floorboard erstellen und Locations eventuell schon abfotografieren?",
-      "assignee": "Jetmir, Raphael",
-      "owner": "",
-      "status": "todo",
-      "deadline": "",
-      "day": null
-    },
-    {
-      "id": "t11",
+      "id": "k10",
       "title": "Doku",
       "description": "Themen erstellen und aufteilen",
       "assignee": "Dilara, Lea",
       "owner": "",
       "status": "todo",
-      "deadline": "",
-      "day": null
+      "deadline": ""
     },
     {
-      "id": "t12",
-      "title": "Haftpflichtversicherung checken",
-      "description": "",
-      "assignee": "",
+      "id": "k11",
+      "title": "Storyboard Countdown",
+      "description": "Scribbles, Bildbeschreibungen",
+      "assignee": "Miriam, Luca, Tobi, Niko, Jetmir",
       "owner": "",
       "status": "todo",
-      "deadline": "",
-      "day": null
+      "deadline": "2026-05-21"
     },
     {
-      "id": "t13",
-      "title": "Location fotografieren & Lichtverhältnisse prüfen",
-      "description": "",
-      "assignee": "",
+      "id": "k12",
+      "title": "Location kontaktieren / scouten",
+      "description": "Anrufen, anfragen, Fotos machen",
+      "assignee": "Jetmir, Raphael",
       "owner": "",
       "status": "todo",
-      "deadline": "",
-      "day": null
+      "deadline": "2026-05-21"
     },
     {
-      "id": "t14",
-      "title": "Color- und Moodboard für die Charaktere",
-      "description": "",
-      "assignee": "",
+      "id": "k13",
+      "title": "Location Floorboard",
+      "description": "Floorboard erstellen und Locations eventuell schon abfotografieren?",
+      "assignee": "Jetmir, Raphael",
       "owner": "",
       "status": "todo",
-      "deadline": "",
-      "day": null
+      "deadline": ""
     },
     {
-      "id": "t15",
-      "title": "Punkte verteidigen vor Petri",
-      "description": "Konkretisierung und Konsens zwischen Petri und Ehringer",
-      "assignee": "",
+      "id": "k14",
+      "title": "Abspann",
+      "description": "Klären, entwerfen",
+      "assignee": "Dilara, Lia, Raphael",
       "owner": "",
       "status": "todo",
-      "deadline": "",
-      "day": null
+      "deadline": ""
     },
     {
-      "id": "t16",
-      "title": "Animation für Best-of-the-Best",
-      "description": "Musik die motiviert nach vorne zu laufen. Klassiker muss aber nicht sein, bisschen ungewohnt",
-      "assignee": "",
+      "id": "k15",
+      "title": "Kompetenzen suchen",
+      "description": "2D/3D für Best-of-the-Best",
+      "assignee": "Lia? Lea? Benni? Miriam?",
       "owner": "",
       "status": "todo",
-      "deadline": "",
-      "day": null
-    },
-    {
-      "id": "t17",
-      "title": "Personen für Grob- und Feinschnitt festlegen",
-      "description": "Schnitt und Editing muss gut sein",
-      "assignee": "",
-      "owner": "",
-      "status": "todo",
-      "deadline": "",
-      "day": null
-    },
-    {
-      "id": "t18",
-      "title": "30sek BOTB animieren",
-      "description": "Am Donnerstag mehr drauf eingehen was wir bei den 30sek BOTB animieren können",
-      "assignee": "",
-      "owner": "",
-      "status": "todo",
-      "deadline": "",
-      "day": null
+      "deadline": ""
     }
   ],
-  "members": []
+  "members": [
+    { "name": "Dilara", "color": "#e63946" },
+    { "name": "Jetmir", "color": "#f4a261" },
+    { "name": "Lia", "color": "#f9c74f" },
+    { "name": "Runa", "color": "#43aa8b" },
+    { "name": "Raphael", "color": "#5fc6b8" },
+    { "name": "Luca", "color": "#4895ef" },
+    { "name": "Miriam", "color": "#7c4dff" },
+    { "name": "Quyen", "color": "#e91e8c" },
+    { "name": "Benicio", "color": "#7b4f1f" },
+    { "name": "Nico", "color": "#1e7d4f" },
+    { "name": "Yudong", "color": "#1d3557" },
+    { "name": "Tobi", "color": "#9aa31a" },
+    { "name": "Alle", "color": "#8892a4" }
+  ]
 }
